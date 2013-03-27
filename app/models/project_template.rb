@@ -1,4 +1,4 @@
-class ProjectTemplate < AbstractProject
+class ProjectTemplate < Project
 end
 
 # == Schema Information

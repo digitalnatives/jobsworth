@@ -193,7 +193,7 @@ class ProjectsController < ApplicationController
   def check_if_project_has_users(project)
     if project.has_users?
       flash[:success] = _('Project was successfully created.')
-      redirect_to projects_path
+      redirect_to (project.class == ProjectTemplate) ? project_templates_path : projects_path
     else
       flash[:success] = 
         _('Project was successfully created. Add users who need access to this project.')
