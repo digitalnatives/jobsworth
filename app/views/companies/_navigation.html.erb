@@ -15,8 +15,11 @@
         <a href="/companies/custom_scripts">Custom Scripts</a>
       </li>
     <% end %>
-    <li class="<%= active_class(selected, "templates") %>">
-      <%= link_to _("Templates"), :controller => 'task_templates', :action=>'index' %>
+    <li class="<%= active_class(selected, "task_templates") %>">
+      <%= link_to _("Task templates"), :controller => 'task_templates', :action=>'index' %>
+    </li>
+    <li class="<%= active_class(selected, "project_templates") %>">
+      <%= link_to _("Project templates"), :controller => 'project_templates', :action=>'index' %>
     </li>
     <li class="<%= active_class(selected, "triggers") %>">
       <%= link_to _("Triggers"), :controller => 'triggers' %>
