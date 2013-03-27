@@ -347,22 +347,23 @@ private
   # Returns the column name to use for lookup for the given
   # class_type
   def column_name_for(class_type)
-    if class_type == "User"
-      return "task_users.type= 'TaskOwner' AND task_users.user_id"
-    elsif class_type == "Project"
-      return "tasks.project_id"
-    elsif class_type == "Task"
-      return "tasks.id"
-    elsif class_type == "Customer"
-      return "projects.customer_id"
-    elsif class_type == "Company"
-      return "tasks.company_id"
-    elsif class_type == "Milestone"
-      return "tasks.milestone_id"
-    elsif class_type == "Tag"
-      return "task_tags.tag_id"
+    case class_type
+    when "User"
+      "task_users.type= 'TaskOwner' AND task_users.user_id"
+    when "Project", "ProjectTemplate"
+      "tasks.project_id"
+    when "Task"
+      "tasks.id"
+    when "Customer"
+      "projects.customer_id"
+    when "Company"
+      "tasks.company_id"
+    when "Milestone"
+      "tasks.milestone_id"
+    when "Tag"
+      "task_tags.tag_id"
     else
-      return "#{ class_type.downcase }_id"
+      "#{ class_type.downcase }_id"
     end
   end
 

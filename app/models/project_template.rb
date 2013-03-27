@@ -1,4 +1,5 @@
 class ProjectTemplate < Project
+
 end
 
 # == Schema Information

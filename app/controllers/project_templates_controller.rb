@@ -1,11 +1,22 @@
 class ProjectTemplatesController < ProjectsController
   def index
-    @project_templates = project_relation
+    @project_templates = scoped_projects
     render :layout => "admin"
   end
 
   def edit
-    @project = project_relation.find(params[:id])
+    @project = scoped_projects.find(params[:id])
+  end
+
+  def update
+    @project = scoped_projects.find(params[:id])
+
+    if @project.update_attributes(params[:project])
+      flash[:success] = _('Project was successfully updated.')
+      redirect_to project_templates_path
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -29,7 +40,7 @@ class ProjectTemplatesController < ProjectsController
     ProjectTemplate.new(attributes)
   end
 
-  def project_relation
+  def scoped_projects
     ProjectTemplate.where(company_id: current_user.company_id)
   end
 end

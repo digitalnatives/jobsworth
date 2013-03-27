@@ -4,15 +4,14 @@
 class ProjectsController < ApplicationController
   before_filter :authorize_user_is_admin, :except => [:index, :new, :create, :show, :list_completed]
   before_filter :authorize_user_can_create_projects, :only => [:new, :create]
-  before_filter :scope_projects, :except => [:new, :create]
 
   def index
-    @projects = @project_relation
+    @projects = scoped_projects
                 .in_progress.order('customer_id')
                 .includes(:customer, :milestones)
                 .paginate(:page => params[:page], :per_page => 100)
 
-    @completed_projects = @project_relation.completed
+    @completed_projects = scoped_projects.completed
   end
 
   def new
@@ -25,8 +24,12 @@ class ProjectsController < ApplicationController
 
     if @project.save
       # create a task filter for the project
-      open = current_user.company.statuses.first
-      TaskFilter.create(:qualifiers_attributes => [{:qualifiable => @project}, {:qualifiable => open}], :shared => true, :user => current_user, :name => @project.name)
+      TaskFilter.create(
+        :shared => true, :user => current_user, :name => @project.name,
+        :qualifiers_attributes => [
+          {:qualifiable => @project},
+          {:qualifiable => current_user.company.statuses.first}],
+      )
 
       create_project_permissions_for(@project, params[:copy_project_id])
       check_if_project_has_users(@project)
@@ -37,7 +40,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = @project_relation.find(params[:id])
+    @project = scoped_projects.find(params[:id])
 
     if @project.nil?
       flash[:error] = "You can't access the project or it doesn't exist."
@@ -48,7 +51,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = @project_relation.find(params[:id])
+    @project = scoped_projects.find(params[:id])
     if @project.nil?
       flash[:error] = "You can't access the project or it doesn't exist."
       redirect_to root_path
@@ -58,7 +61,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = @project_relation.in_progress.find(params[:id])
+    @project = scoped_projects.in_progress.find(params[:id])
 
     if @project.update_attributes(params[:project])
       flash[:success] = _('Project was successfully updated.')
@@ -69,7 +72,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    project = @project_relation.find(params[:id])
+    project = scoped_projects.find(params[:id])
 
     if project.destroy
       flash[:success] = 'Project was deleted.'
@@ -81,11 +84,11 @@ class ProjectsController < ApplicationController
   end
 
   ###
-  # TODO: 'complete' and 'revert' can be replaced by 'update'... 
+  # TODO: 'complete' and 'revert' can be replaced by 'update'...
   # remove this two actions after refactoring the view
   ###
   def complete
-    project = @project_relation.in_progress.find(params[:id])
+    project = scoped_projects.in_progress.find(params[:id])
 
     unless project.nil?
       project.completed_at = Time.now.utc
@@ -97,7 +100,7 @@ class ProjectsController < ApplicationController
   end
 
   def revert
-    project = @project_relation.completed.find(params[:id])
+    project = scoped_projects.completed.find(params[:id])
 
     unless project.nil?
       project.completed_at = nil
@@ -109,7 +112,7 @@ class ProjectsController < ApplicationController
   end
 
   def list_completed
-    @completed_projects = @project_relation.completed.order("completed_at DESC")
+    @completed_projects = scoped_projects.completed.order("completed_at DESC")
   end
 
   ###
@@ -168,6 +171,13 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def clone
+    @template = ProjectTemplate.find(params[:id])
+    @project = Project.new(@template.attributes.except("id", "type"))
+    #@project.milestones = 
+    render :new
+  end
+
   protected
 
   def create_entity(attributes = nil)
@@ -195,7 +205,7 @@ class ProjectsController < ApplicationController
       flash[:success] = _('Project was successfully created.')
       redirect_to (project.class == ProjectTemplate) ? project_templates_path : projects_path
     else
-      flash[:success] = 
+      flash[:success] =
         _('Project was successfully created. Add users who need access to this project.')
       redirect_to edit_project_path(project)
     end
@@ -206,7 +216,7 @@ class ProjectsController < ApplicationController
     redirect_from_last
   end
 
-  def scope_projects
-    @project_relation = current_user.get_projects
+  def scoped_projects
+    @project_relation ||= current_user.get_projects
   end
 end
