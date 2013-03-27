@@ -4,6 +4,16 @@ describe Project do
   let(:project) { Project.make }
 
   describe 'associations' do
+    it { should belong_to(:company) }
+    it { should belong_to(:customer) }
+    it { should have_many(:users) }
+    it { should have_many(:project_permissions) }
+    it { should have_many(:tasks) }
+    it { should have_many(:sheets) }
+    it { should have_many(:work_logs) }
+    it { should have_many(:project_files) }
+    it { should have_many(:milestones) }
+
     it "should have a 'score_rules' association" do
       project.should respond_to(:score_rules)
     end

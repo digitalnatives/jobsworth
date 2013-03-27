@@ -1,21 +1,7 @@
 # encoding: UTF-8
 # A logical grouping of milestones and tasks, belonging to a Customer / Client
 
-class Project < ActiveRecord::Base
-  # Creates a score_rules association and updates the score
-  # of all the task when adding a new score rule
-  include Scorable
-
-  belongs_to    :company
-  belongs_to    :customer
-
-  has_many      :users, :through => :project_permissions
-  has_many      :project_permissions, :dependent => :destroy
-  has_many      :tasks, :class_name => "TaskRecord"
-  has_many      :sheets, :dependent => :destroy
-  has_many      :work_logs, :dependent => :destroy
-  has_many      :project_files, :dependent => :destroy
-  has_many      :milestones, :dependent => :destroy, :order => "due_at asc, lower(name) asc"
+class Project < AbstractProject
 
   scope :completed, where("projects.completed_at is not NULL")
   scope :in_progress, where("projects.completed_at is NULL")

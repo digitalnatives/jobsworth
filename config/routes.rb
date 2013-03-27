@@ -149,6 +149,7 @@ Jobsworth::Application.routes.draw do
   end
 
   resources :task_templates
+  resources :project_templates
 
   resources :companies do
     resources :score_rules

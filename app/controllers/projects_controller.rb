@@ -16,11 +16,11 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new
+    @project = create_entity
   end
 
   def create
-    @project = Project.new(params[:project])
+    @project = create_entity(params[:project])
     @project.company_id = current_user.company_id
 
     if @project.save
@@ -166,6 +166,12 @@ class ProjectsController < ApplicationController
       @users = Company.find(current_user.company_id).users.order("users.name")
       render :partial => "permission_list"
     end
+  end
+
+  protected
+
+  def create_entity(attributes = nil)
+    @project = Project.new(attributes)
   end
 
   private
