@@ -2,6 +2,20 @@
 # A logical grouping of milestones and tasks, belonging to a Customer / Client
 
 class Project < AbstractProject
+
+  def dup_template_relations(template)
+    self.users = template.users
+    template.milestones.each do |template_milestone|
+      self.milestones << template_milestone.dup
+    end
+    template.score_rules.each do |template_score_rule|
+      self.score_rules << template_score_rule.dup
+    end
+    template.project_permissions.each do |template_project_permission|
+      self.project_permissions << template_project_permission.dup
+    end
+  end
+
 end
 
 # == Schema Information

@@ -172,9 +172,9 @@ class ProjectsController < ApplicationController
   end
 
   def clone
-    @template = ProjectTemplate.find(params[:id])
-    @project = Project.new(@template.attributes.except("id", "type"))
-    #@project.milestones = 
+    template = ProjectTemplate.find(params[:id])
+    @project = Project.new( template.attributes.except("id", "type") )
+    @project.dup_template_relations(template)
     render :new
   end
 

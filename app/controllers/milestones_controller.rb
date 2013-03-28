@@ -43,7 +43,7 @@ class MilestonesController < ApplicationController
     if @milestone.save
       unless request.xhr?
         flash[:success] = _('Milestone was successfully created.')
-        redirect_to :controller => 'projects', :action => 'edit', :id => @milestone.project
+        redirect_to :controller => (@milestone.project.template? ? 'project_templates' : 'projects'), :action => 'edit', :id => @milestone.project
       else
         #bind 'ajax:success' event
         #return json to provide refreshMilestones parameters
@@ -76,7 +76,7 @@ class MilestonesController < ApplicationController
     set_due_at
     if @milestone.save
       flash[:success] = _('Milestone was successfully updated.')
-      redirect_to :controller => 'projects', :action => 'edit', :id => @milestone.project
+      redirect_to :controller => (@milestone.project.template? ? 'project_templates' : 'projects'), :action => 'edit', :id => @milestone.project
     else
       flash[:error] = @milestone.errors.full_messages.join(". ")
       render :action => 'edit'
@@ -85,7 +85,7 @@ class MilestonesController < ApplicationController
 
   def destroy
     @milestone.destroy
-    redirect_to :controller => 'projects', :action => 'edit', :id => @milestone.project
+    redirect_to :controller => (@milestone.project.template? ? 'project_templates' : 'projects'), :action => 'edit', :id => @milestone.project
   end
 
   def complete

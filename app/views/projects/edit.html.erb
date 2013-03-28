@@ -58,7 +58,7 @@
     </div>
     <div class="tab-pane" id="score-rules-pane">
        <%= render 'shared/score_rules_container',
-           :container_name => 'projects',
+           :container_name => (@project.template? ? 'project_templates' : 'projects'),
            :container_id   => @project.id %>
     </div>
     <% if current_user.can?( @project, 'grant' ) %>

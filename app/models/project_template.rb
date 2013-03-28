@@ -1,4 +1,4 @@
-class ProjectTemplate < Project
+class ProjectTemplate < AbstractProject
 
 end
 
