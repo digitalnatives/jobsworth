@@ -20,7 +20,7 @@ class ProjectTemplatesController < ProjectsController
   end
 
   def destroy
-    project = project_relation.find(params[:id])
+    project = scoped_projects.find(params[:id])
 
     if project.destroy
       flash[:success] = 'Project was deleted.'
@@ -41,6 +41,6 @@ class ProjectTemplatesController < ProjectsController
   end
 
   def scoped_projects
-    ProjectTemplate.where(company_id: current_user.company_id)
+   @project_relation ||= current_user.get_project_templates
   end
 end

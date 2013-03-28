@@ -317,6 +317,10 @@ class User < ActiveRecord::Base
     (admin?) ? company.projects : all_projects
   end
 
+  def get_project_templates
+    @project_templates ||= ProjectTemplate.where(company_id: company_id)
+  end
+
   # Get the next tasks for the nextTasks panel
   def next_tasks(count = 5)
     self.tasks.open_only.not_snoozed.order("tasks.weight DESC").limit(count)
