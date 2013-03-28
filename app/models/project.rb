@@ -3,8 +3,13 @@
 
 class Project < AbstractProject
 
-  def dup_template_relations(template)
-    self.users = template.users
+  def dup_template_relations(template_id = nil)
+    begin
+      template = ProjectTemplate.find(template_id)
+    rescue ActiveRecord::RecordNotFound
+      return
+    end
+
     template.milestones.each do |template_milestone|
       self.milestones << template_milestone.dup
     end

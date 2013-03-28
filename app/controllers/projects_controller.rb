@@ -20,6 +20,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = create_entity(params[:project])
+    @project.dup_template_relations(params[:template_id])
     @project.company_id = current_user.company_id
 
     if @project.save
@@ -31,7 +32,7 @@ class ProjectsController < ApplicationController
           {:qualifiable => current_user.company.statuses.first}],
       )
 
-      create_project_permissions_for(@project, params[:copy_project_id])
+      create_project_permissions_for(@project, params[:copy_project_id]) unless params[:template_id]
       check_if_project_has_users(@project)
     else
       flash[:error] = @project.errors.full_messages.join(". ")
@@ -142,7 +143,7 @@ class ProjectsController < ApplicationController
     user = User.active.where("company_id = ?", current_user.company_id).find(params[:user_id])
 
     if current_user.admin?
-      @project = current_user.company.projects.find(params[:id])
+      @project = current_user.company.projects_and_project_templates.find(params[:id])
     else
       @project = current_user.projects.find(params[:id])
     end
@@ -172,9 +173,8 @@ class ProjectsController < ApplicationController
   end
 
   def clone
-    template = ProjectTemplate.find(params[:id])
-    @project = Project.new( template.attributes.except("id", "type") )
-    @project.dup_template_relations(template)
+    @template = ProjectTemplate.find(params[:id])
+    @project = Project.new( @template.attributes.except("id", "type") )
     render :new
   end
 
