@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     @current_sheet
   end
 
-  delegate :projects, :project_ids, :to => :current_user, :prefix=> :current
+  delegate :projects, :project_ids, :projects_and_project_templates, :projects_and_project_template_ids, :to => :current_user, :prefix=> :current
   delegate :all_projects, :admin?, :tz,  :to => :current_user
 
   # List of completed milestone ids, joined with ,
@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_templates
-    Template.where("project_id IN (?) AND company_id = ?", current_project_ids, current_user.company_id)
+    Template.where("project_id IN (?) AND company_id = ?", current_projects_and_project_template_ids, current_user.company_id)
   end
 
   protected

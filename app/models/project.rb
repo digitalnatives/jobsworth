@@ -21,14 +21,17 @@ class Project < AbstractProject
     end
 
     template.task_templates.each do |template_task|
-      task = template_task.dup
-      task.todos = template_task.todos
-      task.customers = template_task.customers
-      task.users = template_task.users
-      task.watchers = template_task.watchers
-      task.owners = template_task.owners
-      task.task_property_values = template_task.task_property_values
-      tasks << task.becomes(TaskRecord)
+      copied_task = template_task.dup
+      copied_task.todos = template_task.todos
+      copied_task.customers = template_task.customers
+      copied_task.users = template_task.users
+      copied_task.watchers = template_task.watchers
+      copied_task.owners = template_task.owners
+      copied_task = copied_task.becomes(TaskRecord)
+      template_task.task_property_values.each do |template_task_property|
+        copied_task.task_property_values << template_task_property.dup
+      end
+      self.tasks << copied_task
     end
   end
 

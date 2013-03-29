@@ -318,7 +318,7 @@ class TasksController < ApplicationController
 
   # GET /tasks/billable?customer_ids=:customer_ids&project_id=:project_id&service_id=:service_id
   def billable
-    @project = current_user.projects.find(params[:project_id]) if params[:project_id]
+    @project = current_user.projects_and_project_templates.find(params[:project_id]) if params[:project_id]
     return render :json => {:billable => false} if @project and @project.suppressBilling
     return render :json => {:billable => false} if params[:service_id].to_i < 0
     return render :json => {:billable => true} if params[:service_id].to_i == 0
