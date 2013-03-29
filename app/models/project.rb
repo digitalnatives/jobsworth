@@ -19,6 +19,17 @@ class Project < AbstractProject
     template.project_permissions.each do |template_project_permission|
       self.project_permissions << template_project_permission.dup
     end
+
+    template.task_templates.each do |template_task|
+      task = template_task.dup
+      task.todos = template_task.todos
+      task.customers = template_task.customers
+      task.users = template_task.users
+      task.watchers = template_task.watchers
+      task.owners = template_task.owners
+      task.task_property_values = template_task.task_property_values
+      tasks << task.becomes(TaskRecord)
+    end
   end
 
 end

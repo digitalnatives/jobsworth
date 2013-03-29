@@ -12,7 +12,7 @@ class AbstractTask < ActiveRecord::Base
   MAX_STATUS=4
 
   belongs_to    :company
-  belongs_to    :project
+  belongs_to    :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to    :milestone
 
   has_many      :users, :through => :task_users, :source => :user
@@ -527,6 +527,10 @@ class AbstractTask < ActiveRecord::Base
       work_log.save!
       work_log.notify(files) if work_log.comment?
     end
+  end
+
+  def template?
+    self.class == Template
   end
 
 private

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class ProjectTemplatesController < ProjectsController
   def index
     @project_templates = scoped_projects

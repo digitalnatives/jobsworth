@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class AbstractProject < ActiveRecord::Base
   self.table_name = "projects"
 
@@ -11,6 +12,7 @@ class AbstractProject < ActiveRecord::Base
   has_many      :users, :through => :project_permissions, :foreign_key => 'project_id'
   has_many      :project_permissions, :dependent => :destroy, :foreign_key => 'project_id'
   has_many      :tasks, :class_name => "TaskRecord", :foreign_key => 'project_id'
+  has_many      :task_templates, :class_name => "Template", :foreign_key => 'project_id'
   has_many      :sheets, :dependent => :destroy, :foreign_key => 'project_id'
   has_many      :work_logs, :dependent => :destroy, :foreign_key => 'project_id'
   has_many      :project_files, :dependent => :destroy, :foreign_key => 'project_id'

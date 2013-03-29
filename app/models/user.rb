@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many      :projects, :through => :project_permissions, :source=>:project, :conditions => ['projects.completed_at IS NULL'], :order => "projects.customer_id, projects.name", :readonly => false
   has_many      :completed_projects, :through => :project_permissions, :conditions => ['projects.completed_at IS NOT NULL'], :source => :project, :order => "projects.customer_id, projects.name", :readonly => false
   has_many      :all_projects, :through => :project_permissions, :order => "projects.customer_id, projects.name", :source => :project, :readonly => false
+  has_many      :project_templates, :through => :project_permissions, :source=>:project, :conditions => ["type = 'ProjectTemplate'"], :order => "projects.customer_id, projects.name", :readonly => false
   has_many      :project_permissions, :dependent => :destroy
 
   has_many      :tasks, :through => :task_owners, :class_name => "TaskRecord"
