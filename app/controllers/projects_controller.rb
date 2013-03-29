@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = create_entity(params[:project])
-    @project.dup_template_relations(params[:template_id])
+    @template = @project.dup_and_get_template(params[:template_id])
     @project.company_id = current_user.company_id
 
     if @project.save
@@ -203,7 +203,7 @@ class ProjectsController < ApplicationController
   def check_if_project_has_users(project)
     if project.has_users?
       flash[:success] = _('Project was successfully created.')
-      redirect_to (project.class == ProjectTemplate) ? project_templates_path : projects_path
+      redirect_to (project.template?) ? project_templates_path : projects_path
     else
       flash[:success] =
         _('Project was successfully created. Add users who need access to this project.')

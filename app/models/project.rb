@@ -3,7 +3,7 @@
 
 class Project < AbstractProject
 
-  def dup_template_relations(template_id = nil)
+  def dup_and_get_template(template_id = nil)
     begin
       template = ProjectTemplate.find(template_id)
     rescue ActiveRecord::RecordNotFound
@@ -33,6 +33,7 @@ class Project < AbstractProject
       end
       self.tasks << copied_task
     end
+    template
   end
 
 end
