@@ -120,7 +120,7 @@ module TasksHelper
   ###
   def options_for_user_projects(task)
     if task.template?
-      projects = current_user.project_templates.includes(:customer).except(:order).order("customers.name, projects.name")
+      projects = current_user.projects_and_project_templates.includes(:customer).except(:order).order("customers.name, projects.name")
     else
       projects = current_user.projects.includes(:customer).except(:order).order("customers.name, projects.name")
     end
@@ -129,9 +129,7 @@ module TasksHelper
       projects << task.project
       projects = projects.sort_by { |project| project.customer.name + project.name }
     end
-    options = grouped_client_projects_options(projects)
-
-    return grouped_options_for_select(options, task.project_id, "Please select").html_safe
+    grouped_client_projects_options(projects, task.project_id)
   end
 
   ##

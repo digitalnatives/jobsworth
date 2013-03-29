@@ -324,10 +324,9 @@ module ApplicationHelper
     h(String.new(h(attr)))
   end
 
-  def grouped_client_projects_options(projects)
+  def project_options(projects)
     last_customer = nil
     options = []
-
     projects.each do |project|
       if project.customer != last_customer
         options << [ h(project.customer.name), [] ]
@@ -336,7 +335,20 @@ module ApplicationHelper
 
       options.last[1] << [ project.name, project.id ]
     end
-    return options
+    options
+  end
+
+  def grouped_client_projects_options(projects, selected_id = nil)
+    unless projects.map(&:type).include?("ProjectTemplate")
+      return grouped_options_for_select(project_options(projects), selected_id, "Please select").html_safe
+    end
+
+    template_projects = project_options(projects.select{ |p| p.type == "ProjectTemplate" })
+    projects = project_options(projects.select{ |p| p.type == "Project" })
+    output = content_tag(:option, "Please Select")
+    output << content_tag(:optgroup, :label => 'Templates') { grouped_options_for_select(template_projects, selected_id) }
+    output << content_tag(:optgroup, :label => 'Projects') { grouped_options_for_select(projects, selected_id) }
+    output
   end
 
   def active_class(selected, item)
