@@ -350,7 +350,7 @@ private
     case class_type
     when "User"
       "task_users.type= 'TaskOwner' AND task_users.user_id"
-    when "Project", "ProjectTemplate"
+    when "Project", "ProjectTemplate", "AbstractProject"
       "tasks.project_id"
     when "Task"
       "tasks.id"

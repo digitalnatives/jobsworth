@@ -66,6 +66,13 @@ User.blueprint(:admin) do
   admin 10
 end
 
+AbstractProject.blueprint do
+  name
+  customer
+  company
+  default_estimate 1.0
+end
+
 Project.blueprint do
   name
   customer
@@ -145,8 +152,8 @@ WorkLog.blueprint do
   company
   body { Sham.comment }
   customer { Customer.make(:company=>company)}
-  user { User.make(:company=>company, :projects=>[project])}
   project { Project.make(:customer=>customer,:company=>company)}
+  user { User.make(:company=>company, :projects=>[project])}
   started_at { Time.now }
   task { TaskRecord.make(:project=>project, :company=>company, :users=> [user])}
   event_log { EventLog.make(:company => company, :project => project, :user => user) }

@@ -21,9 +21,9 @@ class User < ActiveRecord::Base
   belongs_to    :customer
   belongs_to    :access_level
   has_many      :projects_and_project_templates, :through => :project_permissions, :source=>:project, :conditions => ['projects.completed_at IS NULL'], :order => "projects.customer_id, projects.name", :readonly => false
-  has_many      :projects, :through => :project_permissions, :source=>:project, :class_name => 'Project', :conditions => ['projects.completed_at IS NULL'], :order => "projects.customer_id, projects.name", :readonly => false
-  has_many      :completed_projects, :through => :project_permissions, :class_name => 'Project', :conditions => ['projects.completed_at IS NOT NULL'], :source => :project, :order => "projects.customer_id, projects.name", :readonly => false
-  has_many      :all_projects, :through => :project_permissions, :order => "projects.customer_id, projects.name", :class_name => 'Project', :source => :project, :readonly => false
+  has_many      :projects, :through => :project_permissions, :source=>:project, :conditions => ["type = 'Project' AND projects.completed_at IS NULL"], :order => "projects.customer_id, projects.name", :readonly => false
+  has_many      :completed_projects, :through => :project_permissions, :conditions => ["type = 'Project' AND projects.completed_at IS NOT NULL"], :source => :project, :order => "projects.customer_id, projects.name", :readonly => false
+  has_many      :all_projects, :through => :project_permissions, :conditions => ["type = 'Project'"],  :order => "projects.customer_id, projects.name", :source => :project, :readonly => false
   has_many      :project_templates, :through => :project_permissions, :source=>:project, :class_name => 'ProjectTemplate', :order => "projects.customer_id, projects.name", :readonly => false
   has_many      :project_permissions, :dependent => :destroy
 

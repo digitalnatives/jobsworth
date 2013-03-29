@@ -10,7 +10,7 @@ class EventLog < ActiveRecord::Base
   belongs_to :target, :polymorphic => true
   belongs_to :user
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
 
   TASK_CREATED       = 1
   TASK_COMPLETED     = 2
