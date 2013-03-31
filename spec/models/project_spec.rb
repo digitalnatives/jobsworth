@@ -76,6 +76,23 @@ describe Project do
       @open_task.weight.should_not == calculated_score
     end 
   end
+
+  describe "Copy project template" do
+    let(:project_template) { FactoryGirl.create(:project_template) }
+
+    it "should be a valid project" do
+      project = Project.new( project_template.attributes.except("id", "type") )
+      project.dup_and_get_template(project_template.id)
+      project.should be_valid
+    end
+
+    it "should be saved as a project" do
+      project = Project.new( project_template.attributes.except("id", "type") )
+      project.dup_and_get_template(project_template.id)
+      expect{ project.save }.to change{ Project.count }.by(1)
+    end
+
+  end
 end
 
 
