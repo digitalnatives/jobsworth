@@ -5,6 +5,27 @@ class ProjectTemplatesController < ProjectsController
     render :layout => "admin"
   end
 
+  def create
+    @project = create_entity(params[:project])
+    @project.company_id = current_user.company_id
+
+    if @project.save
+      # create a task filter for the project
+      TaskFilter.create(
+        :shared => true, :user => current_user, :name => @project.name,
+        :qualifiers_attributes => [
+          {:qualifiable => @project},
+          {:qualifiable => current_user.company.statuses.first}],
+      )
+
+      create_project_permissions_for(@project, params[:copy_project_id])
+      check_if_project_has_users(@project)
+    else
+      flash[:error] = @project.errors.full_messages.join(". ")
+      render :new
+    end
+  end
+
   def edit
     @project = scoped_projects.find(params[:id])
   end

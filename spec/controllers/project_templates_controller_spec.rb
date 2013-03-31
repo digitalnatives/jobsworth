@@ -1,9 +1,32 @@
 require 'spec_helper'
 
 describe ProjectTemplatesController do
-  let(:project_template) { FactoryGirl.create(:project_template, :company => @logged_user.company ) }
+  
+  describe "CREATE" do
+
+    context "When user allowed" do
+      let(:valid_attributes) { FactoryGirl.build(:project_template, :company => @logged_user.company ).attributes }
+      before :each do
+        sign_in_admin
+      end
+
+      it "should create a project template" do
+        expect{
+          post :create, :project => valid_attributes
+        }.to change { ProjectTemplate.count }.by(1)
+      end
+
+      it "should redirect to the 'index' action" do
+        post :create, :project => valid_attributes
+        response.should redirect_to project_templates_path
+      end
+
+    end # when user allowed
+
+  end # DESTROY
 
   describe "DESTROY" do
+    let(:project_template) { FactoryGirl.create(:project_template, :company => @logged_user.company ) }
 
     context "When user allowed" do
       before :each do
