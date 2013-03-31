@@ -19,7 +19,7 @@ describe Project do
     end
 
     it "should fetch the right Score Rule instances" do
-      some_score_rule = ScoreRule.make 
+      some_score_rule = ScoreRule.make
       project.score_rules << some_score_rule
       project.score_rules.should include(some_score_rule)
     end
@@ -52,6 +52,20 @@ describe Project do
     end
   end
 
+  describe '#billing_enabled?' do
+    subject{ FactoryGirl.create(:project) }
+
+    it "should return true if company allows billing use" do
+      subject.company.use_billing = true
+      subject.billing_enabled?.should be_true
+    end
+
+    it "should return false if company doesn't allow billing use" do
+      subject.company.use_billing = false
+      subject.billing_enabled?.should be_false
+    end
+  end
+
   describe "When adding a new score rule to a project that have tasks" do
     before(:each) do
       @open_task    = TaskRecord.make(:status => AbstractTask::OPEN)
@@ -74,22 +88,40 @@ describe Project do
       @closed_task.reload
       calculated_score = @open_task.weight_adjustment + @score_rule.score
       @open_task.weight.should_not == calculated_score
-    end 
+    end
   end
 
   describe "Copy project template" do
-    let(:project_template) { FactoryGirl.create(:project_template) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
+    let(:milestone) { FactoryGirl.create(:milestone, :project => project_template, :company => user.company) }
 
-    it "should be a valid project" do
-      project = Project.new( project_template.attributes.except("id", "type") )
-      project.dup_and_get_template(project_template.id)
-      project.should be_valid
-    end
+    subject(:project) { Project.new( project_template.attributes.except("id", "type") ) }
 
     it "should be saved as a project" do
-      project = Project.new( project_template.attributes.except("id", "type") )
-      project.dup_and_get_template(project_template.id)
-      expect{ project.save }.to change{ Project.count }.by(1)
+      expect{ subject.save }.to change{ Project.count }.by(1)
+    end
+
+    context "should copy project permissions" do
+      let(:custom_permissions) { FactoryGirl.create(:project_permission, 
+                                                    :project => project_template,
+                                                    :user => user,
+                                                    :company => project_template.company) }
+
+      it "defaults" do
+        project_template.create_default_permissions_for(user)
+        subject.dup_and_get_template(project_template.id)
+        subject.save
+        subject.project_permissions.size.should eq(1)
+      end
+
+      it "custom" do
+        custom_permissions
+        subject.dup_and_get_template(project_template.id)
+        subject.save
+        subject.project_permissions.size.should eq(1)
+        subject.project_permissions.first.attributes.except("project_id", "created_at") == custom_permissions.attributes.except("project_id", "created_at")
+      end
     end
 
   end

@@ -5,7 +5,7 @@ describe ProjectTemplatesController do
   describe "CREATE" do
 
     context "When user allowed" do
-      let(:valid_attributes) { FactoryGirl.build(:project_template, :company => @logged_user.company ).attributes }
+      let(:valid_attributes) { FactoryGirl.build(:project_template, :company => @logged_user.company ).attributes.except("id", "type") }
       before :each do
         sign_in_admin
       end

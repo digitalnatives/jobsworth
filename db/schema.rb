@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20130327093919) do
     t.datetime "logo_updated_at"
     t.boolean  "use_resources",                             :default => true
     t.boolean  "use_score_rules",                           :default => true
+    t.boolean  "use_billing",                               :default => true
   end
 
   add_index "companies", ["subdomain"], :name => "index_companies_on_subdomain", :unique => true

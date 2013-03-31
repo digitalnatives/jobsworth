@@ -32,10 +32,22 @@ class Project < AbstractProject
         copied_task.task_property_values << template_task_property.dup
       end
       self.tasks << copied_task
+
     end
     template
   end
 
+  def billing_enabled?
+    company.try :use_billing
+  end
+
+  def billable?
+    billing_enabled? && !suppressBilling
+  end
+
+  def no_billing?
+    !billable?
+  end
 end
 
 # == Schema Information
