@@ -91,36 +91,69 @@ describe Project do
     end
   end
 
-  describe "Copy project template" do
+  describe "should clone project template" do
     let(:user) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
     let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
+    let(:task_template) { FactoryGirl.create(:template,
+                                             :project => project_template,
+                                             :company => user.company,
+                                             :owners => [ user ],
+                                             :users => [ user2 ]) }
     let(:milestone) { FactoryGirl.create(:milestone, :project => project_template, :company => user.company) }
-
-    subject(:project) { Project.new( project_template.attributes.except("id", "type") ) }
+    let(:project) { Project.new( project_template.attributes.except("id", "type") ) }
 
     it "should be saved as a project" do
-      expect{ subject.save }.to change{ Project.count }.by(1)
+      expect{ project.save }.to change{ Project.count }.by(1)
     end
 
     context "should copy project permissions" do
-      let(:custom_permissions) { FactoryGirl.create(:project_permission, 
+      it "defaults" do
+        project_template.create_default_permissions_for(user)
+        project.dup_and_get_template(project_template.id)
+        project.save
+        project.project_permissions.size.should eq(1)
+      end
+    end
+
+    context "should clone project permissions" do
+      let(:custom_permissions) { FactoryGirl.create(:project_permission,
                                                     :project => project_template,
                                                     :user => user,
                                                     :company => project_template.company) }
 
-      it "defaults" do
-        project_template.create_default_permissions_for(user)
-        subject.dup_and_get_template(project_template.id)
-        subject.save
-        subject.project_permissions.size.should eq(1)
+      subject do
+        custom_permissions
+        project.dup_and_get_template(project_template.id)
+        project.save
+        project
       end
 
-      it "custom" do
-        custom_permissions
-        subject.dup_and_get_template(project_template.id)
-        subject.save
-        subject.project_permissions.size.should eq(1)
+      its('project_permissions.size') { should eq(1) }
+      its('tasks.size') { should eq(0) }
+
+      it "all necessary attributes" do
         subject.project_permissions.first.attributes.except("project_id", "created_at") == custom_permissions.attributes.except("project_id", "created_at")
+      end
+    end
+
+    context "should clone related task templates" do
+      subject do
+        task_template
+        project_template.create_default_permissions_for(user)
+        project.dup_and_get_template(project_template.id)
+        project.save
+        project
+      end
+
+      its('tasks.size') { should eq(1) }
+      its('tasks.first.owners.size') { should eq(2) }
+      its('tasks.first.users.size') { should eq(2) }
+      its('tasks.first.owner_ids') { should =~ task_template.owner_ids }
+      its('tasks.first.user_ids') { should =~ task_template.user_ids }
+
+      it "all necessary attributes" do
+        subject.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
       end
     end
 

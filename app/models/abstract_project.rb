@@ -138,6 +138,18 @@ class AbstractProject < ActiveRecord::Base
     total_milestones_count - open_milestones_count
   end
 
+  def billing_enabled?
+    company.try :use_billing
+  end
+
+  def billable?
+    billing_enabled? && !suppressBilling
+  end
+
+  def no_billing?
+    !billable?
+  end
+
   ###
   # Updates the critical, normal and low counts for this project.
   # Also updates open and total tasks.

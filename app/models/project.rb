@@ -22,32 +22,28 @@ class Project < AbstractProject
 
     template.task_templates.each do |template_task|
       copied_task = template_task.dup
-      copied_task.todos = template_task.todos
-      copied_task.customers = template_task.customers
-      copied_task.users = template_task.users
-      copied_task.watchers = template_task.watchers
-      copied_task.owners = template_task.owners
       copied_task = copied_task.becomes(TaskRecord)
+      template_task.todos.each do |template_todos|
+        copied_task.todos << template_todos
+      end
+      template_task.customers.each do |template_owners|
+        copied_task.owners << template_owners
+      end
+      template_task.users.each do |template_user|
+        copied_task.users << template_user
+      end
+      template_task.watchers.each do |template_watcher|
+        copied_task.watchers << template_watcher
+      end
       template_task.task_property_values.each do |template_task_property|
         copied_task.task_property_values << template_task_property.dup
       end
       self.tasks << copied_task
-
     end
+
     template
   end
 
-  def billing_enabled?
-    company.try :use_billing
-  end
-
-  def billable?
-    billing_enabled? && !suppressBilling
-  end
-
-  def no_billing?
-    !billable?
-  end
 end
 
 # == Schema Information
