@@ -313,6 +313,7 @@ Localization.define('hu_HU') do |l|
   l.store "Let me know", "Szólj nekem" # Jozsef
   l.store "New Feature", "Új feature" # Jozsef
   l.store "New Project", "Új Projekt" # Jozsef
+  l.store "New Project Template", "Új Projekt Sablon" # Jozsef
   l.store "Preferences", "Beállítások" # Jozsef
   l.store "Report Type", "Jelentés típusa" # Jozsef
   l.store "Task Status", "Feladatok Státusza" # Jozsef
@@ -329,6 +330,7 @@ Localization.define('hu_HU') do |l|
   l.store "Current logo", "Current logo"
   l.store "Dependencies", "Függések" # Jozsef
   l.store "Edit Project", "Projekt Szerkesztése" # Istvan DEMETER
+  l.store "Edit Project Template", "Projekt sablon Szerkesztése" # Istvan DEMETER
   l.store "Edit Summary", "Összefoglaló szerkesztése" # Szabó Dénes
   l.store "Hide Waiting", "Várakozás elrejtése" # Jozsef
   l.store "Last Updated", "Utolsó módosítás" # Szabó Dénes

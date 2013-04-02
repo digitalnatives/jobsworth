@@ -1,5 +1,7 @@
 class ProjectTemplate < AbstractProject
 
+  validates :start_at, :presence => true
+
 end
 
 # == Schema Information

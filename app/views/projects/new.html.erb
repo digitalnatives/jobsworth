@@ -1,8 +1,8 @@
-<% @page_title = "New Project - #{Setting.productName}" %>
+<% @page_title = "New Project #{'Template' if @project.template?}- #{Setting.productName}" %>
 
 <%= form_tag({:action => 'create'}, :class => "form-horizontal") do %>
   <fieldset id="project_form">
-    <legend><%= _'New Project'%></legend>
+    <legend><%= @project.template? ? _('New Project Template') : _('New Project') %></legend>
     <%= hidden_field_tag :template_id, @template.try(:id) %>
     <%= render :partial => "form" %>
     <% if current_user.all_projects.size > 0 %>

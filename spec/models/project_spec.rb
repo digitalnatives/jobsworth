@@ -100,62 +100,86 @@ describe Project do
                                              :company => user.company,
                                              :owners => [ user ],
                                              :users => [ user2 ]) }
-    let(:milestone) { FactoryGirl.create(:milestone, :project => project_template, :company => user.company) }
+    let(:milestone) { FactoryGirl.create(:milestone, 
+                                         :project => project_template, 
+                                         :company => user.company,
+                                         :due_at => milestone_due_at) }
     let(:project) { Project.new( project_template.attributes.except("id", "type") ) }
 
     it "should be saved as a project" do
       expect{ project.save }.to change{ Project.count }.by(1)
     end
 
-    context "should copy project permissions" do
-      it "defaults" do
-        project_template.create_default_permissions_for(user)
-        project.dup_and_get_template(project_template.id)
-        project.save
-        project.project_permissions.size.should eq(1)
-      end
-    end
-
     context "should clone project permissions" do
-      let(:custom_permissions) { FactoryGirl.create(:project_permission,
-                                                    :project => project_template,
-                                                    :user => user,
-                                                    :company => project_template.company) }
-
-      subject do
-        custom_permissions
-        project.dup_and_get_template(project_template.id)
-        project.save
-        project
+      context "with defaults" do
+        it "with all necessary attributes" do
+          project_template.create_default_permissions_for(user)
+          project.dup_and_get_template(project_template.id)
+          project.save
+          project.project_permissions.size.should eq(1)
+          project.project_permissions.first.attributes.except("project_id", "created_at") == project_template.project_permissions.first.attributes.except("project_id", "created_at")
+        end
       end
 
-      its('project_permissions.size') { should eq(1) }
-      its('tasks.size') { should eq(0) }
+      context "with custom" do
+        let(:custom_permissions) { FactoryGirl.create(:project_permission,
+                                                      :project => project_template,
+                                                      :user => user,
+                                                      :company => project_template.company) }
 
-      it "all necessary attributes" do
-        subject.project_permissions.first.attributes.except("project_id", "created_at") == custom_permissions.attributes.except("project_id", "created_at")
+        before do
+          custom_permissions
+          project.dup_and_get_template(project_template.id)
+          project.save
+          project
+        end
+
+        it "with all necessary attributes" do
+          project.project_permissions.size.should eq(1)
+          project.tasks.size.should eq(0)
+          project.project_permissions.first.attributes.except("project_id", "created_at") == custom_permissions.attributes.except("project_id", "created_at")
+        end
       end
-    end
+    end # should clone project permissions
 
     context "should clone related task templates" do
-      subject do
+      before do 
         task_template
+        milestone
         project_template.create_default_permissions_for(user)
+        project.start_at = Date.today + 1.month
         project.dup_and_get_template(project_template.id)
         project.save
-        project
       end
 
-      its('tasks.size') { should eq(1) }
-      its('tasks.first.owners.size') { should eq(2) }
-      its('tasks.first.users.size') { should eq(2) }
-      its('tasks.first.owner_ids') { should =~ task_template.owner_ids }
-      its('tasks.first.user_ids') { should =~ task_template.user_ids }
+      context "when milestone due at nil" do
+        let(:milestone_due_at) { nil }
 
-      it "all necessary attributes" do
-        subject.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
+        it "with all necessary attributes" do
+          project.milestones.first.due_date.should be_nil
+          project.tasks.size.should eq(1)
+          project.tasks.first.owners.size.should eq(2)
+          project.tasks.first.users.size.should eq(2)
+          project.tasks.first.owner_ids.should =~ task_template.owner_ids
+          project.tasks.first.user_ids.should =~ task_template.user_ids
+          project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
+        end
       end
-    end
+
+      context "when milestone due at set" do
+        let(:milestone_due_at) { Date.today + 5.days }
+
+        it "with all necessary attributes" do
+          project.tasks.size.should eq(1)
+          project.tasks.first.owners.size.should eq(2)
+          project.tasks.first.users.size.should eq(2)
+          project.tasks.first.owner_ids.should =~ task_template.owner_ids
+          project.tasks.first.user_ids.should =~ task_template.user_ids
+          project.milestones.first.due_date.should == milestone.due_at  + 1.month
+          project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
+        end
+      end
+    end # should clone related task templates
 
   end
 end

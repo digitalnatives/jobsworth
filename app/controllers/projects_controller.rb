@@ -175,6 +175,7 @@ class ProjectsController < ApplicationController
   def clone
     @template = ProjectTemplate.find(params[:id])
     @project = Project.new( @template.attributes.except("id", "type") )
+    @project.start_at = Date.today
     render :new
   end
 

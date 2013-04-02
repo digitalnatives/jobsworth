@@ -6,12 +6,18 @@ class Project < AbstractProject
   def dup_and_get_template(template_id = nil)
     begin
       template = ProjectTemplate.find(template_id)
-    rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound => e
+      logger.error(e.message)
+      logger.error(e.backtrace.join("\n"))
       return
     end
 
     template.milestones.each do |template_milestone|
-      self.milestones << template_milestone.dup
+      copied_milestone = template_milestone.dup
+      if start_at.present? && copied_milestone.due_at.present?
+        copied_milestone.due_at += (start_at - template.start_at).days
+      end
+      self.milestones << copied_milestone
     end
     template.score_rules.each do |template_score_rule|
       self.score_rules << template_score_rule.dup

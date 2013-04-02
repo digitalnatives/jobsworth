@@ -15,5 +15,4 @@ FactoryGirl.define do
       type 'Template'
     end
   end
-
 end
