@@ -99,7 +99,8 @@ describe Project do
                                              :project => project_template,
                                              :company => user.company,
                                              :owners => [ user ],
-                                             :users => [ user2 ]) }
+                                             :users => [ user2 ], 
+                                             :due_at => task_due_at) }
     let(:milestone) { FactoryGirl.create(:milestone, 
                                          :project => project_template, 
                                          :company => user.company,
@@ -154,6 +155,7 @@ describe Project do
 
       context "when milestone due at nil" do
         let(:milestone_due_at) { nil }
+        let(:task_due_at) { nil }
 
         it "with all necessary attributes" do
           project.milestones.first.due_date.should be_nil
@@ -162,12 +164,14 @@ describe Project do
           project.tasks.first.users.size.should eq(2)
           project.tasks.first.owner_ids.should =~ task_template.owner_ids
           project.tasks.first.user_ids.should =~ task_template.user_ids
+          project.tasks.first.due_at.should be_nil
           project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
         end
       end
 
       context "when milestone due at set" do
         let(:milestone_due_at) { Date.today + 5.days }
+        let(:task_due_at) { Date.today + 6.days }
 
         it "with all necessary attributes" do
           project.tasks.size.should eq(1)
@@ -175,7 +179,8 @@ describe Project do
           project.tasks.first.users.size.should eq(2)
           project.tasks.first.owner_ids.should =~ task_template.owner_ids
           project.tasks.first.user_ids.should =~ task_template.user_ids
-          project.milestones.first.due_date.should == milestone.due_at  + 1.month
+          project.tasks.first.due_at.should == task_template.due_at + 1.month
+          project.milestones.first.due_at.should == milestone.due_at + 1.month
           project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
         end
       end

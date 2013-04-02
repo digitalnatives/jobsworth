@@ -44,6 +44,9 @@ class Project < AbstractProject
       template_task.task_property_values.each do |template_task_property|
         copied_task.task_property_values << template_task_property.dup
       end
+      if start_at.present? && copied_task.due_at.present?
+        copied_task.due_at += (start_at - template.start_at).days
+      end
       self.tasks << copied_task
     end
 

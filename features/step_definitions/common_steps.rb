@@ -16,9 +16,11 @@ When /^I browse full screen$/ do
 end
 
 When /I am on current common user "([^\"]*)" edit page$/ do |model|
+  @current_user.reload if @current_user.send(model).empty?
   step %Q{I am on the edit company page with params "{ :id => @current_user.#{model}.id }"}
 end
 
 When /I am on current common user (\d+). "([^\"]*)" edit page$/ do |nth, model|
+  @current_user.reload if @current_user.send(model.pluralize).empty?
   step %Q{I am on the edit #{model} page with params "{ :id => @current_user.#{model.pluralize}[#{nth.to_i - 1}].id }"}
 end
