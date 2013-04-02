@@ -23,6 +23,7 @@ gem 'delayed_job_active_record'
 gem 'cocaine'
 gem 'hashie'
 gem 'rufus-scheduler'
+gem 'omniauth'
 
 platforms :jruby do
   gem 'warbler'
