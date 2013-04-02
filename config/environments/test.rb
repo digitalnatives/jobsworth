@@ -6,6 +6,7 @@ Jobsworth::Application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
+  config.assets.debug = true
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
@@ -41,8 +42,8 @@ Jobsworth::Application.configure do
   config.active_record.mass_assignment_sanitizer = :strict
 
   # for cuke
-  config.assets.digest = false
-  config.assets.prefix = "/cucumber_test_assets"
-  config.action_controller.asset_host = "file://#{::Rails.root}/public"
+  #config.assets.digest = false
+  #config.assets.prefix = "/cucumber_test_assets"
+  #config.action_controller.asset_host = "file://#{::Rails.root}/public"
 
 end
