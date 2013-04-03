@@ -31,7 +31,7 @@ module OmniauthFluenta
                         name:           auth_hash['info']['company']['name'],
                         contact_email:  auth_hash['info']['company']['email'],
                         subdomain:      auth_hash['info']['company']['subdomain'],
-      }
+                      } rescue {}
 
       raise InsufficientCompanyData  if REQUIRED_COMPANY_DATA.any?{ |key| company_info[key].blank? }
       raise InsufficientUserData     if REQUIRED_USER_DATA.any?{ |key| user_info[key].blank? }
