@@ -1,4 +1,7 @@
 module OmniauthFluenta
+
+  require 'fetcher'
+
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     def passthru
@@ -8,7 +11,8 @@ module OmniauthFluenta
     end
 
     def fluenta
-      render json: request.env['omniauth.auth'].to_json
+      resource = OmniauthFluenta::Fetcher.user(request.env['omniauth.auth'].to_hash)
+      sign_in_and_redirect(resource_name, resource)
     end
 
   end
