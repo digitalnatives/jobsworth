@@ -3,8 +3,8 @@ class AddFluentaIdToCompaniesAndUsers < ActiveRecord::Migration
     add_column :users,        :fluenta_id, :integer
     add_column :companies,    :fluenta_id, :integer
 
-    add_index :users,         :fluenta_id
-    add_index :companies,     :fluenta_id
+    add_index :users,         :fluenta_id, :unique => true
+    add_index :companies,     :fluenta_id, :unique => true
 
   end
 
