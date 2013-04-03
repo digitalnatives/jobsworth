@@ -77,6 +77,14 @@ When /^(?:|I )press "([^"]*)"(?: within "([^"]*)")?$/ do |button, selector|
   end
 end
 
+When /^(?:|I )select( localized)? "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |localized, value, field, selector|
+  value = I18n.t( value ) if localized
+
+  with_scope(selector) do
+    select(value, :from => field)
+  end
+end
+
 
 Then /^(?:|I )should see "([^"]*)"(?: within( any)? "([^"]*)")?$/ do |text, any, selector|
   if any
