@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130403092442) do
+ActiveRecord::Schema.define(:version => 20130403095335) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130403092442) do
     t.integer  "fluenta_id"
   end
 
+  add_index "companies", ["fluenta_id"], :name => "index_companies_on_fluenta_id"
   add_index "companies", ["subdomain"], :name => "index_companies_on_subdomain", :unique => true
 
   create_table "custom_attribute_choices", :force => true do |t|
@@ -727,6 +728,7 @@ ActiveRecord::Schema.define(:version => 20130403092442) do
   add_index "users", ["autologin"], :name => "index_users_on_autologin"
   add_index "users", ["company_id"], :name => "users_company_id_index"
   add_index "users", ["customer_id"], :name => "index_users_on_customer_id"
+  add_index "users", ["fluenta_id"], :name => "index_users_on_fluenta_id"
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username", "company_id"], :name => "index_users_on_username_and_company_id", :unique => true
