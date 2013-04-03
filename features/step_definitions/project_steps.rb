@@ -8,6 +8,9 @@ end
 
 Given /^I have all project template related test data and logged in as "([^"]+)"$/ do |user|
   @current_user = FactoryGirl.create(:admin)
+  FactoryGirl.create(:user,
+                     :company => @current_user.company,
+                     :name => "Autocomplete Test User")
   @customer_company = FactoryGirl.create(:customer,
                                          :company => @current_user.company,
                                          :name => "First Test Customer Company")

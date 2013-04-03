@@ -133,7 +133,7 @@ class ProjectsController < ApplicationController
       @user = current_user.company.users.find(params[:user_id])
       render :partial => "/users/project_permissions"
     else
-      @project = current_user.company.projects.find(params[:id])
+      @project = current_user.company.projects_and_project_templates.find(params[:id])
       @users = Company.find(current_user.company_id).users.order("users.name")
       render :partial => "permission_list"
     end
