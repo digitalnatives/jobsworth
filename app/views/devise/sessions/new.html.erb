@@ -42,4 +42,7 @@
     <%= f.submit "Login", :class => "btn" %>
     <%=link_to "Forget your password?", new_user_password_path  %>
   </div>
+
+  <%= link_to 'Sign in with Fluenta', user_omniauth_authorize_path(:fluenta) %>
+
 <% end %>

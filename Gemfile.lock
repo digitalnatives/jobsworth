@@ -1,3 +1,11 @@
+PATH
+  remote: vendor/engines/omniauth-fluenta
+  specs:
+    omniauth-fluenta (0.0.1)
+      omniauth
+      omniauth-oauth2
+      rails (~> 3.2.10)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -128,7 +136,7 @@ GEM
       json (>= 1.7.6)
     gherkin (2.11.6-java)
       json (>= 1.7.6)
-    hashie (2.0.3)
+    hashie (1.2.0)
     hike (1.2.1)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
@@ -164,37 +172,24 @@ GEM
     mime-types (1.21)
     mocha (0.13.3)
       metaclass (~> 0.0.1)
-    multi_json (1.7.1)
-    multi_xml (0.5.3)
+    multi_json (1.7.2)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
     net-ldap (0.3.1)
-    nokogiri (1.5.8)
-    nokogiri (1.5.8-java)
-    oa-core (0.0.5)
-      rack (~> 1.1)
-    oa-oauth (0.0.1)
-      json
-      nokogiri
-      oa-core (~> 0.0.0)
-      oauth
-      oauth2
-    oa-openid (0.0.5)
-      oa-core (= 0.0.5)
-      rack-openid (~> 1.1.1)
-      ruby-openid-apps-discovery
-    oauth (0.4.7)
-    oauth2 (0.9.1)
+    nokogiri (1.5.9)
+    nokogiri (1.5.9-java)
+    oauth2 (0.8.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
-      multi_xml (~> 0.5)
       rack (~> 1.2)
-    omniauth (0.0.1)
-      oa-core (~> 0.0.0)
-      oa-oauth (~> 0.0.0)
-      oa-openid (~> 0.0.0)
+    omniauth (1.1.3)
+      hashie (~> 1.2)
+      rack
+    omniauth-oauth2 (1.1.1)
+      oauth2 (~> 0.8.0)
+      omniauth (~> 1.0)
     orm_adapter (0.4.0)
     paperclip (3.4.1)
       activemodel (>= 3.0.0)
@@ -211,9 +206,6 @@ GEM
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-openid (1.1.2)
-      rack (>= 0.4)
-      ruby-openid (>= 2.0.3)
     rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
@@ -252,9 +244,6 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    ruby-openid (2.2.3)
-    ruby-openid-apps-discovery (1.2.0)
-      ruby-openid (>= 2.1.7)
     ruby-prof (0.13.0)
     rubyzip (0.9.9)
     rufus-scheduler (2.0.18)
@@ -345,7 +334,8 @@ DEPENDENCIES
   machinist (= 1.0.6)
   mysql2
   net-ldap
-  omniauth
+  omniauth (~> 1.1.3)
+  omniauth-fluenta!
   paperclip (> 3.1)
   pg
   poltergeist

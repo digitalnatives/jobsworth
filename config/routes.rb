@@ -1,5 +1,11 @@
 Jobsworth::Application.routes.draw do
 
+  devise_for :users,
+             :path_prefix => "auth",
+             :controllers => { :sessions  => "auth/sessions",
+                               :passwords => "auth/passwords",
+                               :omniauth_callbacks => "fluenat_oauth/omniauth_callbacks" }
+
   resources :snippets
 
   resources :service_level_agreements, :only => [:create, :destroy, :update]
@@ -9,11 +15,6 @@ Jobsworth::Application.routes.draw do
       get 'auto_complete_for_service_name'
     end
   end
-
-  devise_for :users,
-             :path_prefix => "auth",
-             :controllers => { :sessions  => "auth/sessions", 
-                                :passwords => "auth/passwords" }
 
   resources :users, :except => [:show] do
     member do
@@ -99,7 +100,7 @@ Jobsworth::Application.routes.draw do
     match :toggle_done, :on => :member
   end
 
-  resources :work_logs do 
+  resources :work_logs do
     match :update_work_log, :on=> :member
   end
 
@@ -166,5 +167,5 @@ Jobsworth::Application.routes.draw do
 
   match ':controller/list' => ':controller#index'
 
-  match ":controller(/:action(/:id(.:format)))"
+  # match ":controller(/:action(/:id(.:format)))"
 end
