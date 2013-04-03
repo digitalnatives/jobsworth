@@ -11,8 +11,21 @@ When /^I wait until all Ajax requests are complete$/ do
   end
 end
 
-When /^I browse full screen$/ do
-  page.driver.browser.manage.window.resize_to(1350,1200)
+When /^I browse( full screen)?(?: with resolution (\d+)x(\d+))?$/ do |full_screen, width, height|
+  case Capybara.current_driver
+  when :selenium
+    if full_screen
+      page.driver.browser.manage.window.maximize 
+    else
+      page.driver.browser.manage.window.resize_to(width.to_i, height.to_i)
+    end
+  when :poltergeist
+    if full_screen
+      page.driver.resize(1024, 768)
+    else
+      page.driver.resize(width.to_i, height.to_i)
+    end
+  end
 end
 
 When /I am on current common user "([^\"]*)" edit page$/ do |model|
