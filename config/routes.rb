@@ -1,10 +1,10 @@
 Jobsworth::Application.routes.draw do
 
+  mount OmniauthFluenta::Engine => '/'
   devise_for :users,
              :path_prefix => "auth",
              :controllers => { :sessions  => "auth/sessions",
-                               :passwords => "auth/passwords",
-                               :omniauth_callbacks => "fluenat_oauth/omniauth_callbacks" }
+                               :passwords => "auth/passwords" }
 
   resources :snippets
 
@@ -167,5 +167,5 @@ Jobsworth::Application.routes.draw do
 
   match ':controller/list' => ':controller#index'
 
-  # match ":controller(/:action(/:id(.:format)))"
+  match ":controller(/:action(/:id(.:format)))"
 end

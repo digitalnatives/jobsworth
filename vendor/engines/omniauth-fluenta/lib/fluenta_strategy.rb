@@ -1,13 +1,4 @@
 require 'omniauth/strategies/oauth2'
-# {"user":{
-#   "id":13,
-#   "language":"hu",
-#   "username":"testcadmin",
-#   "full_name":"Cegesadmin Teszt",
-#   "company":{
-#     "email":"",
-#     "id":2,
-#     "name":"Electool"}}}
 
 module OmniAuth
   module Strategies
@@ -16,15 +7,15 @@ module OmniAuth
       option :name, :fluenta
       option :client_options, {:authorize_url => '/oauth/authorize'}
 
-      uid { raw_info['id'] }
+      uid { raw_user_info['id'] }
 
       info {{
-        email:      raw_info['email'],
-        name:       raw_info['full_name'],
-        first_name: raw_info['first_name'],
-        last_name:  raw_info['first_name'],
-        nickname:   raw_info['username'],
-        language:   raw_info['language'],
+        email:      raw_user_info['email'],
+        name:       raw_user_info['full_name'],
+        first_name: raw_user_info['first_name'],
+        last_name:  raw_user_info['last_name'],
+        nickname:   raw_user_info['username'],
+        language:   raw_user_info['language'],
         company: {
           uid:       raw_company_info['id'],
           name:      raw_company_info['name'],
@@ -37,8 +28,12 @@ module OmniAuth
         @raw_info ||= access_token.get('/api/user.json').parsed
       end
 
+      def raw_user_info
+        @raw_user_info ||= raw_info['user'] || {}
+      end
+
       def raw_company_info
-        @raw_company_info ||= raw_info['company'] || {}
+        @raw_company_info ||= raw_user_info['company'] || {}
       end
 
     end

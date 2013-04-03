@@ -1,3 +1,5 @@
+OmniAuth.config.logger = Rails.logger
+
 module OmniAuth
   module Strategies
     autoload :Fluenta, 'fluenta_strategy'
