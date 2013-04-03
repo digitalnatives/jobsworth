@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130322161232) do
+ActiveRecord::Schema.define(:version => 20130403092442) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -32,9 +32,10 @@ ActiveRecord::Schema.define(:version => 20130322161232) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
-    t.boolean  "use_resources",                             :default => true
     t.boolean  "use_billing",                               :default => true
+    t.boolean  "use_resources",                             :default => true
     t.boolean  "use_score_rules",                           :default => true
+    t.integer  "fluenta_id"
   end
 
   add_index "companies", ["subdomain"], :name => "index_companies_on_subdomain", :unique => true
@@ -720,6 +721,7 @@ ActiveRecord::Schema.define(:version => 20130322161232) do
     t.datetime "reset_password_sent_at"
     t.boolean  "need_schedule"
     t.boolean  "receive_notifications",                     :default => true
+    t.integer  "fluenta_id"
   end
 
   add_index "users", ["autologin"], :name => "index_users_on_autologin"
