@@ -22,7 +22,7 @@ module OmniauthFluenta
       user_info    =  { fluenta_id:     auth_hash['uid'].to_i,
                         name:           auth_hash['info']['name'],
                         email:          auth_hash['info']['email'],
-                        locale:         LANGIAGES[auth_hash['info']['language']],
+                        locale:         LANGUAGES[auth_hash['info']['language']],
                         username:       '???'
                       } rescue {}
 
