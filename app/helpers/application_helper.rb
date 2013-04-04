@@ -236,10 +236,10 @@ module ApplicationHelper
   # session and filters.
   ###
   def selected_project
-    return selected_project = @task.project_id if @task.project_id > 0
+    return selected_project = @task.project_id if @task.try(:project_id).to_i > 0
 
     if @task.try(:template?)
-      selected_project = current_user.project_templates.order('name').first.id
+      selected_project = current_user.projects_and_project_templates.order('name').first.id
     else
       selected_project = current_user.projects.order('name').first.id
     end
