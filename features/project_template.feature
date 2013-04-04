@@ -40,7 +40,7 @@ Feature: Project Template
       And I fill in "Name" with "Clone of Project Template"
       And I fill datepicker "project_start_at" with "02/02/2013"
       And I press "Create"
-      And I am on current common user 2. "project" edit page
+      And I am on current common user 1. "project" edit page
      Then I should see "Project Template First Milestone"
       And I should see "Thu, 21 Feb 2013" within "#milestones-pane"
       And I follow "Access Control"

@@ -265,7 +265,7 @@ class TasksController < ApplicationController
       @task = AbstractTask.accessed_by(current_user).find_by_id(params[:id])
     end
 
-    @project = current_user.projects.find_by_id(params[:project_id])
+    @project = current_user.projects_and_project_templates.find_by_id(params[:project_id])
 
     @customers = []
     @customers << @project.customer

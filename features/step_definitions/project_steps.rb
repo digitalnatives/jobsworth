@@ -11,7 +11,7 @@ Given /^I have all project template related test data and logged in as "([^"]+)"
   FactoryGirl.create(:user,
                      :company => @current_user.company,
                      :name => "Autocomplete Test User")
-  FactoryGirl.create(:project, :users => [ @current_user ], :company => @current_user.company)
+#  FactoryGirl.create(:project, :users => [ @current_user ], :company => @current_user.company)
   @customer_company = FactoryGirl.create(:customer,
                                          :company => @current_user.company,
                                          :name => "First Test Customer Company")

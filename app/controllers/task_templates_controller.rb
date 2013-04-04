@@ -33,4 +33,11 @@ protected
     Template.new(:company => current_user.company)
   end
 
+  def check_if_user_has_projects
+    unless current_user.has_project_templates?
+      flash[:error] = _("You need to create a project template to hold your task templates.")
+      redirect_to new_project_template_path
+    end
+  end
+
 end

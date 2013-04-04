@@ -110,6 +110,10 @@ class User < ActiveRecord::Base
     projects.any?
   end
 
+  def has_project_templates?
+    project_templates.any?
+  end
+
   def has_projects_or_project_templates?
     projects_and_project_templates.any?
   end
