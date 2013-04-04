@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
           {:qualifiable => current_user.company.statuses.first}],
       )
 
-      create_project_permissions_for(@project, params[:copy_project_id]) unless params[:template_id]
+      create_project_permissions_for(@project, params[:copy_project_id]) if params[:template_id].blank?
       check_if_project_has_users(@project)
     else
       flash[:error] = @project.errors.full_messages.join(". ")

@@ -58,6 +58,13 @@ describe ProjectsController do
           post :create, :project => attrs
         }.to change { Project.count }.by(1)
       end
+
+      it "should be assigned to current user by default" do
+        customer = FactoryGirl.create(:customer)
+        attrs = { :name => 'p1', :customer_id => customer.id, :company_id => @logged_user.company.id}
+        post :create, :project => attrs, :template_id => ""
+        assigns(:project).users.should include(@logged_user)
+      end
     end
   end
 
