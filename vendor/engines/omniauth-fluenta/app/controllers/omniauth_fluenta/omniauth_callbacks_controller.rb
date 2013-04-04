@@ -11,8 +11,8 @@ module OmniauthFluenta
     end
 
     def fluenta
-      resource = OmniauthFluenta::Fetcher.user(request.env['omniauth.auth'].to_hash)
-      sign_in_and_redirect(resource_name, resource)
+      sign_in_and_redirect OmniauthFluenta::Fetcher.user(request.env['omniauth.auth'].to_hash), :event => :authentication
+      set_flash_message(:notice, :success, :kind => "Fluenta") if is_navigational_format?
     end
 
   end
