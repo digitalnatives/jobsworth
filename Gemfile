@@ -50,6 +50,7 @@ end
 # in production environments by default.
 group :assets do
   gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'bootstrap-sass'
 end
 
