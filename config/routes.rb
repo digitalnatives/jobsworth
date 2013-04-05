@@ -174,4 +174,6 @@ Jobsworth::Application.routes.draw do
   match ':controller/list' => ':controller#index'
 
   match ":controller(/:action(/:id(.:format)))"
+
+  ActiveAdmin.routes(self)
 end

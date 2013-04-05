@@ -92,7 +92,10 @@ ActiveAdmin.setup do |config|
   # roots for each namespace.
   #
   # Default:
-  config.root_to = 'companies#index'
+
+  config.namespace :admin do |admin_namespace|
+    admin_namespace.root_to = 'companies#index'
+  end
 
   # == Admin Comments
   #
