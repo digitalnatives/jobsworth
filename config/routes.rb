@@ -1,5 +1,7 @@
 Jobsworth::Application.routes.draw do
 
+  ActiveAdmin.routes(self)
+
   resources :snippets
 
   resources :service_level_agreements, :only => [:create, :destroy, :update]
@@ -12,7 +14,7 @@ Jobsworth::Application.routes.draw do
 
   devise_for :users,
              :path_prefix => "auth",
-             :controllers => { :sessions  => "auth/sessions", 
+             :controllers => { :sessions  => "auth/sessions",
                                 :passwords => "auth/passwords" }
 
   resources :users, :except => [:show] do
@@ -100,7 +102,7 @@ Jobsworth::Application.routes.draw do
     match :toggle_done, :on => :member
   end
 
-  resources :work_logs do 
+  resources :work_logs do
     match :update_work_log, :on=> :member
   end
 

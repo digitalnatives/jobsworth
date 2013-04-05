@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   before_filter :current_sheet
   before_filter :set_mailer_url_options
-  
+
   include UrlHelper
   include DateAndTimeHelper
 
@@ -113,6 +113,14 @@ class ApplicationController < ActionController::Base
 
     url = url.gsub("format=js", "")
     redirect_using_js_if_needed(url)
+  end
+
+  def authenticate_superadmin_user!
+    authenticate_user!
+    unless current_user.superadmin?
+      flash[:alert] = _("Only admins may access this area.")
+      redirect_to root_path
+    end
   end
 
   private
