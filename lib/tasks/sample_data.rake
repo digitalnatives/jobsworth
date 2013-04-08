@@ -1,5 +1,3 @@
-require 'faker' if Rails.env.staging?
-
 def dont_run
   puts "This task should be runned only in staging, but you're in #{Rails.env} environment."
   puts "Exiting task without changes to database."
@@ -12,6 +10,7 @@ def drop_db
 end
 
 def populate_db
+  require 'faker' if Rails.env.staging?
   Rake::TaskRecord['db:setup'].invoke
   puts "Done."
 end
