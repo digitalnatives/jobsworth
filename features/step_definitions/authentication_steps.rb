@@ -45,10 +45,8 @@ def set_subdomain(user)
   case Capybara.current_driver
   when :rack_test
     find('#user_subdomain').set(user.company.subdomain)
-  when :selenium
+  else
     page.execute_script("document.getElementById('user_subdomain').value = '#{user.company.subdomain}'")
-  when :poltergeist
-    page.execute_script("setTimeout( function(){ document.getElementById('user_subdomain').value = '#{user.company.subdomain}'}, 2000 )")
   end
 end
 

@@ -6,3 +6,7 @@ Then /^I wait (\d+) seconds$/ do |seconds|
   sleep seconds.to_i
 end
 
+Then /^I debug$/ do
+  debugger
+  true
+end

@@ -12,9 +12,9 @@ require 'cucumber/rails'
 require 'capybara/poltergeist'
 require 'factory_girl'
 
-# Capybara.register_driver :poltergeist do |app|
-  # Capybara::Poltergeist::Driver.new(app, :js_errors => false )
-# end
+#Capybara.register_driver :poltergeist do |app|
+# Capybara::Poltergeist::Driver.new(app, :js_errors => false )
+#end
 
 Capybara.javascript_driver = :poltergeist
 Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'] || 3340

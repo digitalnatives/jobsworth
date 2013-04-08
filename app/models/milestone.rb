@@ -9,7 +9,7 @@ class Milestone < ActiveRecord::Base
   STATUSES = [:planning, :open, :locked, :closed]
 
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to :user
 
   has_many :tasks, :class_name => "TaskRecord", :dependent => :nullify

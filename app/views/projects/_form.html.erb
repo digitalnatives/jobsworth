@@ -40,6 +40,21 @@
 </div>
 <% end %>
 
+<% if @project.template? || (!@project.template? && @project.new_record?) %>
+<script type="text/javascript">jQuery("#project_start_at").datepicker({dateFormat: '<%= current_user.dateFormat %>'});</script>
+<div class="control-group">
+  <label for="project_start_at"><%=_ 'Start' %></label>
+  <div class="controls">
+    <%= text_field 'project',
+                   'start_at',
+                   :title => start_at_title_helper,
+                   :class => :datefield,
+                   :rel => :tooltip,
+                   :value => (@project.start_at.nil? ? "" : @project.start_at.strftime("#{current_user.date_format}"))  %>
+  </div>
+</div>
+<% end %>
+
 <input type = "hidden" id = "project_customer_id" name = "project[customer_id]" value="<%=@project.customer.nil? ? 0 :@project.customer.id -%>">
 
 <div class="control-group">

@@ -236,14 +236,13 @@ module ApplicationHelper
   # session and filters.
   ###
   def selected_project
-    if @task and @task.project_id.to_i > 0
-      selected_project = @task.project_id
+    return selected_project = @task.project_id if @task.try(:project_id).to_i > 0
+
+    if @task.try(:template?)
+      selected_project = current_user.projects_and_project_templates.order('name').first.id
     else
       selected_project = current_user.projects.order('name').first.id
     end
-
-
-    return selected_project
   end
 
   ###
@@ -324,10 +323,9 @@ module ApplicationHelper
     h(String.new(h(attr)))
   end
 
-  def grouped_client_projects_options(projects)
+  def projects_options(projects)
     last_customer = nil
     options = []
-
     projects.each do |project|
       if project.customer != last_customer
         options << [ h(project.customer.name), [] ]
@@ -336,7 +334,20 @@ module ApplicationHelper
 
       options.last[1] << [ project.name, project.id ]
     end
-    return options
+    options
+  end
+
+  def grouped_client_projects_options(projects, selected_id = nil)
+    unless projects.map(&:type).include?("ProjectTemplate")
+      return grouped_options_for_select(projects_options(projects), selected_id, "Please select").html_safe
+    end
+
+    template_projects = projects_options(projects.select{ |p| p.type == "ProjectTemplate" })
+    projects = projects_options(projects.select{ |p| p.type == "Project" })
+    output = content_tag(:option, "Please Select")
+    output << content_tag(:optgroup, :label => 'Templates') { grouped_options_for_select(template_projects, selected_id) }
+    output << content_tag(:optgroup, :label => 'Projects') { grouped_options_for_select(projects, selected_id) }
+    output
   end
 
   def active_class(selected, item)
