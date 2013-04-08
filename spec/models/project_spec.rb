@@ -4,6 +4,16 @@ describe Project do
   let(:project) { Project.make }
 
   describe 'associations' do
+    it { should belong_to(:company) }
+    it { should belong_to(:customer) }
+    it { should have_many(:users) }
+    it { should have_many(:project_permissions) }
+    it { should have_many(:tasks) }
+    it { should have_many(:sheets) }
+    it { should have_many(:work_logs) }
+    it { should have_many(:project_files) }
+    it { should have_many(:milestones) }
+
     it "should have a 'score_rules' association" do
       project.should respond_to(:score_rules)
     end
@@ -79,6 +89,103 @@ describe Project do
       calculated_score = @open_task.weight_adjustment + @score_rule.score
       @open_task.weight.should_not == calculated_score
     end
+  end
+
+  describe "should clone project template" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
+    let(:task_template) { FactoryGirl.create(:template,
+                                             :project => project_template,
+                                             :company => user.company,
+                                             :owners => [ user ],
+                                             :users => [ user2 ], 
+                                             :due_at => task_due_at) }
+    let(:milestone) { FactoryGirl.create(:milestone, 
+                                         :project => project_template, 
+                                         :company => user.company,
+                                         :due_at => milestone_due_at) }
+    let(:project) { Project.new( project_template.attributes.except("id", "type") ) }
+
+    it "should be saved as a project" do
+      expect{ project.save }.to change{ Project.count }.by(1)
+    end
+
+    context "should clone project permissions" do
+      context "with defaults" do
+        it "with all necessary attributes" do
+          project_template.create_default_permissions_for(user)
+          project.dup_and_get_template(project_template.id)
+          project.save
+          project.project_permissions.size.should eq(1)
+          project.project_permissions.first.attributes.except("project_id", "created_at") == project_template.project_permissions.first.attributes.except("project_id", "created_at")
+        end
+      end
+
+      context "with custom" do
+        let(:custom_permissions) { FactoryGirl.create(:project_permission,
+                                                      :project => project_template,
+                                                      :user => user,
+                                                      :company => project_template.company) }
+
+        before do
+          custom_permissions
+          project.dup_and_get_template(project_template.id)
+          project.save
+          project
+        end
+
+        it "with all necessary attributes" do
+          project.project_permissions.size.should eq(1)
+          project.tasks.size.should eq(0)
+          project.project_permissions.first.attributes.except("project_id", "created_at") == custom_permissions.attributes.except("project_id", "created_at")
+        end
+      end
+    end # should clone project permissions
+
+    context "should clone related task templates" do
+      before do 
+        task_template
+        milestone
+        project_template.create_default_permissions_for(user)
+        project.start_at = Date.today + 1.month
+        project.dup_and_get_template(project_template.id)
+        project.save
+      end
+
+      context "when milestone due at nil" do
+        let(:milestone_due_at) { nil }
+        let(:task_due_at) { nil }
+
+        it "with all necessary attributes" do
+          project.milestones.first.due_date.should be_nil
+          project.tasks.size.should eq(1)
+          project.tasks.first.owners.size.should eq(2)
+          project.tasks.first.users.size.should eq(2)
+          project.tasks.first.owner_ids.should =~ task_template.owner_ids
+          project.tasks.first.user_ids.should =~ task_template.user_ids
+          project.tasks.first.due_at.should be_nil
+          project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
+        end
+      end
+
+      context "when milestone due at set" do
+        let(:milestone_due_at) { Date.today + 5.days }
+        let(:task_due_at) { Date.today + 6.days }
+
+        it "with all necessary attributes" do
+          project.tasks.size.should eq(1)
+          project.tasks.first.owners.size.should eq(2)
+          project.tasks.first.users.size.should eq(2)
+          project.tasks.first.owner_ids.should =~ task_template.owner_ids
+          project.tasks.first.user_ids.should =~ task_template.user_ids
+          project.tasks.first.due_at.should == task_template.due_at + 1.month
+          project.milestones.first.due_at.should == milestone.due_at + 1.month
+          project.tasks.first.attributes.except("project_id", "created_at") == task_template.attributes.except("project_id", "created_at")
+        end
+      end
+    end # should clone related task templates
+
   end
 end
 

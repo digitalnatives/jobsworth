@@ -1,8 +1,8 @@
-<% @page_title = "Project : #{@project.name} - #{Setting.productName}" %>
+<% @page_title = "Project #{'Template' if @project.template?}: #{@project.name} - #{Setting.productName}" %>
 
 <%= form_for(@project, :html => {:class => "form-horizontal"}) do %>
   <fieldset id="project_form">
-    <legend><%=_ 'Edit Project' %>
+    <legend><%= @project.template? ? _('Edit Project Template') : _('Edit Project') %>
       <%= link_to_tasks_filtered_by(_("View Tasks"), @project, :class => "btn btn-success pull-right") %>
     </legend>
     <%= render :partial => "form" %>
@@ -11,7 +11,7 @@
       <% if current_user.admin?%>
         <%= link_to _("Delete"), project_path(@project), :method => "delete", :confirm => "Really delete #{@project.name}?", :class => "btn btn-mini btn-danger pull-right" %>
       <% end %>
-      <% if current_user.can?( @project, 'grant' ) || current_user.admin > 0 %>
+      <% if !@project.template? && (current_user.can?( @project, 'grant' ) || current_user.admin > 0) %>
         <% if @project.complete? %>
           <%= link_to( _("Re-Open"), revert_project_path(@project), :confirm => "Really revert #{@project.name}?", :method => :post, :class => "btn") %>
         <% else %>
@@ -61,7 +61,7 @@
     <% if current_user.company.use_score_rules? %>
       <div class="tab-pane" id="score-rules-pane">
         <%= render 'shared/score_rules_container',
-          :container_name => 'projects',
+           :container_name => (@project.template? ? 'project_templates' : 'projects'),
           :container_id   => @project.id %>
         </div>
       <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130322161232) do
+ActiveRecord::Schema.define(:version => 20130327093919) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -315,6 +315,8 @@ ActiveRecord::Schema.define(:version => 20130322161232) do
     t.integer  "open_milestones"
     t.decimal  "default_estimate",                :precision => 5, :scale => 2, :default => 1.0
     t.boolean  "suppressBilling",                                               :default => false, :null => false
+    t.string   "type"
+    t.date     "start_at"
   end
 
   add_index "projects", ["company_id"], :name => "projects_company_id_index"

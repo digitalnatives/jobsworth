@@ -18,7 +18,7 @@ class WorkLog < ActiveRecord::Base
   belongs_to :_user_, :class_name => "User", :foreign_key => "user_id"
   belongs_to :email_address
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to :customer
   belongs_to :task, :class_name=>"AbstractTask", :foreign_key=>'task_id'
   belongs_to :access_level

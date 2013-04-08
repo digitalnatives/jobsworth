@@ -3,7 +3,7 @@
 
 class ProjectPermission < ActiveRecord::Base
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to :user
   def self.permissions
      ['comment', 'work', 'close', 'see_unwatched', 'create', 'edit', 'reassign', 'milestone', 'report', 'grant', 'all']

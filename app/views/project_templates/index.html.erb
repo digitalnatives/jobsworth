@@ -1,0 +1,23 @@
+<% @page_title = "Project Templates - #{Setting.productName}" %>
+
+<% content_for :navigation do %>
+  <%= render :partial => "companies/navigation", :locals => {:selected => "project_templates"} %>
+<% end %>
+
+<legend>
+  Project Templates
+  <%= link_to _('New project template'), new_project_template_path, :class => "btn pull-right" %>
+</legend>
+
+<ul>
+  <% @project_templates.each do |template| %>
+    <li>
+      <%= link_to template, edit_project_template_path(template) %>
+      <div style="display:inline;" class="task-action">
+        <%= link_to('<i class="icon-remove"></i>'.html_safe, project_template_path(template), :method => :delete,
+            :confirm => _("Are you sure?"), :title => _("Delete %s",template.name ), :rel => "tooltip") %>
+      </div>
+    </li>
+  <% end %>
+</ul>
+

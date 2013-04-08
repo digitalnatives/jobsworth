@@ -42,6 +42,7 @@ Jobsworth::Application.routes.draw do
 
     member do
       get 'ajax_add_permission'
+      get 'clone'
       post :complete
       post :revert
     end
@@ -132,6 +133,10 @@ Jobsworth::Application.routes.draw do
   match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
 
   resources :projects, :customers, :property_values do
+    resources :score_rules
+  end
+
+  resources :project_templates do
     resources :score_rules
   end
 

@@ -8,6 +8,7 @@ class TaskFilterQualifier < ActiveRecord::Base
   validates_presence_of :qualifiable
 
   before_validation :set_qualifiable_from_task_num
+  before_validation :set_qualifiable_from_project
 
   scope :for, lambda { |type| where(:qualifiable_type => type) }
   scope :reversed, where(:reversed => true)
@@ -21,6 +22,12 @@ class TaskFilterQualifier < ActiveRecord::Base
     if task
       self.qualifiable = task
     end
+  end
+
+  def set_qualifiable_from_project
+    return unless qualifiable.is_a?(AbstractProject)
+
+    self.qualifiable_type = qualifiable.class.to_s
   end
 
 end

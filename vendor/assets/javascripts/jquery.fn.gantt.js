@@ -138,7 +138,7 @@
 
             elementFromPoint: function (x, y) {
 
-                if ($.browser.msie) {
+                if (!$.support.boxModel) {
                     x -= $(document).scrollLeft();
                     y -= $(document).scrollTop();
                 } else {

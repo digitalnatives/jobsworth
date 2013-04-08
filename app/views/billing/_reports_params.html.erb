@@ -19,7 +19,7 @@
       <select name="report[filter_project]"> 
         <option value="0" class="select_default"><%= _("[Any Project]") %></option>
         <% projects = current_user.projects.includes(:customer).except(:order).order("customers.name, projects.name") %>
-        <% client_projects = grouped_client_projects_options(projects)%>
+        <% client_projects = projects_options(projects) %>
         <% client_projects.each do |c| %>
           <optgroup class="select_heading" label="<%= c.first %>">
           <% c.last.each do |p| %>
