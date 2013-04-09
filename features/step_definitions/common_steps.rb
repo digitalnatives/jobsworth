@@ -15,7 +15,7 @@ When /^I browse( full screen)?(?: with resolution (\d+)x(\d+))?$/ do |full_scree
   case Capybara.current_driver
   when :selenium
     if full_screen
-      page.driver.browser.manage.window.maximize 
+      page.driver.browser.manage.window.maximize
     else
       page.driver.browser.manage.window.resize_to(width.to_i, height.to_i)
     end
@@ -29,7 +29,7 @@ When /^I browse( full screen)?(?: with resolution (\d+)x(\d+))?$/ do |full_scree
 end
 
 When /I am on current common user "([^\"]*)" edit page$/ do |model|
-  @current_user.reload if @current_user.send(model).empty?
+  @current_user.reload if @current_user.send(model).blank?
   step %Q{I am on the edit company page with params "{ :id => @current_user.#{model}.id }"}
 end
 
