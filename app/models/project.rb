@@ -3,15 +3,24 @@
 
 class Project < AbstractProject
 
-  def dup_and_get_template(template_id = nil)
-    begin
-      template = ProjectTemplate.find(template_id)
-    rescue ActiveRecord::RecordNotFound => e
-      logger.error(e.message)
-      logger.error(e.backtrace.join("\n"))
-      return
-    end
+  def dup_and_get_template(template_id)
+    @template = ProjectTemplate.find template_id
 
+    copy_and_ajust_milestones
+    copy_score_rules
+    copy_project_permissions
+    copy_and_ajust_tasks
+
+    return @template
+  rescue ActiveRecord::RecordNotFound => e
+    logger.error(e.message)
+    logger.error(e.backtrace.join("\n"))
+  end
+
+private
+  def template; @template; end
+
+  def copy_and_ajust_milestones
     template.milestones.each do |template_milestone|
       copied_milestone = template_milestone.dup
       if start_at.present? && copied_milestone.due_at.present?
@@ -19,38 +28,23 @@ class Project < AbstractProject
       end
       self.milestones << copied_milestone
     end
+  end
+
+  def copy_score_rules
     template.score_rules.each do |template_score_rule|
       self.score_rules << template_score_rule.dup
     end
+  end
+
+  def copy_project_permissions
     template.project_permissions.each do |template_project_permission|
       self.project_permissions << template_project_permission.dup
     end
+  end
 
-    template.task_templates.each do |template_task|
-      copied_task = template_task.dup
-      copied_task = copied_task.becomes(TaskRecord)
-      template_task.todos.each do |template_todos|
-        copied_task.todos << template_todos
-      end
-      template_task.customers.each do |template_owners|
-        copied_task.owners << template_owners
-      end
-      template_task.users.each do |template_user|
-        copied_task.users << template_user
-      end
-      template_task.watchers.each do |template_watcher|
-        copied_task.watchers << template_watcher
-      end
-      template_task.task_property_values.each do |template_task_property|
-        copied_task.task_property_values << template_task_property.dup
-      end
-      if start_at.present? && copied_task.due_at.present?
-        copied_task.due_at += (start_at - template.start_at).days
-      end
-      self.tasks << copied_task
-    end
-
-    template
+  def copy_and_ajust_tasks
+    ajustment_days = (start_at - template.start_at).days
+    self.tasks << template.task_templates.map {|t| t.duplicate ajustment_days }
   end
 
 end
