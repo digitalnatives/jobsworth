@@ -4,25 +4,25 @@ require "active_record_extensions"
 class AbstractTask < ActiveRecord::Base
   self.table_name = "tasks"
 
-  OPEN=0
-  CLOSED=1
-  WILL_NOT_FIX=2
-  INVALID=3
-  DUPLICATE=4
-  MAX_STATUS=4
+  OPEN         = 0
+  CLOSED       = 1
+  WILL_NOT_FIX = 2
+  INVALID      = 3
+  DUPLICATE    = 4
+  MAX_STATUS   = 4
 
   belongs_to    :company
   belongs_to    :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to    :milestone
 
-  has_many      :users, :through => :task_users, :source => :user
-  has_many      :owners, :through =>:task_owners, :source=>:user
-  has_many      :watchers, :through =>:task_watchers, :source=>:user
+  has_many      :users,    through: :task_users,    source: :user, uniq: true
+  has_many      :owners,   through: :task_owners,   source: :user, uniq: true
+  has_many      :watchers, through: :task_watchers, source: :user, uniq: true
 
   #task_watcher and task_owner is subclasses of task_user
-  has_many      :task_users, :dependent => :destroy, :foreign_key=>'task_id'
-  has_many      :task_watchers, :dependent => :destroy, :foreign_key=>'task_id'
-  has_many      :task_owners, :dependent => :destroy, :foreign_key=>'task_id'
+  has_many      :task_users,    dependent: :destroy, foreign_key: 'task_id'
+  has_many      :task_watchers, dependent: :destroy, foreign_key: 'task_id'
+  has_many      :task_owners,   dependent: :destroy, foreign_key: 'task_id'
 
   has_and_belongs_to_many  :dependencies, :class_name => "AbstractTask", :join_table => "dependencies", :association_foreign_key => "dependency_id", :foreign_key => "task_id", :order => 'dependency_id', :select => "tasks.*"
   has_and_belongs_to_many  :dependants, :class_name => "AbstractTask", :join_table => "dependencies", :association_foreign_key => "task_id", :foreign_key => "dependency_id", :order => 'task_id', :select=> "tasks.*"

@@ -14,6 +14,25 @@ class Template < AbstractTask
     res
   end
 
+  def duplicate(ajustment_days = 0)
+    copied_task = self.dup.becomes(TaskRecord)
+
+    copied_task.owners   = self.owners
+    copied_task.users    = self.users
+    copied_task.watchers = self.watchers
+    copied_task.due_at   += ajustment_days if copied_task.due_at
+
+    self.todos.each do |template_todos|
+      copied_task.todos << template_todos.dup
+    end
+
+    self.task_property_values.each do |template_task_property|
+      copied_task.task_property_values << template_task_property.dup
+    end
+
+    copied_task
+  end
+
 end
 
 
