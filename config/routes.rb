@@ -1,5 +1,11 @@
 Jobsworth::Application.routes.draw do
 
+  mount OmniauthFluenta::Engine => '/'
+  devise_for :users,
+             :path_prefix => "auth",
+             :controllers => { :sessions  => "auth/sessions",
+                               :passwords => "auth/passwords" }
+
   resources :snippets
 
   resources :service_level_agreements, :only => [:create, :destroy, :update]
@@ -9,11 +15,6 @@ Jobsworth::Application.routes.draw do
       get 'auto_complete_for_service_name'
     end
   end
-
-  devise_for :users,
-             :path_prefix => "auth",
-             :controllers => { :sessions  => "auth/sessions",
-                                :passwords => "auth/passwords" }
 
   resources :users, :except => [:show] do
     member do

@@ -1,45 +1,55 @@
 <% @page_title = "Sign In - #{Setting.productName}" %>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "well form-horizontal span6 center"}) do |f| %>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "well form-horizontal span8 center"}) do |f| %>
   <legend>Sign in</legend>
+
   <% if flash[:alert] %>
      <div class="alert alert-error" id="notice">
-        <%= "Invalid user or password" %>
-        <% flash[:alert]=nil%>
+        <%= flash[:alert] %>
      </div>
   <% end %>
 
-  <%= devise_error_messages! %>
+  <div class="row-fluid">
+    <div class="span8" style="border-right: 1px solid #e5e5e5;">
+      <%= f.hidden_field :subdomain, :value => request.subdomains[0] %>
 
-  <%= f.hidden_field :subdomain, :value => request.subdomains[0] %>
+      <div class="control-group">
+        <%= f.label :username %>
+        <div class="controls">
+          <%= f.text_field :username%>
+        </div>
+      </div>
 
-  <div class="control-group">
-    <%= f.label :username %>
-    <div class="controls">
-      <%= f.text_field :username%>
-    </div>
-  </div>
+      <div class="control-group">
+        <%= f.label :password %>
+        <div class="controls">
+          <%= f.password_field :password %>
+        </div>
+      </div>
 
-  <div class="control-group">
-    <%= f.label :password %>
-    <div class="controls">
-      <%= f.password_field :password %>
-    </div>
-  </div>
+      <% if devise_mapping.rememberable? -%>
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox inline">
+              <%= f.check_box :remember_me %>
+              remember me
+            </label>
+          </div>
+        </div>
+      <% end -%>
 
-  <% if devise_mapping.rememberable? -%>
-    <div class="control-group">
-      <div class="controls">
-        <label class="checkbox inline">
-          <%= f.check_box :remember_me %>
-          remember me
-        </label>
+      <div class="form-actions">
+        <%= f.submit "Login", :class => "btn" %>
+        <%=link_to "Forget your password?", new_user_password_path  %>
       </div>
     </div>
-  <% end -%>
 
-  <div class="form-actions">
-    <%= f.submit "Login", :class => "btn" %>
-    <%=link_to "Forget your password?", new_user_password_path  %>
+    <div class="span4">
+      <%= link_to user_omniauth_authorize_path(:fluenta) do %>
+        <i class="icon-user"></i>
+        Sign in with Fluenta
+      <% end %>
+    </div>
   </div>
+
 <% end %>

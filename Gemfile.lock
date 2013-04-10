@@ -1,3 +1,11 @@
+PATH
+  remote: vendor/engines/omniauth-fluenta
+  specs:
+    omniauth-fluenta (0.0.1)
+      omniauth
+      omniauth-oauth2
+      rails (~> 3.2.10)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -141,6 +149,8 @@ GEM
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
     faker (0.3.1)
+    faraday (0.8.7)
+      multipart-post (~> 1.1)
     fastercsv (1.5.5)
     faye-websocket (0.4.7)
       eventmachine (>= 0.12.0)
@@ -160,6 +170,7 @@ GEM
     hike (1.2.1)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
+    httpauth (0.2.0)
     i18n (0.6.4)
     icalendar (1.2.3)
     inherited_resources (1.4.0)
@@ -178,6 +189,8 @@ GEM
       jruby-rack (>= 1.1.10)
     json (1.7.7)
     json (1.7.7-java)
+    jwt (0.1.8)
+      multi_json (>= 1.5)
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -202,10 +215,23 @@ GEM
     mocha (0.13.3)
       metaclass (~> 0.0.1)
     multi_json (1.7.1)
+    multipart-post (1.2.0)
     mysql2 (0.3.11)
     net-ldap (0.3.1)
     nokogiri (1.5.8)
     nokogiri (1.5.8-java)
+    oauth2 (0.8.1)
+      faraday (~> 0.8)
+      httpauth (~> 0.1)
+      jwt (~> 0.1.4)
+      multi_json (~> 1.0)
+      rack (~> 1.2)
+    omniauth (1.1.4)
+      hashie (>= 1.2, < 3)
+      rack
+    omniauth-oauth2 (1.1.1)
+      oauth2 (~> 0.8.0)
+      omniauth (~> 1.0)
     orm_adapter (0.4.0)
     paperclip (3.4.1)
       activemodel (>= 3.0.0)
@@ -361,6 +387,8 @@ DEPENDENCIES
   machinist (= 1.0.6)
   mysql2
   net-ldap
+  omniauth (~> 1.1.3)
+  omniauth-fluenta!
   paperclip (> 3.1)
   pg
   poltergeist

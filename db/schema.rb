@@ -50,8 +50,10 @@ ActiveRecord::Schema.define(:version => 20130405120154) do
     t.boolean  "use_resources",                             :default => true
     t.boolean  "use_billing",                               :default => true
     t.boolean  "use_score_rules",                           :default => true
+    t.integer  "fluenta_id"
   end
 
+  add_index "companies", ["fluenta_id"], :name => "index_companies_on_fluenta_id"
   add_index "companies", ["subdomain"], :name => "index_companies_on_subdomain", :unique => true
 
   create_table "custom_attribute_choices", :force => true do |t|
@@ -738,11 +740,13 @@ ActiveRecord::Schema.define(:version => 20130405120154) do
     t.boolean  "need_schedule"
     t.boolean  "receive_notifications",                     :default => true
     t.boolean  "superadmin",                                :default => false
+    t.integer  "fluenta_id"
   end
 
   add_index "users", ["autologin"], :name => "index_users_on_autologin"
   add_index "users", ["company_id"], :name => "users_company_id_index"
   add_index "users", ["customer_id"], :name => "index_users_on_customer_id"
+  add_index "users", ["fluenta_id"], :name => "index_users_on_fluenta_id"
   add_index "users", ["last_seen_at"], :name => "index_users_on_last_seen_at"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username", "company_id"], :name => "index_users_on_username_and_company_id", :unique => true

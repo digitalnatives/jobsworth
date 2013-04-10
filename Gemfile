@@ -23,9 +23,12 @@ gem 'delayed_job_active_record'
 gem 'cocaine'
 gem 'hashie'
 gem 'rufus-scheduler'
+gem 'activeadmin'
+
 gem 'unicorn'
 
-gem 'activeadmin'
+gem 'omniauth', '~> 1.1.3'
+gem 'omniauth-fluenta', :path => "vendor/engines/omniauth-fluenta"
 
 platforms :jruby do
   gem 'warbler'
