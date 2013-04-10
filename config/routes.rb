@@ -1,7 +1,5 @@
 Jobsworth::Application.routes.draw do
 
-  ActiveAdmin.routes(self)
-
   resources :snippets
 
   resources :service_level_agreements, :only => [:create, :destroy, :update]
@@ -171,9 +169,10 @@ Jobsworth::Application.routes.draw do
 
   resources :emails, only: [:create]
 
+  ActiveAdmin.routes(self)
+
   match ':controller/list' => ':controller#index'
 
   match ":controller(/:action(/:id(.:format)))"
 
-  ActiveAdmin.routes(self)
 end
