@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem "rails", "3.2.10"
 
-gem "will_paginate"
+gem "will_paginate", '~> 3.0'
 gem 'icalendar'
 gem 'tzinfo'
 gem 'RedCloth', :require=>'redcloth'
@@ -24,6 +24,8 @@ gem 'cocaine'
 gem 'hashie'
 gem 'rufus-scheduler'
 gem 'unicorn'
+
+gem 'activeadmin'
 
 platforms :jruby do
   gem 'warbler'
@@ -48,6 +50,7 @@ end
 # in production environments by default.
 group :assets do
   gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'bootstrap-sass'
 end
 

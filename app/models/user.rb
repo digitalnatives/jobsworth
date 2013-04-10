@@ -390,7 +390,7 @@ class User < ActiveRecord::Base
     if conditions[:subdomain]
       company = Company.find_by_subdomain(conditions.delete(:subdomain))
       company ||= Company.first if Company.count == 1
-      conditions[:company_id] = company.id
+      conditions[:company_id] = company.try :id
     end
     super(conditions)
   end
