@@ -14,9 +14,9 @@ required_settings_with_defaults = {
   :store_root       => Rails.root.join("store").to_s,
   :from             => 'fromnotset',
   :domain           => 'example.org',
-  :receiving_emails => { :secret => SecureRandom.hex(8) }
+  :receiving_emails => { :secret => SecureRandom.hex(8) },
+  :contact_creation_allowed => true
 }
-required_settings_with_defaults.each { |key, value|
 required_settings_with_defaults.each do |key, value|
   unless Setting.key?(key)
     Setting[key] = value
