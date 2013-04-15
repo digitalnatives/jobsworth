@@ -7,6 +7,11 @@ module OmniAuth
 end
 
 Devise.setup do |config|
-  config.omniauth :fluenta, ENV['FLUENTA_KEY'], ENV['FLUENTA_SECRET'], client_options: {site: ENV['FLUENTA_SITE']}
+  rconfig = Rails.configuration.jobsworth.omniauth
+  app_id  = rconfig.fluenta.app_id
+  secret  = rconfig.fluenta.secret
+  site    = rconfig.fluenta.site
+
+  config.omniauth :fluenta, app_id, secret, client_options: {site: site}
 end
 
