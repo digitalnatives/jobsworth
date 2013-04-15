@@ -20,7 +20,8 @@ class ProjectsController < ApplicationController
 
   def create
     @project = create_entity(params[:project])
-    @template = @project.dup_and_get_template(params[:template_id])
+    @template = ProjectTemplate.find params[:template_id]
+    @project.copy_template(@template)
     @project.company_id = current_user.company_id
 
     if @project.save

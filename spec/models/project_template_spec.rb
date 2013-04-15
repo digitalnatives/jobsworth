@@ -18,3 +18,4 @@ describe ProjectTemplate do
     end
   end
 end
+

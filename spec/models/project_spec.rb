@@ -91,15 +91,15 @@ describe Project do
     end
   end
 
-  describe '#dup_and_get_template' do
+  describe '#copy_template' do
     let(:user)  { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }
     let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
     let(:task_template) { FactoryGirl.create :template,
                                              :project => project_template,
                                              :company => user.company,
-                                             :owners => [ user ],
-                                             :users => [ user2 ],
+                                             :owners => [user],
+                                             :users => [user2],
                                              :due_at => task_due_at }
     let(:milestone) { FactoryGirl.create(:milestone,
                                          :project => project_template,
@@ -117,7 +117,7 @@ describe Project do
         before do
           project_template.create_default_permissions_for(user)
 
-          subject.dup_and_get_template project_template.id
+          subject.copy_template project_template
           subject.save
         end
 
@@ -140,7 +140,7 @@ describe Project do
 
         before do
           custom_permissions
-          subject.dup_and_get_template(project_template.id)
+          subject.copy_template project_template
           subject.save
         end
 
@@ -160,7 +160,7 @@ describe Project do
         project_template.create_default_permissions_for(user)
         subject.start_at = Date.today + 1.month
 
-        subject.dup_and_get_template(project_template.id)
+        subject.copy_template project_template
         subject.save
       end
 
