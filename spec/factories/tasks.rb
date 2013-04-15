@@ -7,7 +7,7 @@ FactoryGirl.define do
     type 'AbstractTask'
     sequence(:name) { |n| "#{type} #{n}" }
 
-    factory :task_record do
+    factory :task_record, aliases: [:task] do
       type 'TaskRecord'
     end
 
