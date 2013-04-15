@@ -33,6 +33,8 @@ gem 'unicorn'
 gem 'omniauth', '~> 1.1.3'
 gem 'omniauth-fluenta', :path => "vendor/engines/omniauth-fluenta"
 
+gem 'choices'
+
 platforms :jruby do
   gem 'warbler'
   gem 'jruby-rack-worker', :require => false
