@@ -182,7 +182,7 @@ ActiveRecord::Schema.define(:version => 20130411041529) do
     t.integer  "company_id"
     t.integer  "user_id"
     t.string   "filename"
-    t.text     "report",     :limit => 2147483647
+    t.text     "report"
     t.datetime "created_at"
   end
 
