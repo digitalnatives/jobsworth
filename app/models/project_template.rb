@@ -2,6 +2,13 @@ class ProjectTemplate < AbstractProject
 
   validates :start_at, :presence => true
 
+  after_initialize :set_default_start_at
+
+private
+  def set_default_start_at
+    self.start_at ||= Date.current.beginning_of_year
+  end
+
 end
 
 # == Schema Information
