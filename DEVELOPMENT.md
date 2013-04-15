@@ -1,0 +1,31 @@
+This file outlines notes for developers interested in working on jobsworth. If
+you plan only on using this project, then ignore this.
+
+# Git branching
+
+* We use the 'dev' branch for primary development. All pull requests should be
+  based on dev.
+* 'master' is the stable branch and should be kept in good working order.
+  Typically Ari will merge back to master once the dev branch is in a stable
+  state.
+* We tag upon releasing and make as many feature branches as needed for our
+  development.
+
+
+# Contributing
+
+Please read CONTRIBUTORS. We would love to have your work added to this
+repository if it meets the high coding standards of this project, has test cases
+to go with the code and is broken into clear understandable commits. And you
+sign the contributor agreement.
+
+
+# Minitest and RSpec
+
+Yes, we have both! And we have so many tests in each, it doesn't look like
+either is winning any time soon.
+
+
+# Deprecated code
+
+* machinist is on the way out, to be replaced with factory_girl

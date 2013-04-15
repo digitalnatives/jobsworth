@@ -65,11 +65,9 @@ class CustomersController < ApplicationController
   # Returns the list to use for auto completes for customer names.
   ###
   def auto_complete_for_customer_name
-    text = params[:term]
-    if !text.blank?
-      customer_table = Customer.arel_table
-      @customers = current_user.company.customers.order('name').where(customer_table[:name].matches("#{text}%").or(customer_table[:name].matches("%#{text}%"))).limit(50)
-      render :json=> @customers.collect{|customer| {:value => customer.name, :id=> customer.id} }.to_json
+    if (term = params[:term]).present?
+      @customers = current_company.customers.search_by_name(term).limit(50)
+      render :json=> @customers.collect { |customer| {value: customer.name, id: customer.id} }.to_json
     else
       render :nothing=> true
     end

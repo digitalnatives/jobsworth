@@ -34,15 +34,12 @@ Jobsworth::Application.configure do
   config.assets.compress = true
   config.assets.js_compressor  = Closure::Compiler.new
 
-  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w(excanvas.js)
-
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.smtp_settings = Setting.smtp if defined?(Setting)
+  config.action_mailer.smtp_settings = Setting.smtp.try :to_hash, :symbolize_keys => true
 
   # Enable threaded mode
   config.threadsafe! if defined?(JRUBY_VERSION)
@@ -50,5 +47,5 @@ Jobsworth::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  config.middleware.use ExceptionNotifier, Setting.exception_notifiers if defined?(Setting)
+  config.middleware.use ExceptionNotifier, Setting.exception_notifier
 end

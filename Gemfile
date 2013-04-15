@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "3.2.10"
+gem "rails", "3.2.13"
 
 gem "will_paginate", '~> 3.0'
 gem 'icalendar'
@@ -13,7 +13,10 @@ gem 'acts_as_tree'
 gem 'acts_as_list'
 gem 'dynamic_form'
 gem 'remotipart'
-gem "exception_notification_rails3", :require => "exception_notifier"
+# use v2.6.1 while one of these are resolved:
+# https://github.com/smartinez87/exception_notification/pull/126
+# https://github.com/jruby/jruby/issues/375
+gem "exception_notification", '2.6.1'
 gem 'net-ldap'
 gem 'devise'
 gem 'devise-encryptable'
@@ -54,11 +57,14 @@ end
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
-  gem 'bootstrap-sass'
+  # Lock to 2.3.0.1 until this issue is fixed - https://github.com/twitter/bootstrap/issues/7118
+  gem 'bootstrap-sass', '2.3.0.1'
 end
 
 group :test, :development do
   gem 'debugger', platform: :mri
+  gem "machinist",        '1.0.6'
+  gem 'factory_girl_rails'
 end
 
 group :test do
