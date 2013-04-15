@@ -18,28 +18,49 @@ module OmniauthFluenta
     end
 
     def initialize(auth_hash)
-      @user_info    = { fluenta_id:     auth_hash['uid'].to_i,
-                        name:           auth_hash['info']['name'],
-                        email:          auth_hash['info']['email'],
-                        locale:         LANGUAGES[auth_hash['info']['language']],
-                        username:       auth_hash['info']['nickname']
-                      } rescue {}
+      @user_info    = user_info auth_hash
+      @company_info = company_info auth_hash
 
-      @company_info = { fluenta_id:     auth_hash['info']['company']['uid'].to_i,
-                        name:           auth_hash['info']['company']['name'],
-                        contact_email:  auth_hash['info']['company']['email'],
-                        subdomain:      auth_hash['info']['company']['subdomain'],
-                      } rescue {}
-
-      raise InsufficientCompanyData  if REQUIRED_COMPANY_DATA.any?{ |key| @company_info[key].blank? }
-      raise InsufficientUserData     if REQUIRED_USER_DATA.any?{ |key| @user_info[key].blank? }
+      raise InsufficientCompanyData if REQUIRED_COMPANY_DATA.any?{ |key| @company_info[key].blank? }
+      raise InsufficientUserData    if REQUIRED_USER_DATA.any?{ |key| @user_info[key].blank? }
     end
 
     def user
       get_user! @user_info.merge(:company => get_company!(@company_info))
     end
 
-    private
+  private
+    def user_info(hash)
+      {
+        fluenta_id:hash['uid'].to_i,
+        name:      hash['info']['name'],
+        email:     hash['info']['email'],
+        locale:    LANGUAGES[hash['info']['language']],
+        username:  hash['info']['nickname']
+      }
+    rescue
+      {}
+    end
+
+    def company_info(hash)
+      {
+        fluenta_id:      hash['info']['company']['uid'].to_i,
+        name:            hash['info']['company']['name'],
+        contact_email:   hash['info']['company']['email'],
+        subdomain:       hash['info']['company']['subdomain'],
+        # Set default values
+        show_wiki:       false,
+        use_resources:   false,
+        use_score_rules: false,
+        use_billing:     false
+      }
+    rescue
+      {}
+    end
+
+    def create_customer(company)
+      Customer.create!({name: company.name, company: company})
+    end
 
     ['Company', 'User'].each do |klass|
       define_method "get_#{klass.underscore}!" do |params|
@@ -50,6 +71,7 @@ module OmniauthFluenta
           else
             record = klass.constantize.new params
             record.save!
+            create_customer record if klass == 'Company'
           end
           record
         rescue StandardError
