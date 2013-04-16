@@ -15,6 +15,11 @@ class Todo < ActiveRecord::Base
   def css_classes
     self.done? ? "todo todo-completed" : "todo todo-active"
   end
+
+  # Detach todo from task and return self
+  def detach_from_task
+    self.task = nil; self
+  end
 end
 
 

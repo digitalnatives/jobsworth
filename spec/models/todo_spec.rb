@@ -23,4 +23,16 @@ describe Todo do
     pending 'This method should be in a helper/decorator!'
   end
 
+  describe '#detach_from_task' do
+    subject { described_class.new({task_id: 1}) }
+
+    it 'should detach from task' do
+      expect{ subject.detach_from_task }.to change{ subject.task_id }.from(1).to(nil)
+    end
+
+    it 'should return itself' do
+      expect(subject.detach_from_task).to equal subject
+    end
+  end
+
 end
