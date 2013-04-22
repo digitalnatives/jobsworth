@@ -34,7 +34,7 @@ class ProjectTemplatesController < ProjectsController
     @project = scoped_projects.find(params[:id])
 
     if @project.update_attributes(params[:project])
-      flash[:success] = _('Project was successfully updated.')
+      flash[:success] = t('flash.notice.model_updated', model: Project.model_name.human)
       redirect_to project_templates_path
     else
       render :edit
@@ -45,7 +45,7 @@ class ProjectTemplatesController < ProjectsController
     project = scoped_projects.find(params[:id])
 
     if project.destroy
-      flash[:success] = 'Project was deleted.'
+      flash[:success] = t('flash.notice.model_deleted', model: Project.model_name.human)
     else
       flash[:error] = project.errors[:base].join(', ')
     end

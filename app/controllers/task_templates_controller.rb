@@ -35,7 +35,7 @@ protected
 
   def check_if_user_has_projects
     unless current_user.has_projects_or_project_templates?
-      flash[:error] = _("You need to create a project/project template to hold your task templates.")
+      flash[:error] = t('hint.task.project_needed')
       redirect_to new_project_template_path
     end
   end

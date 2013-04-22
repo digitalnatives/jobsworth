@@ -120,7 +120,7 @@ class ApplicationController < ActionController::Base
   def authenticate_superadmin_user!
     authenticate_user!
     unless current_user.superadmin?
-      flash[:alert] = _("Only admins may access this area.")
+      flash[:alert] = t('flash.alert.admin_permission_needed')
       redirect_to root_path
     end
   end

@@ -111,9 +111,7 @@ module TasksHelper
       projects << task.project
       projects = projects.sort_by { |project| project.customer.name + project.name }
     end
-    options = grouped_client_projects_options(projects)
-
-    return grouped_options_for_select(options, task.project_id, t('forms.select.please_select')).html_safe
+    grouped_client_projects_options(projects, task.project_id)
   end
 
   ##

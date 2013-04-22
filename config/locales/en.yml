@@ -339,7 +339,7 @@ en:
       template_start_at: "A default start date for project template, related milestones due date will be recalculated relative to this date when project template converted to project"
       project_start_at: "Milestones due date will updated according the difference of the project template start date and current project start date"
     task:
-      project_needed: 'You need to create a project to hold your tasks.'
+      project_needed: 'You need to create a project/project template to hold your tasks.'
       target_date_from_milestone: "Target date from milestone"
       target_date_from_start: "The target date for when you want this task to be started."
     user:
@@ -913,6 +913,7 @@ en:
   project_templates:
     edit: 'Edit Project Template'
     new_template: 'New Project Template'
+    delete: Delete %{model}
   project_permissions:
     read: "You may not view this task."
     comment: "You may not add a comment to tasks in this project."

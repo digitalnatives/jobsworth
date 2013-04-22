@@ -5,16 +5,16 @@ Feature: Project Template
     Given I have all project template related test data and logged in as "admin"
       And I browse with resolution 1024x768
      When I am on the new project template page
-      And I fill in "Name" with "Project Template"
+      And I fill in "Name" with "Project Template Sample"
       And I should see no autocomplete suggestions
       And I fill in "Company" autocomplete with "first"
       And I should see 1 autocomplete suggestions
       And I pick "First Test Customer Company" autocomplete option
       And I fill datepicker "project_start_at" with "01/01/2013"
       And I press "Create"
-     Then I should see "Project Templates"
+     Then I should see "Project successfully created"
      # Assign milestone
-     When I follow list item "Project Template" within "#content"
+     When I follow list item "Project Template Sample" within "#content"
       And I follow "New milestone"
       And I fill in "Name" with "Project Template First Milestone"
       And I fill datepicker "milestone_due_at" with "20/01/2013"
@@ -31,13 +31,13 @@ Feature: Project Template
      # Assign template task
      When I am on the new task template page
       And I fill in "task_name" with "Task Template"
-      And I select "Project Template" from "task_project_id"
+      And I select "Project Template Sample" from "task_project_id"
       And I press "Save"
      When I am on the tasks page
      Then I should not see "Task Template"
      # Clone project
      When I am on clone project page
-      And I fill in "Name" with "Clone of Project Template"
+      And I fill in "Name" with "Clone of Project Template Sample"
       And I fill datepicker "project_start_at" with "02/02/2013"
       And I press "Create"
       And I am on current common user 1. "project" edit page
@@ -47,5 +47,5 @@ Feature: Project Template
       And I should see "User 1"
       And I should see "Autocomplete Test User"
      When I am on the tasks page
-      And I follow "Clone of Project Template" within "#task_filters"
+      And I follow "Clone of Project Template Sample" within "#task_filters"
      Then I should see "Task Template"
