@@ -39,6 +39,13 @@ development: &development
   #     secret: 456
   #     site:   http://oauth.site.com
 
+  # Localeapp api key
+  localeapp:
+    api_key:
+    sending_environments: []
+    polling_environments: []
+    reloading_environments: []
+
 test:
   <<: *development
 

@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
     @project = scoped_projects.find(params[:id])
 
     if @project.nil?
-      flash[:error] = "You can't access the project or it doesn't exist."
+      flash[:error] = t('flash.error.not_exists_or_no_permission', model: Project.model_name.human)
       redirect_to root_path
     else
       @users = User.where("company_id = ?", current_user.company_id).order("users.name")
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
   def show
     @project = scoped_projects.find(params[:id])
     if @project.nil?
-      flash[:error] = "You can't access the project or it doesn't exist."
+      flash[:error] = t('flash.error.not_exists_or_no_permission', model: Project.model_name.human)
       redirect_to root_path
     else
       @users = User.where("company_id = ?", current_user.company_id).order("users.name")
@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
     @project = scoped_projects.in_progress.find(params[:id])
 
     if @project.update_attributes(params[:project])
-      flash[:success] = _('Project was successfully updated.')
+      flash[:success] = t('flash.notice.model_updated', model: Project.model_name.human)
       redirect_to projects_path
     else
       render :edit
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
     project = scoped_projects.find(params[:id])
 
     if project.destroy
-      flash[:success] = 'Project was deleted.'
+      flash[:success] = t('flash.notice.model_deleted', model: Project.model_name.human)
     else
       flash[:error] = project.errors[:base].join(', ')
     end
@@ -94,7 +94,7 @@ class ProjectsController < ApplicationController
     unless project.nil?
       project.completed_at = Time.now.utc
       project.save
-      flash[:success] = _("#{project.name} completed.")
+      flash[:success] = t('flash.notice.model_completed', model: project.name)
     end
 
     redirect_to edit_project_path(project)
@@ -106,7 +106,7 @@ class ProjectsController < ApplicationController
     unless project.nil?
       project.completed_at = nil
       project.save
-      flash[:success] = _("#{project.name} reverted.")
+      flash[:success] = t('flash.notice.model_reverted', model: project.name)
     end
 
     redirect_to edit_project_path(project)
@@ -188,7 +188,8 @@ class ProjectsController < ApplicationController
   private
 
   def authorize_user_can_create_projects
-    msg = "You're not allowed to create new projects. Have your admin give you access."
+    # msg = "You're not allowed to create new projects. Have your admin give you access."
+    msg = t('flash.alert.unauthorized_operation')
     deny_access(msg) unless current_user.create_projects?
   end
 
@@ -202,18 +203,18 @@ class ProjectsController < ApplicationController
   end
 
   def check_if_project_has_users(project)
+    msg = t('flash.notice.model_created', model: Project.model_name.human)
+
     if project.has_users?
-      flash[:success] = _('Project was successfully created.')
-      redirect_to (project.template?) ? project_templates_path : projects_path
+      redirect_to (project.template?) ? project_templates_path : projects_path, notice: msg
     else
-      flash[:success] =
-        _('Project was successfully created. Add users who need access to this project.')
-      redirect_to edit_project_path(project)
+      hint = t('hint.project.add_users')
+      redirect_to edit_project_path(project), notice: [msg, hint].join(' ')
     end
   end
 
   def deny_access(msg)
-    flash[:error] = _(msg)
+    flash[:error] = msg
     redirect_from_last
   end
 

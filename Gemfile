@@ -35,6 +35,9 @@ gem 'omniauth-fluenta', :path => "vendor/engines/omniauth-fluenta"
 
 gem 'choices'
 
+gem 'localeapp'
+gem 'human_attribute'
+
 platforms :jruby do
   gem 'warbler'
   gem 'jruby-rack-worker', :require => false
@@ -79,7 +82,7 @@ group :test do
 end
 
 group :development do
-  gem "annotate"
+  gem 'annotate'
 end
 
 group :test, :cucumber do
@@ -91,9 +94,11 @@ group :test, :cucumber do
   gem "shoulda", :require => false
   gem 'database_cleaner'
   gem "launchy"
+  gem 'timecop'
 end
 
 group :cucumber do
   gem 'cucumber-rails'
   gem 'crb'
 end
+

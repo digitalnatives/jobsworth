@@ -1,18 +1,22 @@
 FactoryGirl.define do
   factory :abstract_task do
-    description {Faker::Lorem.paragraph }
+    sequence(:name) { |n| "#{type} #{n}" }
+    description { Faker::Lorem.paragraph }
+    weight_adjustment 0
+
     association :company, :factory => :company
     association :project, :factory => :project
-    weight_adjustment 0
-    type 'AbstractTask'
-    sequence(:name) { |n| "#{type} #{n}" }
 
-    factory :task_record do
-      type 'TaskRecord'
+
+    trait(:with_customers) do
+      ignore { customer_count 1 }
+      customers { FactoryGirl.create_list :customer, customer_count }
     end
 
-    factory :template do
-      type 'Template'
+    factory :task_record, aliases: [:task], class: 'TaskRecord' do
+      factory :task_with_customers, traits: [:with_customers]
     end
+
+    factory :template, class: 'Template'
   end
 end

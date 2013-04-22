@@ -4,7 +4,6 @@
 
 #TODO: Clean this mess laterz
 require 'digest/md5'
-require "#{Rails.root}/lib/localization"
 
 class ApplicationController < ActionController::Base
   before_filter :set_locale
@@ -16,7 +15,6 @@ class ApplicationController < ActionController::Base
   include DateAndTimeHelper
 
   helper :task_filter
-  helper :users
   helper :date_and_time
   helper :todos
   helper :tags
@@ -50,6 +48,10 @@ class ApplicationController < ActionController::Base
       end
     end
     @current_sheet
+  end
+
+  def current_company
+    @_current_company ||= current_user.try :company
   end
 
   delegate :projects, :project_ids, :projects_and_project_templates, :projects_and_project_template_ids, :to => :current_user, :prefix=> :current
@@ -99,10 +101,6 @@ class ApplicationController < ActionController::Base
     end
 
     return @company
-  end
-
-  def current_company
-    current_user.try :company
   end
 
   # Redirects to the last page this user was on, or to the root url.
@@ -178,13 +176,12 @@ class ApplicationController < ActionController::Base
 
   def authorize_user_is_admin
     unless current_user.admin?
-      flash[:error] = _("Only admins may access this area.")
-      redirect_to root_path
+      redirect_to root_path, alert: t('flash.alert.admin_permission_needed')
     end
   end
 
   def set_locale
-    Localization.lang(current_user.try(:locale) || 'en_US')
+    I18n.locale = current_user.try(:locale) || 'en_US'
   end
 
 end

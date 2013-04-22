@@ -2,9 +2,9 @@
 module ProjectsHelper
   def start_at_title_helper
     if @project.template?
-      _("A default start date for project template, related milestones due date will be recalculated relative to this date when project template converted to project")
+      t 'hint.project.template_start_at'
     else
-      _("Milestones due date will updated according the difference of the project template start date and current project start date")
+      t 'hint.project.project_start_at'
     end
   end
 end

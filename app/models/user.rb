@@ -155,13 +155,8 @@ class User < ActiveRecord::Base
   end
 
   def generate_widgets
-
-    old_lang = Localization.lang
-
-    Localization.lang(self.locale || 'en_US')
-
     w = new_widget
-    w.name =  _("Top Tasks")
+    w.name = I18n.t("widgets.top_tasks")
     w.widget_type = 0
     w.number = 5
     w.mine = true
@@ -171,7 +166,7 @@ class User < ActiveRecord::Base
     w.save
 
     w = new_widget
-    w.name = _("Newest Tasks")
+    w.name = I18n.t("widgets.newest_tasks")
     w.widget_type = 0
     w.number = 5
     w.mine = false
@@ -181,16 +176,13 @@ class User < ActiveRecord::Base
     w.save
 
     w = new_widget
-    w.name = _("Open Tasks")
+    w.name = I18n.t("widgets.open_tasks")
     w.widget_type = 3
     w.number = 7
     w.mine = true
     w.column = 1
     w.position = 0
     w.save
-
-    Localization.lang(old_lang)
-
   end
 
   def avatar_url(size=32, secure = false)
@@ -325,7 +317,7 @@ class User < ActiveRecord::Base
   def email=(new_email)
     ea = EmailAddress.where(:email => new_email).first || EmailAddress.new(:email => new_email, :company => self.company)
     if ea.user
-      errors.add(:email, "#{ea.email} is already taken by #{ea.user.name}")
+      errors.add(:email, I18n.t("errors.messages.taken_by", email: ea.email, user: ea.user.name))
     else
       self.email_addresses.update_all(:default => false)
       ea.default = true
@@ -421,7 +413,7 @@ private
 
   def reject_destroy_if_exist
     [:work_logs].each do |association|
-      errors.add(:base, "The user has the #{association.to_s.humanize}, please remove them first or deactivate user.") unless eval("#{association}.count").zero?
+      errors.add(:base, I18n.t("errors.messages.reject_destroy_if_exist", association: association.to_s.humanize)) unless eval("#{association}.count").zero?
     end
     if errors.count.zero?
       ActiveRecord::Base.connection.execute("UPDATE tasks set creator_id = NULL WHERE company_id = #{self.company_id} AND creator_id = #{self.id}")

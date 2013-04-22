@@ -18,17 +18,17 @@ class AbstractProject < ActiveRecord::Base
   has_many      :project_files, :dependent => :destroy, :foreign_key => 'project_id'
   has_many      :milestones, :dependent => :destroy, :order => "due_at asc, lower(name) asc", :foreign_key => 'project_id'
 
-  scope :completed, where("projects.completed_at is not NULL")
-  scope :in_progress, where("projects.completed_at is NULL")
+  scope :completed, where('projects.completed_at IS NOT NULL')
+  scope :in_progress, where('projects.completed_at' => nil)
   scope :from_this_year, where("created_at > ?", Time.zone.now.beginning_of_year - 1.month)
 
-  validates_length_of    :name,  :maximum=>200
+  validates_length_of    :name, maximum: 200
   validates_presence_of  :name
   validates_presence_of  :customer
 
   validates :default_estimate,
-            :presence      => true,
-            :numericality  => { :greater_than_or_equal_to => 1.0 }
+            presence:     true,
+            numericality: { greater_than_or_equal_to: 1.0 }
 
   after_update    :update_work_sheets
   before_destroy  :reject_destroy_if_have_tasks
@@ -167,7 +167,9 @@ class AbstractProject < ActiveRecord::Base
 
   def reject_destroy_if_have_tasks
     unless tasks.count.zero?
-      errors.add(:base, "Can not delete project, please remove tasks from this project.")
+      errors.add(:base, I18n.t('flash.error.destroy_dependents_of_model',
+                               dependents: TaskRecord.model_name.human(count: 2),
+                               model: Project.model_name.human))
       return false
     end
     true
@@ -175,7 +177,7 @@ class AbstractProject < ActiveRecord::Base
 
   def update_work_sheets
     if self.customer_id != self.customer_id_was
-      WorkLog.update_all("customer_id = #{self.customer_id}", 
+      WorkLog.update_all("customer_id = #{self.customer_id}",
         "project_id = #{self.id} AND customer_id != #{self.customer_id}")
     end
   end
