@@ -110,17 +110,13 @@ class TaskRecord < AbstractTask
       company.properties.collect { |property| property_value(property).to_s }
   end
 
-  ###
   # This method return value of property named "Type"
-  ###
   def type
-    property_value(company.type_property)
+    property_value company.try(:type_property)
   end
 
-  ###
   # Returns an int to use for sorting this task. See Company.rank_by_properties
   # for more info.
-  ###
   def sort_rank
     @sort_rank ||= company.rank_by_properties(self)
   end
@@ -129,23 +125,20 @@ class TaskRecord < AbstractTask
   # A task is critical if it is in the top 20% of the possible
   # ranking using the companys sort.
   ###
+
   def critical?
     return false if company.maximum_sort_rank == 0
 
     sort_rank.to_f / company.maximum_sort_rank.to_f > 0.80
   end
 
-  ###
   # A task is normal if it is not critical or low.
-  ###
   def normal?
-    !critical? and !low?
+    !(critical? || low?)
   end
 
-  ###
   # A task is low if it is in the bottom 20% of the possible
   # ranking using the companys sort.
-  ###
   def low?
     return false if company.maximum_sort_rank == 0
 
@@ -162,13 +155,11 @@ class TaskRecord < AbstractTask
     recipients
   end
 
-  ###
   # This method will mark this task as unread for any
   # setup watchers or task owners.
   # The exclude param should be a user which unread
   # status will not be updated. For example, the person who wrote a
   # comment should probably be excluded.
-  ###
   def mark_as_unread(exclude = "")
     exclude = ["user_id !=?", exclude.id ] if exclude.is_a?(User)
     self.task_users.where(exclude).update_all(:unread => true)
