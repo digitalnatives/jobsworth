@@ -120,6 +120,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_sign_in_path_for(resource_or_scope)
+    main_app.root_url
+  end
+
   private
 
   # Returns a link to the given task.
