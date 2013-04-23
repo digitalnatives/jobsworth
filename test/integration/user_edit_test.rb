@@ -10,7 +10,7 @@ class UserEditTest < ActionController::IntegrationTest
     end
 
     should "be able to update user information" do
-      uncheck "Receive Notifications"
+      uncheck User.human_attribute_name :receive_notifications
       click_button "Save"
       @user.reload
 
