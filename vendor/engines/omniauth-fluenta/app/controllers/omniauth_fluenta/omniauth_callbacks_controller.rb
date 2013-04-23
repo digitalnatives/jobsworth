@@ -15,7 +15,9 @@ module OmniauthFluenta
       set_flash_message(:notice, :success, :kind => "Fluenta") if is_navigational_format?
     rescue StandardError => e
       logger.debug "\nException occured while trying to sign in via fluenta :\n\t#{e.inspect}\n#{e.backtrace}\n"
-      redirect_to request.env['omniauth.origin'], :alert => _("Internal error occured while trying to sign in through Fluenta...")
+      redirect_to request.env['omniauth.origin'],
+        :alert => t('devise.omniauth_callbacks.failure', kind: 'Fluenta', reason: e.message)
+
     end
 
   end
