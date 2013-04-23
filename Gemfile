@@ -27,6 +27,7 @@ gem 'cocaine'
 gem 'hashie'
 gem 'rufus-scheduler'
 gem 'activeadmin'
+gem 'locale_setter'
 
 gem 'unicorn'
 
@@ -83,6 +84,7 @@ end
 
 group :development do
   gem 'annotate'
+  gem 'quiet_assets'
 end
 
 group :test, :cucumber do

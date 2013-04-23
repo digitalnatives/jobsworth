@@ -6,7 +6,6 @@
 require 'digest/md5'
 
 class ApplicationController < ActionController::Base
-  before_filter :set_locale
   before_filter :authenticate_user!
   before_filter :current_sheet
   before_filter :set_mailer_url_options
@@ -178,10 +177,6 @@ class ApplicationController < ActionController::Base
     unless current_user.admin?
       redirect_to root_path, alert: t('flash.alert.admin_permission_needed')
     end
-  end
-
-  def set_locale
-    I18n.locale = current_user.try(:locale) || 'en_US'
   end
 
 end
