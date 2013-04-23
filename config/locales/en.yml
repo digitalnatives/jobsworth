@@ -9,7 +9,7 @@ en:
     - Fri
     - Sat
     abbr_month_names:
-    -
+    - 
     - Jan
     - Feb
     - Mar
@@ -31,11 +31,11 @@ en:
     - Friday
     - Saturday
     formats:
-      default: '%Y-%m-%d'
-      long: '%B %d, %Y'
-      short: '%b %d'
+      default: ! '%Y-%m-%d'
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
     month_names:
-    -
+    - 
     - January
     - February
     - March
@@ -78,16 +78,16 @@ en:
         other: over %{count} years
       x_days:
         one: 1 day
-        other: '%{count} days'
+        other: ! '%{count} days'
       x_minutes:
         one: 1 minute
-        other: '%{count} minutes'
+        other: ! '%{count} minutes'
       x_months:
         one: 1 month
-        other: '%{count} months'
+        other: ! '%{count} months'
       x_seconds:
         one: 1 second
-        other: '%{count} seconds'
+        other: ! '%{count} seconds'
     prompts:
       day: Day
       hour: Hour
@@ -96,14 +96,14 @@ en:
       second: Seconds
       year: Year
   errors:
-    format: '%{attribute} %{message}'
-    messages: &70292853691280
+    format: ! '%{attribute} %{message}'
+    messages:
       accepted: must be accepted
       blank: can't be blank
       between: must be a number between %{num1} and %{num2}
-      can_not_delete_project: "Can not delete project, please remove tasks from this project."
+      can_not_delete_project: Can not delete project, please remove tasks from this project.
       confirmation: doesn't match confirmation
-      doesnt_match_regex: "%{ attr_name } doesn't match regex"
+      doesnt_match_regex: ! '%{ attr_name } doesn''t match regex'
       empty: can't be empty
       equal_to: must be equal to %{count}
       even: must be even
@@ -114,14 +114,14 @@ en:
       invalid: is invalid
       less_than: must be less than %{count}
       less_than_or_equal_to: must be less than or equal to %{count}
-      mandatory: "Missing value for mandatory %{attr_name}"
+      mandatory: Missing value for mandatory %{attr_name}
       not_a_number: is not a number
       not_an_integer: must be an integer
       odd: must be odd
-      record_invalid: "! 'Validation failed: %{errors}'"
+      record_invalid: ! 'Validation failed: %{errors}'
       reject_destroy_if_exist: The user has the %{association}, please remove them first or deactivate user.
       taken: has already been taken
-      taken_by: '%{email} has already been taken by %{user}'
+      taken_by: ! '%{email} has already been taken by %{user}'
       too_long:
         one: is too long (maximum is 1 character)
         other: is too long (maximum is %{count} characters)
@@ -131,7 +131,7 @@ en:
       wrong_length:
         one: is the wrong length (should be 1 character)
         other: is the wrong length (should be %{count} characters)
-    template: &70292801738300
+    template:
       body: ! 'There were problems with the following fields:'
       header:
         one: 1 error prohibited this %{model} from being saved
@@ -139,8 +139,7 @@ en:
     models:
       task_record:
         task_number:
-          invalid: 'Invalid Task Number'
-
+          invalid: Invalid Task Number
   helpers:
     select:
       prompt: Please select
@@ -149,41 +148,41 @@ en:
       submit: Save %{model}
       update: Update %{model}
   boolean:
-    yes: Yes
-    no: No
+    true: true
+    false: false
   number:
     currency:
       format:
-        delimiter: ','
-        format: '%u%n'
+        delimiter: ! ','
+        format: ! '%u%n'
         precision: 2
         separator: .
         significant: false
         strip_insignificant_zeros: false
         unit: $
     format:
-      delimiter: ','
+      delimiter: ! ','
       precision: 3
       separator: .
       significant: false
       strip_insignificant_zeros: false
     human:
       decimal_units:
-        format: '%n %u'
+        format: ! '%n %u'
         units:
           billion: Billion
           million: Million
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit: ''
+          unit: 
       format:
-        delimiter: ''
+        delimiter: 
         precision: 3
         significant: true
         strip_insignificant_zeros: true
       storage_units:
-        format: '%n %u'
+        format: ! '%n %u'
         units:
           byte:
             one: Byte
@@ -194,35 +193,109 @@ en:
           tb: TB
     percentage:
       format:
-        delimiter: ''
+        delimiter: 
     precision:
       format:
-        delimiter: ''
+        delimiter: 
   support:
     array:
-      last_word_connector: ', and '
-      two_words_connector: ' and '
-      words_connector: ', '
+      last_word_connector: ! ', and '
+      two_words_connector: ! ' and '
+      words_connector: ! ', '
   time:
     am: am
     formats:
-      default: '%a, %d %b %Y %H:%M:%S %z'
-      long: '%B %d, %Y %H:%M'
-      short: '%d %b %H:%M'
+      default: ! '%a, %d %b %Y %H:%M:%S %z'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
     pm: pm
   activemodel:
     errors:
-      format: '%{attribute} %{message}'
-      messages: *70292853691280
-      template: *70292801738300
+      format: ! '%{attribute} %{message}'
+      messages:
+        accepted: must be accepted
+        blank: can't be blank
+        between: must be a number between %{num1} and %{num2}
+        can_not_delete_project: Can not delete project, please remove tasks from this project.
+        confirmation: doesn't match confirmation
+        doesnt_match_regex: ! '%{ attr_name } doesn''t match regex'
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not included in the list
+        invalid: is invalid
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        mandatory: Missing value for mandatory %{attr_name}
+        not_a_number: is not a number
+        not_an_integer: must be an integer
+        odd: must be odd
+        record_invalid: ! 'Validation failed: %{errors}'
+        reject_destroy_if_exist: The user has the %{association}, please remove them first or deactivate user.
+        taken: has already been taken
+        taken_by: ! '%{email} has already been taken by %{user}'
+        too_long:
+          one: is too long (maximum is 1 character)
+          other: is too long (maximum is %{count} characters)
+        too_short:
+          one: is too short (minimum is 1 character)
+          other: is too short (minimum is %{count} characters)
+        wrong_length:
+          one: is the wrong length (should be 1 character)
+          other: is the wrong length (should be %{count} characters)
+      template:
+        body: ! 'There were problems with the following fields:'
+        header:
+          one: 1 error prohibited this %{model} from being saved
+          other: ! '%{count} errors prohibited this %{model} from being saved'
   activerecord:
     errors:
-      format: '%{attribute} %{message}'
-      messages: *70292853691280
-      template: *70292801738300
+      format: ! '%{attribute} %{message}'
+      messages:
+        accepted: must be accepted
+        blank: can't be blank
+        between: must be a number between %{num1} and %{num2}
+        can_not_delete_project: Can not delete project, please remove tasks from this project.
+        confirmation: doesn't match confirmation
+        doesnt_match_regex: ! '%{ attr_name } doesn''t match regex'
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not included in the list
+        invalid: is invalid
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        mandatory: Missing value for mandatory %{attr_name}
+        not_a_number: is not a number
+        not_an_integer: must be an integer
+        odd: must be odd
+        record_invalid: ! 'Validation failed: %{errors}'
+        reject_destroy_if_exist: The user has the %{association}, please remove them first or deactivate user.
+        taken: has already been taken
+        taken_by: ! '%{email} has already been taken by %{user}'
+        too_long:
+          one: is too long (maximum is 1 character)
+          other: is too long (maximum is %{count} characters)
+        too_short:
+          one: is too short (minimum is 1 character)
+          other: is too short (minimum is %{count} characters)
+        wrong_length:
+          one: is the wrong length (should be 1 character)
+          other: is the wrong length (should be %{count} characters)
+      template:
+        body: ! 'There were problems with the following fields:'
+        header:
+          one: 1 error prohibited this %{model} from being saved
+          other: ! '%{count} errors prohibited this %{model} from being saved'
     attributes:
-      resource_type_id: 'Resource Type'
-      customer_id: 'Customer'
+      resource_type_id: Resource Type
+      customer_id: Customer
       company:
         name: Company Name
         logo: Current Logo
@@ -245,14 +318,14 @@ en:
     attribute_values:
       task_record:
         status:
-          '0': 'Open'
-          '1': 'Closed'
-          '2': 'Will not fix'
-          '3': 'Invalid'
-          '4': 'Duplicate'
+          '0': Open
+          '1': Closed
+          '2': Will not fix
+          '3': Invalid
+          '4': Duplicate
         open_or_closed:
-          open: 'Open'
-          closed: 'Closed'
+          open: Open
+          closed: Closed
     models:
       company:
         one: Company
@@ -301,87 +374,81 @@ en:
         other: Projects
   email:
     subject:
-      signup: '[Jobsworth] Account Registration'
-      account_created: '[Jobsworth] Invitation from %{name}'
-      mass_email: '[Jobsworth] New version'
-      subdomain_changed: '[Jobsworth] %{company_name} - Login URL changed'
+      signup: ! '[Jobsworth] Account Registration'
+      account_created: ! '[Jobsworth] Invitation from %{name}'
+      mass_email: ! '[Jobsworth] New version'
+      subdomain_changed: ! '[Jobsworth] %{company_name} - Login URL changed'
   flash:
     alert:
-      empty_report: 'Empty report, log more work!'
-      admin_permission_needed: 'Only admins may access this area.'
-      access_denied: 'Access denied'
-      access_denied_to_model: "You don't have access to %{model}"
-      unauthorized_operation: "You're not authorized to perform the operation."
-      file_not_found: 'No such file.'
+      empty_report: Empty report, log more work!
+      admin_permission_needed: Only admins may access this area.
+      access_denied: Access denied
+      access_denied_to_model: You don't have access to %{model}
+      unauthorized_operation: You're not authorized to perform the operation.
+      file_not_found: No such file.
     error:
-      destroy_dependents_of_model: 'Please delete all %{dependents} for %{model} before deleting it.'
-      cant_delete_default_model: "Default %{model} can't be deleted."
-      not_exists_or_no_permission: "You can't access the %{model} or it doesn't exist."
-      model_closed: "The %{model} is closed. Please reopen it first in order to modify it."
-      model_delete: "%{model} deletion failed."
-      pair_already_added: "The pair (%{first}, %{second}) has already been added."
-
+      destroy_dependents_of_model: Please delete all %{dependents} for %{model} before deleting it.
+      cant_delete_default_model: Default %{model} can't be deleted.
+      not_exists_or_no_permission: You can't access the %{model} or it doesn't exist.
+      model_closed: The %{model} is closed. Please reopen it first in order to modify it.
+      model_delete: ! '%{model} deletion failed.'
+      pair_already_added: The pair (%{first}, %{second}) has already been added.
     notice:
-      settings_updated: '%{model} settings updated'
-      model_updated: '%{model} successfully updated.'
-      model_saved: '%{model} saved.'
-      model_created: '%{model} successfully created.'
-      model_deleted: '%{model} successfully deleted.'
-      model_attached_to_other: '%{model} attached to %{other} successfully.'
-      model_completed: '%{model} completed.'
-      model_reverted: '%{model} reverted.'
-
+      settings_updated: ! '%{model} settings updated'
+      model_updated: ! '%{model} successfully updated.'
+      model_saved: ! '%{model} saved.'
+      model_created: ! '%{model} successfully created.'
+      model_deleted: ! '%{model} successfully deleted.'
+      model_attached_to_other: ! '%{model} attached to %{other} successfully.'
+      model_completed: ! '%{model} completed.'
+      model_reverted: ! '%{model} reverted.'
   hint:
     company:
-      receiving_emails: "Emails received by Jobsworth that don't belong to a task will be added to this project"
+      receiving_emails: Emails received by Jobsworth that don't belong to a task will be added to this project
     project:
-      add_users: 'Add users who need access to this project.'
-      template_start_at: "A default start date for project template, related milestones due date will be recalculated relative to this date when project template converted to project"
-      project_start_at: "Milestones due date will updated according the difference of the project template start date and current project start date"
+      add_users: Add users who need access to this project.
+      template_start_at: A default start date for project template, related milestones due date will be recalculated relative to this date when project template converted to project
+      project_start_at: Milestones due date will updated according the difference of the project template start date and current project start date
     task:
-      project_needed: 'You need to create a project/project template to hold your tasks.'
-      target_date_from_milestone: "Target date from milestone"
-      target_date_from_start: "The target date for when you want this task to be started."
+      project_needed: You need to create a project/project template to hold your tasks.
+      target_date_from_milestone: Target date from milestone
+      target_date_from_start: The target date for when you want this task to be started.
     user:
-      add_permissions: 'Remember to give this user access to needed projects.'
-      avatar: '(Will be resized to 25x25 and 50x50 while preserving aspect ratio)'
+      add_permissions: Remember to give this user access to needed projects.
+      avatar: (Will be resized to 25x25 and 50x50 while preserving aspect ratio)
     milestone:
       statuses:
-        planning: 'planning (can add tasks, all tasks are snoozed)'
-        open: 'open (can add tasks, tasks not snoozed)'
-        locked: 'locked (cannot add tasks, tasks not snoozed)'
-        closed: 'closed (cannot add tasks, all tasks are closed)'
-
+        planning: planning (can add tasks, all tasks are snoozed)
+        open: open (can add tasks, tasks not snoozed)
+        locked: locked (cannot add tasks, tasks not snoozed)
+        closed: closed (cannot add tasks, all tasks are closed)
   forms:
     action:
-      create: 'Create %{model}'
-      add: 'Add %{model}'
+      create: Create %{model}
+      add: Add %{model}
     select:
-      please_select: 'Please select'
-      none: 'none'
-
+      please_select: Please select
+      none: none
   error:
     user:
-      send_creation_email: 'Error sending creation email. Account still created.'
-      delete_self: "You can't delete yourself."
+      send_creation_email: Error sending creation email. Account still created.
+      delete_self: You can't delete yourself.
     company:
-      no_internal_customer: 'Unable to find internal customer.'
-      delete_own_company: "You can't delete your own company."
+      no_internal_customer: Unable to find internal customer.
+      delete_own_company: You can't delete your own company.
     email:
-      secret_incorrect: 'The secret key is incorrect.'
+      secret_incorrect: The secret key is incorrect.
     sheet:
-      already_saved: 'Log entry already saved from another browser instance.'
-
+      already_saved: Log entry already saved from another browser instance.
   timetracking:
-    add_earlier: 'Add earlier work to <b>%{task}</b>.'
-    cancel: 'Cancel working on <b>%{task}</b>.'
-    cancel_confirm: 'Really abort work?'
-    pause: 'Pause working on <b>%{task}</b>.'
-    resume: 'Resume working on <b>%{task}</b>.'
-    stop: 'Stop working on <b>%{task}</b>.'
-    start: 'Start working on <b>%{task}</b>.'
-    time_worked: '%{time} worked'
-
+    add_earlier: Add earlier work to <b>%{task}</b>.
+    cancel: Cancel working on <b>%{task}</b>.
+    cancel_confirm: Really abort work?
+    pause: Pause working on <b>%{task}</b>.
+    resume: Resume working on <b>%{task}</b>.
+    stop: Stop working on <b>%{task}</b>.
+    start: Start working on <b>%{task}</b>.
+    time_worked: ! '%{time} worked'
   companies:
     admin_panel: Admin Panel
     company: Company
@@ -405,13 +472,13 @@ en:
     set_as_default: Set as Default
   mailmans:
     wrapper:
-      bad_subject: "the subject of your email was empty or it was too generic without providing a summary of the issue."
-      blank: "the body of your email was blank or you didn't reply above the line."
-      too_large: "you attached a file over %{max}"
-      too_old: "your email was over a week old (or your clock is badly adjusted)."
-    no_company: "Can't find receiver of the email."
-    inactive_user: "You can not send emails to Jobsworth, because you are an inactive user."
-    no_related: "The email doesn't relate to any task or project."
+      bad_subject: the subject of your email was empty or it was too generic without providing a summary of the issue.
+      blank: the body of your email was blank or you didn't reply above the line.
+      too_large: you attached a file over %{max}
+      too_old: your email was over a week old (or your clock is badly adjusted).
+    no_company: Can't find receiver of the email.
+    inactive_user: You can not send emails to Jobsworth, because you are an inactive user.
+    no_related: The email doesn't relate to any task or project.
   news_items:
     body: Body
     public: Public
@@ -428,9 +495,9 @@ en:
     error_msg: ! 'prohibited this snippet from being saved:'
   tasks:
     actions:
-      add_me: 'Add me'
-      open: 'Open <b>%{task}</b>'
-      close: 'Close <b>%{task}</b>'
+      add_me: Add me
+      open: Open <b>%{task}</b>
+      close: Close <b>%{task}</b>
     index_title: Tasks - %{title}
     title: ! 'Task #%{num} : %{title}'
     icon_list: List
@@ -444,8 +511,7 @@ en:
       quoted: Quoted
       quoted_title: This task is quoted
     service_tip: Service Tip
-    no_todos: '[To-do]'
-
+    no_todos: ! '[To-do]'
     billable: billable
     unbillable: unbillable
     snooze_until: Snooze until
@@ -459,15 +525,15 @@ en:
     time_estimate: Time Estimate
     target_date: Target Date
     target_dates:
-      not_set: 'Not set'
-      manually_overridden: 'Manually overridden'
-      from_milestone: 'From milestone %{milestone}'
+      not_set: Not set
+      manually_overridden: Manually overridden
+      from_milestone: From milestone %{milestone}
     groupings:
-      not_grouped: 'Not grouped'
-      group_by: 'Grouped by %{thing}'
-      by_client: 'Grouped by Client'
-      by_resolution: 'Grouped by Resolution'
-      by_assigned: 'Grouped by Assigned'
+      not_grouped: Not grouped
+      group_by: Grouped by %{thing}
+      by_client: Grouped by Client
+      by_resolution: Grouped by Resolution
+      by_assigned: Grouped by Assigned
     forecast_to_miss: Forecast to miss target
     forecast_date: Forecast Date
     resolution: Resolution
@@ -512,13 +578,14 @@ en:
     score_exponent: Exponent
     score_type: Type
     score_final_value: Final value
-    templates:
   triggers:
     trigger_title: Triggers
     new_trigger_title: ! 'New Trigger : %{title}'
     create_trigger: Create Trigger
     triggers: Triggers
-    updated_by_trigger: "This task was updated by trigger\n"
+    updated_by_trigger: ! 'This task was updated by trigger
+
+'
     new_trigger: New Trigger
     task_filter: Task Filter
     fire_on: Fire on
@@ -618,7 +685,7 @@ en:
     custom: Custom
     date: Date
     download:
-      csv: 'Download CSV file of this report'
+      csv: Download CSV file of this report
     from: From
     hide_approved_logs: Hide approved logs
     hide_rejected_logs: Hide rejected logs
@@ -661,7 +728,7 @@ en:
     no_project_in_process: No project in process
     no_project_completed: No project completed
   wiki:
-    frontpage: 'Frontpage'
+    frontpage: Frontpage
     title: Wiki - %{title}
     revisions_title: ! 'Wiki Revisions : %{title}'
     linked_from: Linked from
@@ -669,8 +736,10 @@ en:
     by: by %{user}
     under_revision_by: Under revision by %{user}
     linking_to_pages: Linking to Pages
-    link_helper: "[[Wikipage]]\n[[Wikipage|link name]]"
-    no_page_yet: "This wiki page doesn't exist yet. Create it by entering text and clicking the button below."
+    link_helper: ! '[[Wikipage]]
+
+      [[Wikipage|link name]]'
+    no_page_yet: This wiki page doesn't exist yet. Create it by entering text and clicking the button below.
     edit_summary: Edit Summary
     revisions: Revisions
     revision_n: Revision %{n}
@@ -718,33 +787,31 @@ en:
     edit: Edit Milestone
     view_tasks: View Tasks
     reopen: Re-open
-    complete: Complete
     score_rules: Score Rules
     milestones: Milestones
     create: Create Milestone
     new: New Milestone
     statuses:
-      planning: 'planning'
-      open: 'open'
-      locked: 'locked'
-      closed: 'closed'
+      planning: planning
+      open: open
+      locked: locked
+      closed: closed
   work_logs:
     status_options:
-      leave_open: 'Leave Open'
-      reopen: 'Revert to Open'
-      close: 'Close'
-      leave_closed: 'Leave Closed'
-      wont_fix: "Set as Won't Fix"
-      leave_wont_fix: "Leave as Won't Fix"
-      invalid: 'Set as Invalid'
-      leave_invalid: 'Leave as Invalid'
-      duplicate: 'Set as Duplicate'
-      leave_duplicate: 'Leave as Duplicate'
-
+      leave_open: Leave Open
+      reopen: Revert to Open
+      close: Close
+      leave_closed: Leave Closed
+      wont_fix: Set as Won't Fix
+      leave_wont_fix: Leave as Won't Fix
+      invalid: Set as Invalid
+      leave_invalid: Leave as Invalid
+      duplicate: Set as Duplicate
+      leave_duplicate: Leave as Duplicate
     title: Work Log - %{title}
     new_title: New Log Entry
     edit_title: Edit Log Entry
-    email_sent_to: 'Sent to %{recipients}'
+    email_sent_to: Sent to %{recipients}
     delete_title: Delete Log Entry
     delete_confirmation: Really delete this log entry?
     client: Client
@@ -769,7 +836,7 @@ en:
       invalid_end_date: Invalid end date
   widgets:
     active_tasks: Active Tasks
-    all_tasks: "[All Tasks]"
+    all_tasks: ! '[All Tasks]'
     burndown: Burndown Chart
     burnup: Burnup Chart
     comments: Comments
@@ -787,28 +854,19 @@ en:
     priority: Priority
     recent: Recent
     resolution: Work Resolution
-    started_at: "started %{time}"
+    started_at: started %{time}
     subscribe_rss: Subscribe to this widget's RSS feed
     tasks: Tasks
     time_chart: Tasks / Day Chart
     top_tasks: Top tasks
     type: Type
-    unassigned: "[Unassigned]"
-    widget_title: Title
-    mine: Mine
-    everyone: Everyone
     unassigned: ! '[Unassigned]'
-    subscribe_rss: Subscribe to this widget's RSS feed
-    started_at: started %{time}
-    all_tasks: ! '[All Tasks]'
-    eta: ETA
-    gadget_html_code: Gadget HTML Code
-    find_google_gadget: Find a Google Gadget
+    widget_title: Title
     number_9:
-      new: 'New'
-      completed: 'Completed'
-      work_logged: 'Work Logged'
-      last_completed_tasks: 'Last %{count} Completed Tasks'
+      new: New
+      completed: Completed
+      work_logged: Work Logged
+      last_completed_tasks: Last %{count} Completed Tasks
   users:
     name: Name
     username: Username
@@ -844,7 +902,7 @@ en:
     send_welcome_email: Send welcome email
     welcome_message: Welcome message
     welcome_message_input: input welcome message here
-    welcome_message_header: 'Signup Message'
+    welcome_message_header: Signup Message
     welcome_message_optional: The message will be included in the signup email.
     access_title: ! 'User : %{title}'
     new_user_title: ! 'User : %{title}'
@@ -855,6 +913,8 @@ en:
     new_user: New user
     recent_work: Recent work
     next_tasks: Next Tasks
+    no_filters: 
+    show_avatars: Show Avatars
   todos:
     delete_todo_html: Delete <b>%{todo}</b>
     add_todo_placeholder: Add a todo item...
@@ -873,27 +933,27 @@ en:
   org_units:
     name: Name
     active: Active
-    edit_title: 'Edit Organizational Unit %{unit}'
-    new_title: 'New Organizational Unit for %{customer}'
+    edit_title: Edit Organizational Unit %{unit}
+    new_title: New Organizational Unit for %{customer}
   projects:
-    edit_project_html: 'Edit project <b>%{project}</b>'
-    view_project_html: 'View project <b>%{project}</b>'
-    n_completed_milestones: '%{n} completed milestones'
-    n_completed_projects: '%{n} completed projects'
+    edit_project_html: Edit project <b>%{project}</b>
+    view_project_html: View project <b>%{project}</b>
+    n_completed_milestones: ! '%{n} completed milestones'
+    n_completed_projects: ! '%{n} completed projects'
     user: User
     name: Name
     company: Company
     customer: Customer
     estimate: Estimate
     default_estimate: Default Estimate
-    estimate_placeholder: 'duration estimate for a task in this project(unit: hour)'
+    estimate_placeholder: ! 'duration estimate for a task in this project(unit: hour)'
     suppressBilling: Suppress Billing
     billing_tip: Don't bill time for this project
     description: Description
-    edit_title: 'Project : %{title}'
-    index_title: 'Project - %{title}'
-    new_title: 'New Project - %{title}'
-    completed_title: 'Completed Projects - %{title}'
+    edit_title: ! 'Project : %{title}'
+    index_title: Project - %{title}
+    new_title: New Project - %{title}
+    completed_title: Completed Projects - %{title}
     completed_projects: Completed Projects
     edit: Edit Project
     reopen: Re-Open
@@ -910,30 +970,30 @@ en:
     new_project: New Project
     view_tasks: View Tasks
   project_templates:
-    edit: 'Edit Project Template'
-    new_template: 'New Project Template'
+    edit: Edit Project Template
+    new_template: New Project Template
     delete: Delete %{model}
   project_permissions:
-    read: "You may not view this task."
-    comment: "You may not add a comment to tasks in this project."
-    work: "You may not add worklogs to tasks in this project."
-    close: "You may not change the resolution of tasks in this project."
-    see_unwatched: "You may not view this task."
-    create: "You may not create tasks in this project."
-    edit: "You may not edit tasks in this project."
-    reassign: "You may not assign users to tasks in this project."
-    milestone: "You may not change the milestone of tasks in this project."
-    report: "You may not see reports for this project."
-    grant: "You may not assign access rights for users in this project."
-    no_message: "Can not find message for permission: %{permission}"
+    read: You may not view this task.
+    comment: You may not add a comment to tasks in this project.
+    work: You may not add worklogs to tasks in this project.
+    close: You may not change the resolution of tasks in this project.
+    see_unwatched: You may not view this task.
+    create: You may not create tasks in this project.
+    edit: You may not edit tasks in this project.
+    reassign: You may not assign users to tasks in this project.
+    milestone: You may not change the milestone of tasks in this project.
+    report: You may not see reports for this project.
+    grant: You may not assign access rights for users in this project.
+    no_message: ! 'Can not find message for permission: %{permission}'
   properties:
     create: Create Task Property
-    color: 'Color'
-    default: 'Default'
+    color: Color
+    default: Default
     default_sort: Sort tasks by this property by default
     default_color: Color tasks by this property by default
     edit: Edit Task Property
-    icon_url: 'Icon URL'
+    icon_url: Icon URL
     index: Task Properties
     mandatory: Tasks require a value for this property to save
     name: Name
@@ -947,7 +1007,7 @@ en:
       lowest: Lowest
       normal: Normal
       urgent: Urgent
-    remove_value: "Remove Property Value %{value}"
+    remove_value: Remove Property Value %{value}
     select_replacement: Select one value to replace with
     severity: Severity
     severities:
@@ -963,10 +1023,9 @@ en:
       improvement: Improvement
       new_feature: New feature
       task: Task
-    values: 'Value'
-
+    values: Value
   resource_attributes:
-    password_changed: " changed to a new password."
+    password_changed: ! ' changed to a new password.'
   resource_types:
     attributes: Attributes
     name: Name
@@ -1011,8 +1070,8 @@ en:
   task_filters:
     my_unread_only: My unread tasks only
     my_unread: My unread tasks only
-    open: 'Open tasks'
-    my_open: 'My open tasks'
+    open: Open tasks
+    my_open: My open tasks
     have_not_keyword: ! 'Have not keyword:'
     keyword: ! 'Keyword:'
     filters: Filters
@@ -1040,6 +1099,7 @@ en:
     wiki_additions: Wiki Additions
     wiki_changes: Wiki Changes
     password_request: Resource Password Request
+    wiki_addictions: 
   permissions:
     copy_permissions: Copy permissions from
     read: Read
@@ -1069,9 +1129,9 @@ en:
       resolved: Resolved
       updated: Updated
       comment: Comment
-      reverted:
+      reverted: 
       reassigned: Reassigned
-    invalid_email: '%{prefix} invalid email'
+    invalid_email: ! '%{prefix} invalid email'
     project: Project
     milestone: Milestone
     due: Due
@@ -1081,7 +1141,7 @@ en:
     due_tomorrow: Tasks due tomorrow
     overdue: Overdue Tasks
     history_visit: ! 'To see the history of this task, visit:'
-    tasks_due: 'Tasks due'
+    tasks_due: Tasks due
     task_updated: This task %{num} was just updated with the information above.
     further_comments: If you have any further comments to make, please reply to this email above the line.
     thank_you_signature: ! 'Thank you,
@@ -1105,18 +1165,17 @@ en:
     login_at: Login at %{url}
     welcome_back: Welcome back to %{product}
     account_created: ! '%{user} has created an account for you in our task and project management system.'
-
   shared:
-    any_thing: 'Any %{thing}'
-    thing_with_count: '%{thing} (%{count})'
-    another_attribute: 'another attribute'
+    any_thing: Any %{thing}
+    thing_with_count: ! '%{thing} (%{count})'
+    another_attribute: another attribute
     true: true
     here: here
     actions: Actions
     action_labels:
-      show_password: 'Show password'
-      remove: 'Remove'
-      add_another: 'Add another'
+      show_password: Show password
+      remove: Remove
+      add_another: Add another
     form_errors: ! 'The following errors, prevented the instance from being created:'
     error: error
     errors: errors
@@ -1124,17 +1183,17 @@ en:
     no_item_found: No item found.
     all: All
     none: None
-    items_more: '%{count} more'
-    not_specified: 'Not specified'
+    items_more: ! '%{count} more'
+    not_specified: Not specified
     last_month: Last Month
     last_week: Last Week
     last_year: Last Year
     this_month: This Month
     this_week: This Week
     this_year: This Year
-    today: today
+    today: Today
     tomorrow: tomorrow
-    yesterday: yesterday
+    yesterday: Yesterday
     total: Total
     monday: Monday
     tuesday: Tuesday
@@ -1143,7 +1202,7 @@ en:
     friday: Friday
     saturday: Saturday
     sunday: Sunday
-    last_x_days: 'Last %{x} Days'
+    last_x_days: Last %{x} Days
     monday_short: Mon
     tuesday_short: Tue
     wednesday_short: Wed
@@ -1157,7 +1216,7 @@ en:
     never: Never
     by_html: by <strong>%{user}</strong>
     by: by %{user}
-    not_set: 'Not set'
+    not_set: Not set
     hour: hour
     minute: minute
     days: days
@@ -1167,22 +1226,56 @@ en:
     loading: Loading...
     default: Default
     customer_placeholder: Please enter the client name by the autocomplete.
-    unknown: 'Unknown'
-    worked_today: "%{time} worked today"
-
+    unknown: Unknown
+    worked_today: ! '%{time} worked today'
+    yess: true
   will_paginate:
-    previous_label: "&#8592; Previous"
-    next_label: "Next &#8594;"
-    page_gap: "&hellip;"
+    previous_label: ! '&#8592; Previous'
+    next_label: Next &#8594;
+    page_gap: ! '&hellip;'
     page_entries_info:
       single_page:
-        zero:  "No %{model} found"
-        one:   "Displaying 1 %{model}"
-        other: "Displaying all %{count} %{model}"
+        zero: No %{model} found
+        one: Displaying 1 %{model}
+        other: Displaying all %{count} %{model}
       single_page_html:
-        zero:  "No %{model} found"
-        one:   "Displaying <b>1</b> %{model}"
-        other: "Displaying <b>all&nbsp;%{count}</b> %{model}"
-
-      multi_page: "Displaying %{model} %{from} - %{to} of %{count} in total"
-      multi_page_html: "Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"
+        zero: No %{model} found
+        one: Displaying <b>1</b> %{model}
+        other: Displaying <b>all&nbsp;%{count}</b> %{model}
+      multi_page: Displaying %{model} %{from} - %{to} of %{count} in total
+      multi_page_html: Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total
+  active_admin:
+    batch_actions:
+      action_label: 
+      button_label: 
+      delete_confirmation: 
+    clear_filters: 
+    delete: 
+    delete_confirmation: 
+    download: Download
+    edit: 
+    equal_to: 
+    filter: 
+    greater_than: 
+    less_than: 
+    logout: 
+    new_model: 
+    pagination:
+      one_page: 
+    powered_by: 
+    search_field: 
+    view: 
+  delete_todo_html: 
+  form:
+    select:
+      please_select: 
+  locales:
+    as_in_days: as in days
+    as_in_hours: as in hours
+    as_in_minutes: as in minutes
+    as_in_weeks: as in weeks
+    no_live_changes: Changes are not made live instantly.
+    plural: Plural
+    same_as_in_english: Same as in English
+    singular: Singular
+    translate: Translate
