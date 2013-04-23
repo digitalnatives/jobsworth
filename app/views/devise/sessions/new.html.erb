@@ -3,7 +3,7 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name),
              html: {class: "well form-horizontal span8 center"}) do |f| %>
 
-  <%= content_tag :legend, t('devise.sign_in') %>
+  <legend><%= t('devise.sign_in') %></legend>
 
   <% if flash[:alert] %>
      <div class="alert alert-error" id="notice">
@@ -49,7 +49,7 @@
       <div class="span4">
         <%= link_to user_omniauth_authorize_path(:fluenta) do %>
           <i class="icon-user"></i>
-          Sign in with Fluenta
+          <%= t 'devise.omniauth.sign_in_with', kind: 'Fluenta' %>
         <% end %>
       </div>
     <% end %>
