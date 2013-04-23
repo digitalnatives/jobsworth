@@ -9,11 +9,12 @@
   <%= link_to_tasks_filtered_by(t("users.view_tasks"), @user, :class => "btn btn-success pull-right") %>
 </legend>
 
-<%= form_tag(user_path(@user), :method => :put, :class => "form-horizontal", :multipart => true) do %>
-  <%= render :partial => "form" %>
+<%= form_for @user, class: "form-horizontal", multipart: true do |f| %>
+  <%= render 'form', f: f %>
+
   <div class="form-actions">
     <%= submit_tag t("button.save"), :class => 'btn btn-primary' %>
-    <%= link_to t("button.delete"), user_path(@user), :method => :delete, :confirm => t("shared.are_you_sure"), :class => "btn btn-mini btn-danger pull-right" %>
+    <%= link_to t("button.delete"), @user, method: :delete, confirm: t('shared.are_you_sure'), class: "btn btn-mini btn-danger pull-right" %>
   </div>
 <% end %>
 
