@@ -9,10 +9,6 @@ module OmniauthFluenta
     REQUIRED_USER_DATA    = [:fluenta_id, :username, :name, :email]
     REQUIRED_COMPANY_DATA = [:fluenta_id, :name, :subdomain]
 
-    LANGUAGES = { 'hu' => 'hu_HU',
-                  'en' => 'en_US',
-                  'he' => 'he_IL' }
-
     def self.user(*args)
       new(*args).user
     end
@@ -35,7 +31,7 @@ module OmniauthFluenta
         fluenta_id:hash['uid'].to_i,
         name:      hash['info']['name'],
         email:     hash['info']['email'],
-        locale:    LANGUAGES[hash['info']['language']],
+        locale:    hash['info']['language'],
         username:  hash['info']['nickname']
       }
     rescue
