@@ -86,17 +86,13 @@ class ApplicationController < ActionController::Base
     session[:last_active] ||= Time.now.utc
   end
 
-  ###
   # Which company does the served hostname correspond to?
-  ###
   def company_from_subdomain
     if @company.nil?
       subdomain = request.subdomains.first if request.subdomains
 
-      @company = Company.where("subdomain = ?", subdomain).first
-      if Company.count == 1
-        @company ||= Company.order("id asc").first
-      end
+      @company = Company.where('subdomain' => subdomain).first
+      @company ||= Company.first if Company.count == 1
     end
 
     return @company
@@ -168,7 +164,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_templates
-    Template.where("project_id IN (?) AND company_id = ?", current_projects_and_project_template_ids, current_user.company_id)
+    Template.where(project_id: current_projects_and_project_template_ids,
+                   company_id: current_user.company_id)
   end
 
   protected
