@@ -3,15 +3,14 @@
 
 class Project < AbstractProject
 
-  def dup_and_get_template(template_id)
-    @template = ProjectTemplate.find template_id
+  def copy_template(template)
+    @template = template
 
     copy_and_ajust_milestones
     copy_score_rules
     copy_project_permissions
     copy_and_ajust_tasks
 
-    return @template
   rescue ActiveRecord::RecordNotFound => e
     logger.error "Project.dup_and_get_template(#{template_id})"
     logger.error e.message
