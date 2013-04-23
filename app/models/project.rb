@@ -13,8 +13,9 @@ class Project < AbstractProject
 
     return @template
   rescue ActiveRecord::RecordNotFound => e
-    logger.error(e.message)
-    logger.error(e.backtrace.join("\n"))
+    logger.error "Project.dup_and_get_template(#{template_id})"
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
   end
 
 private
