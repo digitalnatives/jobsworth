@@ -1,15 +1,18 @@
 FactoryGirl.define do
   factory :todo do
-    task
-    association :completed_by_user, factory: :user
 
+    association :task
     sequence(:name) { |n| "Todo #{n}" }
     sequence :position
 
-    trait(:done)   { completed_at 5.days.ago }
     trait(:undone) { completed_at nil }
+    trait :done do
+      completed_at 1.day.ago
+      association :completed_by_user, factory: :user
+    end
 
-    factory :done_todo, traits: [:done]
+    factory :done_todo,   traits: [:done]
     factory :undone_todo, traits: [:undone]
+
   end
 end
