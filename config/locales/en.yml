@@ -136,10 +136,6 @@ en:
       header:
         one: 1 error prohibited this %{model} from being saved
         other: ! '%{count} errors prohibited this %{model} from being saved'
-    models:
-      task_record:
-        task_number:
-          invalid: 'Invalid Task Number'
 
   helpers:
     select:
@@ -220,6 +216,15 @@ en:
       format: '%{attribute} %{message}'
       messages: *70292853691280
       template: *70292801738300
+      models:
+        task_record:
+          attributes:
+            task_number:
+              invalid: 'Invalid Task Number'
+        template:
+          attributes:
+            dependencies:
+              from_other_projects: 'are from other projects.'
     attributes:
       resource_type_id: 'Resource Type'
       customer_id: 'Customer'

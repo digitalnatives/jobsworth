@@ -32,7 +32,7 @@ describe Template do
                                         owners: owners, users: users,
                                         watchers: watchers, todos: todos,
                                         due_at: 2.days.from_now }
-    let(:ajustment_days) { 1 }
+    let(:ajustment_days) { 1.day }
 
     before(:each)  { template.stub clone_todos: cloned_todos }
 
@@ -52,7 +52,22 @@ describe Template do
     it('should have cloned properties') { pending }
 
     it('should have ajusted due at date') {
-      expect(subject.due_at).to eql(template.due_at + ajustment_days.day) }
+      expect(subject.due_at).to eql(template.due_at + ajustment_days) }
+  end
+
+  describe 'dependencies validation' do
+    subject { FactoryGirl.build :task_template, project_id: 1, dependencies: [dep1] }
+    let(:dep1) { stub_model Template, project_id: project_id }
+
+    context 'when dependency belongs to other project' do
+      let(:project_id) { 2 }
+      it { should_not be_valid }
+    end
+
+    context 'when dependency belongs to the same project' do
+      let(:project_id) { 1 }
+      it { should be_valid }
+    end
   end
 
 end
