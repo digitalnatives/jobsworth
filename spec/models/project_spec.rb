@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Project do
   let(:project) { Project.make }
 
+  it { should validate_presence_of :name }
+
   describe 'associations' do
     it { should belong_to(:company) }
     it { should belong_to(:customer) }
