@@ -16,11 +16,8 @@ class Template < AbstractTask
     copied_task.users    = self.users
     copied_task.watchers = self.watchers
     copied_task.todos    = self.clone_todos
-    copied_task.due_at   += ajustment_days if copied_task.due_at
-
-    self.task_property_values.each do |template_task_property|
-      copied_task.task_property_values << template_task_property.dup
-    end
+    copied_task.due_at   += ajustment_days.days if copied_task.due_at
+    copied_task.task_property_values = self.task_property_values.map(&:dup)
 
     copied_task
   end
