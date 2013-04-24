@@ -13,10 +13,20 @@ FactoryGirl.define do
       customers { FactoryGirl.create_list :customer, customer_count }
     end
 
-    factory :task_record, aliases: [:task], class: 'TaskRecord' do
-      factory :task_with_customers, traits: [:with_customers]
+    trait :with_todos do
+      ignore { todos_count 3 }
+      after :create do |task, evaluator|
+        FactoryGirl.create_list :todo, evaluator.todos_count, task: task
+      end
     end
 
-    factory :template, class: 'Template'
+    factory :task_record, aliases: [:task], class: 'TaskRecord' do
+      factory :task_with_customers, traits: [:with_customers]
+      factory :task_with_todos,     traits: [:with_todos]
+    end
+
+    factory :template, aliases: [:task_template], class: 'Template' do
+      factory :template_with_todos, traits: [:with_todos]
+    end
   end
 end
