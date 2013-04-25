@@ -324,6 +324,7 @@ en:
       not_exists_or_no_permission: "You can't access the %{model} or it doesn't exist."
       model_closed: "The %{model} is closed. Please reopen it first in order to modify it."
       model_delete: "%{model} deletion failed."
+      model_update: "%{model} update failed."
       pair_already_added: "The pair (%{first}, %{second}) has already been added."
 
     notice:

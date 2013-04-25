@@ -14,10 +14,14 @@ class TaskTemplatesController < TasksController
       redirect_from_last and return
     end
 
-    @task.send(:do_update, params, current_user)
+    @task.do_update params, current_user
 
     flash[:success] ||= link_to_task(@task) + " - #{t('flash.notice.model_updated', model: Template.model_name.human)}"
     redirect_to :action=> "edit", :id => @task.task_num
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = (t('flash.error.model_update', model: Template.model_name.human) + '<br>' +
+                    @task.errors.full_messages.join('<br>')).html_safe
+    render :action=> "edit"
   end
 
   def destroy
