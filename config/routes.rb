@@ -154,7 +154,12 @@ Jobsworth::Application.routes.draw do
     end
   end
 
-  resources :task_templates
+  resources :task_templates do
+    collection do
+      get :auto_complete_for_dependency_targets
+      get :dependency
+    end
+  end
 
   resources :companies do
     resources :score_rules

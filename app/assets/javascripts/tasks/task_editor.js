@@ -29,18 +29,18 @@ jobsworth.tasks.TaskEditor = (function($) {
     $('.autogrow').autoGrow();
 
     $('#dependencies_input').autocomplete({
-      source: '/tasks/auto_complete_for_dependency_targets',
+      source: $('#dependencies_input').data('autocomplete-source'),
+      delay: 800,
+      minlength: 3,
       select: function(event, ui) {
-        var id = ui.item.id;
-        $(this).val("");
-        $.get("/tasks/dependency/", { dependency_id : id }, function(data) {
+        var url = ui.item.url || "/tasks/dependency/";
+        this.value = '';
+        $.get(url, { dependency_id : ui.item.id }, function(data) {
           $("#task_dependencies .dependencies").append(data);
         }, 'html');
         return false;
-      },
-      delay: 800,
-      minlength: 3
-    })
+      }
+    });
 
     $('.resource_no .remove_link').click(function() {
       $(this).parent(".resource_no").remove();
@@ -72,7 +72,7 @@ jobsworth.tasks.TaskEditor = (function($) {
     this.updateBillable();
 
     if (/task_templates/.test(document.location.pathname)) {
-      $("#task_dependencies").hide();
+      // $("#task_dependencies").hide();
       $("#snippet").hide();
       $("#upload_container").hide();
       $("#task_information textarea.autogrow").hide();

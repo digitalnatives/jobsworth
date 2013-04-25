@@ -7,6 +7,20 @@ class Template < AbstractTask
 
   validate :dependencies_from_project
 
+  def self.search(user, terms)
+    t = arel_table
+    search_scope = all_accessed_by(user)
+
+    conditions = []
+    conditions << t[:task_num].eq(terms.to_i) unless terms.to_i.zero?
+
+    conditions += terms.split(' ').map do |fragment|
+      t[:name].matches('%%%s%%' % fragment)
+    end
+
+    search_scope.where conditions.map(&:to_sql).join(' OR ')
+  end
+
   def clone_todos
     todos.map { |todo| todo.dup.detach_from_task }
   end

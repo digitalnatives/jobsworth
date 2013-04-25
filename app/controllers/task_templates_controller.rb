@@ -1,5 +1,7 @@
 # encoding: UTF-8
 class TaskTemplatesController < TasksController
+  include ActionView::Helpers::TextHelper
+
   def index
     @task_templates = current_templates
     render :layout => "admin"
@@ -23,6 +25,26 @@ class TaskTemplatesController < TasksController
     @task_template.destroy
     flash[:success] = t('flash.notice.model_deleted', model: Template.model_name.human)
     redirect_to task_templates_path
+  end
+
+  def auto_complete_for_dependency_targets
+    @tasks = Template.search(current_user, params[:term])
+    hits = @tasks.collect do |task|
+      {
+        label: "[##{task.task_num}] #{task.name}",
+        value: truncate(task.name, length: 17),
+        id:    task.task_num,
+        url:   url_for(action: 'dependency')
+      }
+    end
+    render json: hits.to_json
+  end
+
+  def dependency
+    dependency = Template.accessed_by(current_user)
+                         .find_by_task_num(params[:dependency_id])
+
+    render partial: 'dependency', locals: { dependency: dependency, perms: {} }
   end
 
 protected
