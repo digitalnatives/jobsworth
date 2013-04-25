@@ -8,5 +8,5 @@
 
 <%= form_tag(action, { :multipart => "true", :id => "taskform" }) do %>
   <%# render form partial but not timer %>
-  <%= render_task_form(false) %>
+  <%= render 'tasks/form', show_timer: false %>
 <% end %>
