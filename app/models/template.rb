@@ -1,17 +1,28 @@
 # encoding: UTF-8
-#This model is to task templates
-#use the same table as Task  model.
+# This model is to task templates
+# use the same table as Task  model.
 class Template < AbstractTask
 
-  self.default_scopes=[]
+  self.default_scopes = []
+
+  validate :dependencies_from_project
+
+  def self.search(user, terms)
+    t = arel_table
+    search_scope = all_accessed_by(user)
+
+    conditions = []
+    conditions << t[:task_num].eq(terms.to_i) unless terms.to_i.zero?
+
+    conditions += terms.split(' ').map do |fragment|
+      t[:name].matches('%%%s%%' % fragment)
+    end
+
+    search_scope.where conditions.map(&:to_sql).join(' OR ')
+  end
 
   def clone_todos
-    res = []
-    todos.each do |t|
-      res << t.dup
-      res.last.task_id = nil
-    end
-    res
+    todos.map { |todo| todo.dup.detach_from_task }
   end
 
   def duplicate(ajustment_days = 0)
@@ -20,17 +31,19 @@ class Template < AbstractTask
     copied_task.owners   = self.owners
     copied_task.users    = self.users
     copied_task.watchers = self.watchers
+    copied_task.todos    = self.clone_todos
     copied_task.due_at   += ajustment_days if copied_task.due_at
-
-    self.todos.each do |template_todos|
-      copied_task.todos << template_todos.dup
-    end
-
-    self.task_property_values.each do |template_task_property|
-      copied_task.task_property_values << template_task_property.dup
-    end
+    copied_task.task_property_values = self.task_property_values.map(&:dup)
 
     copied_task
+  end
+
+private
+
+  def dependencies_from_project
+    unless dependencies.all? { |dt| dt.project_id == project_id }
+      errors.add :dependencies, :from_other_projects
+    end
   end
 
 end

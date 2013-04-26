@@ -9,7 +9,7 @@ en:
     - Fri
     - Sat
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -35,7 +35,7 @@ en:
       long: ! '%B %d, %Y'
       short: ! '%b %d'
     month_names:
-    - 
+    -
     - January
     - February
     - March
@@ -175,9 +175,9 @@ en:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit: 
+          unit:
       format:
-        delimiter: 
+        delimiter:
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -193,10 +193,10 @@ en:
           tb: TB
     percentage:
       format:
-        delimiter: 
+        delimiter:
     precision:
       format:
-        delimiter: 
+        delimiter:
   support:
     array:
       last_word_connector: ! ', and '
@@ -293,6 +293,15 @@ en:
         header:
           one: 1 error prohibited this %{model} from being saved
           other: ! '%{count} errors prohibited this %{model} from being saved'
+      models:
+        task_record:
+          attributes:
+            task_number:
+              invalid: 'Invalid Task Number'
+        template:
+          attributes:
+            dependencies:
+              from_other_projects: 'are from other projects.'
     attributes:
       resource_type_id: Resource Type
       customer_id: Customer
@@ -392,6 +401,7 @@ en:
       not_exists_or_no_permission: You can't access the %{model} or it doesn't exist.
       model_closed: The %{model} is closed. Please reopen it first in order to modify it.
       model_delete: ! '%{model} deletion failed.'
+      model_update: "%{model} update failed."
       pair_already_added: The pair (%{first}, %{second}) has already been added.
     notice:
       settings_updated: ! '%{model} settings updated'
@@ -498,6 +508,7 @@ en:
       add_me: Add me
       open: Open <b>%{task}</b>
       close: Close <b>%{task}</b>
+    depends_from: 'Depended on by'
     index_title: Tasks - %{title}
     title: ! 'Task #%{num} : %{title}'
     icon_list: List
@@ -913,7 +924,7 @@ en:
     new_user: New user
     recent_work: Recent work
     next_tasks: Next Tasks
-    no_filters: 
+    no_filters:
     show_avatars: Show Avatars
   todos:
     delete_todo_html: Delete <b>%{todo}</b>
@@ -1099,7 +1110,7 @@ en:
     wiki_additions: Wiki Additions
     wiki_changes: Wiki Changes
     password_request: Resource Password Request
-    wiki_addictions: 
+    wiki_addictions:
   permissions:
     copy_permissions: Copy permissions from
     read: Read
@@ -1129,7 +1140,7 @@ en:
       resolved: Resolved
       updated: Updated
       comment: Comment
-      reverted: 
+      reverted:
       reassigned: Reassigned
     invalid_email: ! '%{prefix} invalid email'
     project: Project
@@ -1246,29 +1257,29 @@ en:
       multi_page_html: Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total
   active_admin:
     batch_actions:
-      action_label: 
-      button_label: 
-      delete_confirmation: 
-    clear_filters: 
-    delete: 
-    delete_confirmation: 
+      action_label:
+      button_label:
+      delete_confirmation:
+    clear_filters:
+    delete:
+    delete_confirmation:
     download: Download
-    edit: 
-    equal_to: 
-    filter: 
-    greater_than: 
-    less_than: 
-    logout: 
-    new_model: 
+    edit:
+    equal_to:
+    filter:
+    greater_than:
+    less_than:
+    logout:
+    new_model:
     pagination:
-      one_page: 
-    powered_by: 
-    search_field: 
-    view: 
-  delete_todo_html: 
+      one_page:
+    powered_by:
+    search_field:
+    view:
+  delete_todo_html:
   form:
     select:
-      please_select: 
+      please_select:
   locales:
     as_in_days: as in days
     as_in_hours: as in hours

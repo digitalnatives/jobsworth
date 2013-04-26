@@ -1,8 +1,5 @@
 # encoding: UTF-8
 module TasksHelper
-  def render_task_form(show_timer = true)
-    render partial: 'tasks/form', locals: { show_timer: show_timer }
-  end
 
   def render_task_dependants(t, depth, root_present)
     res = ""

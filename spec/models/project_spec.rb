@@ -1,7 +1,12 @@
 require 'spec_helper'
 
+MUTABLE_ATTRIBUTES = %w[id project_id type created_at updated_at]
+
 describe Project do
   let(:project) { Project.make }
+
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :customer }
 
   describe 'associations' do
     it { should belong_to(:company) }
@@ -91,22 +96,22 @@ describe Project do
     end
   end
 
-  describe '#dup_and_get_template' do
+  describe '#copy_template' do
     let(:user)  { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }
     let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
     let(:task_template) { FactoryGirl.create :template,
                                              :project => project_template,
                                              :company => user.company,
-                                             :owners => [ user ],
-                                             :users => [ user2 ],
+                                             :owners => [user],
+                                             :users => [user2],
                                              :due_at => task_due_at }
     let(:milestone) { FactoryGirl.create(:milestone,
                                          :project => project_template,
                                          :company => user.company,
                                          :due_at => milestone_due_at) }
 
-    subject { Project.new( project_template.attributes.except('id', 'type') ) }
+    subject { Project.new( project_template.attributes.except(*MUTABLE_ATTRIBUTES) ) }
 
     it "should be saved as a project" do
       expect { subject.save }.to change { Project.count }.by(1)
@@ -117,7 +122,7 @@ describe Project do
         before do
           project_template.create_default_permissions_for(user)
 
-          subject.dup_and_get_template project_template.id
+          subject.copy_template project_template
           subject.save
         end
 
@@ -127,8 +132,8 @@ describe Project do
         it "with all necessary attributes" do
           expect(permissions.size).to eq(1)
 
-          permissions.first.attributes.except('project_id', 'created_at') ==
-            template_permissions.first.attributes.except('project_id', 'created_at')
+          permissions.first.attributes.except(*MUTABLE_ATTRIBUTES).should ==
+            template_permissions.first.attributes.except(*MUTABLE_ATTRIBUTES)
         end
       end
 
@@ -140,15 +145,16 @@ describe Project do
 
         before do
           custom_permissions
-          subject.dup_and_get_template(project_template.id)
+          subject.copy_template project_template
           subject.save
         end
 
         it "with all necessary attributes" do
           subject.project_permissions.size.should eq(1)
           subject.tasks.size.should eq(0)
-          subject.project_permissions.first.attributes.except("project_id", "created_at") ==
-            custom_permissions.attributes.except("project_id", "created_at")
+
+          subject.project_permissions.first.attributes.except(*MUTABLE_ATTRIBUTES).should ==
+            custom_permissions.attributes.except(*MUTABLE_ATTRIBUTES)
         end
       end
     end
@@ -160,7 +166,7 @@ describe Project do
         project_template.create_default_permissions_for(user)
         subject.start_at = Date.today + 1.month
 
-        subject.dup_and_get_template(project_template.id)
+        subject.copy_template project_template
         subject.save
       end
 
@@ -178,8 +184,9 @@ describe Project do
           expect(first_task.owners).to match_array([user, user2])
           expect(first_task.users).to  match_array([user, user2])
 
-          first_task.attributes.except('project_id', 'created_at') ==
-            task_template.attributes.except('project_id', 'created_at')
+          # TODO Clean this messy spec
+          # first_task.attributes.except(*MUTABLE_ATTRIBUTES).should ==
+            # task_template.attributes.except(*MUTABLE_ATTRIBUTES)
         end
       end
 
@@ -196,8 +203,9 @@ describe Project do
 
           expect(first_task.due_at).to eq(task_template.due_at + 1.month)
 
-          first_task.attributes.except('project_id', 'created_at') ==
-            task_template.attributes.except('project_id', 'created_at')
+          # TODO Clean this messy spec
+          # first_task.attributes.except(*MUTABLE_ATTRIBUTES).should ==
+            # task_template.attributes.except(*MUTABLE_ATTRIBUTES)
         end
       end
     end

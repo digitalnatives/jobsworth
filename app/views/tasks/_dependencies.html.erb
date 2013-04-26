@@ -10,7 +10,9 @@
 
   <label for="dependencies_input"><%= t('tasks.snooze_until') %></label>
   <% if perms['edit'].empty? %>
-    <input name="dependencies[]" size="12" type="text" id="dependencies_input" title="<%= t("tasks.search_by") %>" rel="tooltip" >
+    <input name="dependencies[]" size="12" type="text" id="dependencies_input"
+           data-autocomplete-source="<%= url_for action: 'auto_complete_for_dependency_targets' %>"
+           title="<%= t("tasks.search_by") %>" rel="tooltip" >
     <div style="clear:both; display:none;" id="dependencies_input_auto_complete"></div>
   <% else %>
     <input name="dependencies[]" size="12" type="text" disabled="disabled">
@@ -25,10 +27,10 @@
   </div>
 
   <div id="customer_response" class="field_header">
-  <% if @task.wait_for_customer %>
+    <% if @task.wait_for_customer %>
       <%= t("tasks.customer_response") %>
       <%= link_to('<i class="icon-remove"></i>'.html_safe, "#", :class => "removeLink") %>
-  <% end %>
+    <% end %>
   </div>
 
   <span class="dependencies">
@@ -37,7 +39,7 @@
 
   <% if @task.dependants.any? %>
     <div style="clear:both">
-      <p for="dependants"><%=_ "Depended on by"%></p>
+      <p for="dependants"><%= t 'tasks.depends_form'%></p>
       <% @task.dependants.accessed_by(current_user).each do |d| %>
         <div class="field_header">
           <%= link_to_task(d) %>

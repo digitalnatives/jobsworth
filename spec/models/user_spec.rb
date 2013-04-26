@@ -119,6 +119,21 @@ describe User do
     end
   end
 
+  describe ".tasks" do
+    context 'when templates exist' do
+      subject        { FactoryGirl.create :user }
+      let(:company)  { subject.company }
+      let(:customer) { subject.customer }
+      let(:project)  { FactoryGirl.create :project, company: company, customer: customer }
+
+      let!(:task)     { FactoryGirl.create :task, company: company, owners: [subject] }
+      let!(:template) { FactoryGirl.create :task_template, project: project, company: company, owners: [subject] }
+
+      it 'should not include them, only tasks' do
+        expect(subject.tasks).to match_array [task]
+      end
+    end
+  end
 end
 
 

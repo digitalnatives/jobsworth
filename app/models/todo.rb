@@ -2,20 +2,23 @@
 # A simple todo item for a task
 
 class Todo < ActiveRecord::Base
-  belongs_to :company
-  belongs_to :task, :class_name=> "AbstractTask"
-  belongs_to :completed_by_user, :class_name => "User", :foreign_key => "completed_by_user_id"
+
+  belongs_to :task, class_name: 'AbstractTask'
+  belongs_to :completed_by_user, class_name: 'User', foreign_key: 'completed_by_user_id'
 
   def done?
-    self.completed_at != nil
+    !completed_at.nil?
   end
+  alias_method :done, :done?
 
-  def done
-    self.done?
-  end
-
+  # TODO Move it to a decorator or helper method
   def css_classes
     self.done? ? "todo todo-completed" : "todo todo-active"
+  end
+
+  # Detach todo from task and return self
+  def detach_from_task
+    self.task = nil; self
   end
 end
 
