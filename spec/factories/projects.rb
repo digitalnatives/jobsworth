@@ -1,16 +1,13 @@
 FactoryGirl.define do
-  factory :abstract_project do
+  factory :abstract_project, class: 'AbstractProject' do
     sequence(:name) { |n| "Project #{n}" }
     association :company, :factory => :company
     association :customer, :factory => :customer
 
-    factory :project do
-      type 'Project'
-    end
+    factory :project, class: 'Project'
 
-    factory :project_template do
+    factory :project_template, class: 'ProjectTemplate' do
       start_at Date.today
-      type 'ProjectTemplate'
     end
   end
 end
