@@ -9,7 +9,7 @@ class Project < AbstractProject
     copy_and_ajust_milestones
     copy_score_rules
     copy_project_permissions
-    copy_and_ajust_tasks
+    TaskTemplatesCloner.clone from: template, to: self
 
   rescue ActiveRecord::RecordNotFound => e
     logger.error "Project.dup_and_get_template(#{template_id})"
@@ -40,11 +40,6 @@ private
     template.project_permissions.each do |template_project_permission|
       self.project_permissions << template_project_permission.dup
     end
-  end
-
-  def copy_and_ajust_tasks
-    ajustment_days = (start_at - template.start_at).days
-    self.tasks << template.task_templates.map {|t| t.duplicate ajustment_days }
   end
 
 end
