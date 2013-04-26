@@ -27,11 +27,11 @@ class AbstractTask < ActiveRecord::Base
   has_and_belongs_to_many :dependencies,
     class_name: "AbstractTask", join_table: "dependencies",
     association_foreign_key: "dependency_id", foreign_key: "task_id",
-    order: 'dependency_id', select: "tasks.*", uniq: true
+    order: 'dependency_id', select: "tasks.*, dependency_id", uniq: true
   has_and_belongs_to_many :dependants,
     class_name: "AbstractTask", join_table: "dependencies",
     association_foreign_key: "task_id", foreign_key: "dependency_id",
-    order: 'task_id', select: "tasks.*", uniq: true
+    order: 'task_id', select: "tasks.*, task_id", uniq: true
 
   has_many      :attachments, :class_name => "ProjectFile", :dependent => :destroy, :foreign_key=>'task_id'
   has_many      :scm_changesets, :dependent =>:destroy, :foreign_key=>'task_id', :conditions => "task_id IS NOT NULL"
