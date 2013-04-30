@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = create_entity(params[:project])
-    if params[:template_id]
+    if params[:template_id].present?
       @template = ProjectTemplate.find params[:template_id]
       @project.copy_template(@template)
     end

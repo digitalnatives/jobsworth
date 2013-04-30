@@ -176,9 +176,9 @@ class AbstractProject < ActiveRecord::Base
   end
 
   def update_work_sheets
-    if self.customer_id != self.customer_id_was
-      WorkLog.update_all("customer_id = #{self.customer_id}",
-        "project_id = #{self.id} AND customer_id != #{self.customer_id}")
+    if customer_id != customer_id_was
+      work_logs.where('customer_id != ?', customer_id)
+               .update_all customer_id: self.customer_id
     end
   end
 end

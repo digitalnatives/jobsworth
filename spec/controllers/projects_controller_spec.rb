@@ -19,7 +19,7 @@ describe ProjectsController do
       end
 
       it "should be authorized to update a project" do
-        put :update, :id => @project, :project => { :name => 'some_name' } 
+        put :update, :id => @project, :project => { :name => 'some_name' }
         @project.reload
         @project.name.should match 'some_name'
       end
@@ -107,32 +107,29 @@ describe ProjectsController do
 
     context "When using valid params" do
       context "When the work sheet needs to be updated" do
-        before :each do
-          @project = Project.make(:company => @logged_user.company)
-          @project_attrs = Project.make(:company => @logged_user.company).attributes.except("id", "type")
-          @work_log = WorkLog.make(:project => @project)
-        end
+        let(:new_customer)  { FactoryGirl.create :customer }
+        let(:project)       { FactoryGirl.create :project, company: @logged_user.company }
+        let(:project_attrs) { {name: 'some new name', customer_id: new_customer.id} }
+        let!(:work_log)     { FactoryGirl.create :work_log, project: project, company: @logged_user.company }
 
         it "should update the Work Sheet accordantly" do
-          put :update, :id => @project, :project => @project_attrs
-          @work_log.reload
-          @work_log.customer_id.should == @project_attrs["customer_id"]
+          put :update, :id => project, :project => project_attrs
+          work_log.reload
+
+          expect(work_log.customer_id).to eql project_attrs[:customer_id]
         end
       end
 
       context "When the Work sheet does not need to be updated" do
-        before :each do
-          @project = Project.make(:company => @logged_user.company)
-          @project_attrs = Project
-            .make(:company => @logged_user.company, :customer => @project.customer)
-            .attributes.except("id", "type")
-          @work_log = WorkLog.make(:project => @project)
-        end
+        let(:project)       { FactoryGirl.create :project, company: @logged_user.company }
+        let(:project_attrs) { {name: 'some new name', customer_id: project.customer_id} }
+        let!(:work_log)     { FactoryGirl.create :work_log, project: project, company: @logged_user.company }
 
         it "should not update the Work Sheet" do
-          put :update, :id => @project, :project => @project_attrs
-          @work_log.reload
-          @work_log.customer_id.should_not == @project_attrs["customer_id"]
+          put :update, :id => project, :project => project_attrs
+          work_log.reload
+
+          expect(work_log.customer_id).to_not eql project_attrs[:customer_id]
         end
       end
     end
