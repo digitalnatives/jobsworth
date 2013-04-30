@@ -43,12 +43,12 @@ describe TasksHelper do
 
     context 'date is yesterday' do
       let(:date) { 1.day.ago - 1.second }
-      it { expect(subject).to eql '<time datetime="1986-03-22T09:59:59Z" title="1986-03-22"><span class="label label-info">yesterday</span></time>' }
+      it { expect(subject).to eql '<time datetime="1986-03-22T09:59:59Z" title="1986-03-22"><span class="label label-info">Yesterday</span></time>' }
     end
 
     context 'date is today' do
       let(:date) { 1.second.ago }
-      it { expect(subject).to eql '<time datetime="1986-03-23T09:59:59Z" title="1986-03-23"><span class="label label-warning">today</span></time>' }
+      it { expect(subject).to eql '<time datetime="1986-03-23T09:59:59Z" title="1986-03-23"><span class="label label-warning">Today</span></time>' }
     end
 
     context 'date is tomorrow' do
