@@ -3,7 +3,7 @@ require 'test_helper'
 class TasksControllerTest < ActionController::TestCase
 
   def setup
-    @user = User.make(:admin)
+    @user = FactoryGirl.create :admin
     sign_in @user
     @user.company.create_default_statuses
 
@@ -31,6 +31,7 @@ class TasksControllerTest < ActionController::TestCase
       end
       get :nextTasks, :count => 5
     end
+
     should respond_with(:success)
     should respond_with_content_type('application/json')
   end
@@ -43,8 +44,10 @@ class TasksControllerTest < ActionController::TestCase
   end
 
   should "find task by task num on /edit" do
-    task = @user.tasks.first
-    task.update_attribute(:task_num, task.task_num - 1)
+    task = @user.tasks.last
+    # By default id and task_num increments side by side
+    task.increment! :task_num
+    assert_not_equal task.id, task.task_num
 
     get :edit, :id => task.task_num
     assert_equal task, assigns["task"]
@@ -253,7 +256,7 @@ class TasksControllerTest < ActionController::TestCase
           should "create work log with type according to changes, with (changes+comment) as a body, without time and send it" do
             worklog = @task.work_logs.detect {|wl| wl.comment? }
             assert_not_nil worklog
-            assert_equal worklog.duration, 10
+            assert_equal 10, worklog.duration
             assert @task.event_logs.last.body =~ /name/i, "work log body must include changes "
             assert worklog.body =~ /#{@parameters[:comment]}/, "work log body must include comment"
           end
@@ -419,7 +422,7 @@ class TasksControllerTest < ActionController::TestCase
       end
     end
   end
-################################################
+
   context "a new task with a few users attached when creating" do
     setup do
       ActionMailer::Base.deliveries = []
@@ -448,29 +451,32 @@ class TasksControllerTest < ActionController::TestCase
 
     context "with time spend" do
       setup do
-        @parameters.merge!( { :work_log=>{:duration=>'10m', :started_at=>"02/02/2010 17:02" } })
+        @parameters.merge!({work_log: {duration: '10m', started_at: '02/02/2010 17:02' }})
       end
 
       context "with comment" do
         setup do
           @parameters.merge!({:comment => "Test comment"})
           #this context not have other contexts, so make post here
-          post(:create, @parameters)
-          @new_task=assigns(:task)
+          post :create, @parameters
+          @new_task = assigns(:task)
           assert_redirected_to tasks_path
         end
 
         should "create work log with type TASK_CREATED, without time spend, with task description as a body  and not send it" do
-          assert @new_task.work_logs.exists?
           work_log = @new_task.work_logs.detect {|wl| wl.event_log.event_type == EventLog::TASK_CREATED }
+
+          assert @new_task.work_logs.exists?
           assert_equal work_log.duration, 0
           assert work_log.body =~ /#{@new_task.description}/
         end
 
         should "create work log with type TASK_WORK_ADDED, with time, comment as a body  and send it" do
+          work_log = @new_task.work_logs.detect(&:worktime?)
+
           assert @new_task.work_logs.exists?
-          work_log = @new_task.work_logs.detect {|wl| wl.worktime? }
-          assert_equal work_log.duration,  10  # 10 minutes
+          assert_not_nil work_log
+          assert_equal work_log.duration, 10  # 10 minutes
           assert work_log.comment?
           assert work_log.body =~ /#{@parameters[:comment]}/
         end
@@ -479,6 +485,7 @@ class TasksControllerTest < ActionController::TestCase
           assert_emails @new_task.users.length
         end
       end
+
       context "without comment" do
         setup do
           @parameters.merge!({:comment => ""})
@@ -496,10 +503,12 @@ class TasksControllerTest < ActionController::TestCase
         end
 
         should "create work log with type TASK_WORK_ADDED, with time spend, without body and not send it" do
+          work_log = @new_task.work_logs.detect(&:worktime?)
+
           assert @new_task.work_logs.exists?
-          work_log = @new_task.work_logs.detect {|wl| wl.worktime? }
-          assert_equal work_log.duration,  10  # 10 minutes
-          assert ! work_log.comment?
+          assert_not_nil work_log
+          assert_equal work_log.duration, 10  # 10 minutes
+          assert !work_log.comment?
           assert work_log.body.blank?
         end
 
@@ -566,8 +575,6 @@ class TasksControllerTest < ActionController::TestCase
     end
   end
 
-####################################################################
-
   context "a normal task" do
     setup do
       @task = @user.tasks.first
@@ -608,7 +615,6 @@ class TasksControllerTest < ActionController::TestCase
       end
     end
   end
-
 
   context "test billable" do
     setup do

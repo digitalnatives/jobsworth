@@ -37,28 +37,29 @@ class ActiveSupport::TestCase
   # access to the project.
   # The user will also be on the assigned list for the tasks.
   def project_with_some_tasks(user, options = {})
-    task_count = options[:task_count] || 2
-    customer = options[:customer] || user.customer || Customer.make(:company => user.company)
     make_milestones = options[:make_milestones]
+    task_count      = options[:task_count] || 2
 
-    project = Project.make(:company => user.company,
-                           :customer => customer)
-    project.users << user
+    company         = user.company.reload
+    customer        = options[:customer] ||
+                      user.customer ||
+                      FactoryGirl.create(:customer, company: company)
+
+    project         = FactoryGirl.create :project,
+                        company: company, customer: customer, users: [user]
     perm = project.project_permissions.build(:user => user)
     perm.set("all")
     project.save!
 
-    if make_milestones
-      2.times { project.milestones.make }
-    end
+    ms = make_milestones ?
+      FactoryGirl.create_list(:milestone, 2, project: project) : []
+    ts = FactoryGirl.create_list :task, task_count,
+                                 project: project,
+                                 company: company,
+                                 users: [user],
+                                 milestone: ms.sample
 
-    task_count.times do
-      t = TaskRecord.make(:project => project,
-                    :company => project.company,
-                    :users => [user],
-                    :milestone => project.milestones.rand)
-    end
-
+    user.reload
     return project
   end
 end
