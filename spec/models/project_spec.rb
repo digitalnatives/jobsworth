@@ -97,19 +97,24 @@ describe Project do
   end
 
   describe '#copy_template' do
-    let(:user)  { FactoryGirl.create(:user) }
-    let(:user2) { FactoryGirl.create(:user) }
-    let(:project_template) { FactoryGirl.create(:project_template, :company => user.company) }
-    let(:task_template) { FactoryGirl.create :template,
-                                             :project => project_template,
-                                             :company => user.company,
-                                             :owners => [user],
-                                             :users => [user2],
-                                             :due_at => task_due_at }
-    let(:milestone) { FactoryGirl.create(:milestone,
-                                         :project => project_template,
-                                         :company => user.company,
-                                         :due_at => milestone_due_at) }
+    before { Timecop.freeze(Time.local(2013, 3, 23, 10, 0)) }
+    after  { Timecop.return }
+
+    let(:user)             { FactoryGirl.create(:user) }
+    let(:user2)            { FactoryGirl.create(:user) }
+    let(:project_template) { FactoryGirl.create(:project_template,
+                                                company: user.company,
+                                                start_at: Time.now.beginning_of_year.to_date) }
+    let(:task_template)    { FactoryGirl.create :template,
+                                                project: project_template,
+                                                company: user.company,
+                                                owners:  [user],
+                                                users:   [user2],
+                                                due_at:  task_due_at }
+    let(:milestone)        { FactoryGirl.create(:milestone,
+                                                project: project_template,
+                                                company: user.company,
+                                                due_at:  milestone_due_at) }
 
     subject { Project.new( project_template.attributes.except(*MUTABLE_ATTRIBUTES) ) }
 
@@ -159,12 +164,12 @@ describe Project do
       end
     end
 
-    context "should clone related task templates" do
+    context "when project starts after templates start_at with 1 month" do
       before do
         task_template; milestone
 
         project_template.create_default_permissions_for(user)
-        subject.start_at = Date.today + 1.month
+        subject.start_at = project_template.start_at + 1.month
 
         subject.copy_template project_template
         subject.save
@@ -191,17 +196,17 @@ describe Project do
       end
 
       context "when milestone due at set" do
-        let(:milestone_due_at) { Date.today + 5.days }
-        let(:task_due_at)      { Date.today + 6.days }
+        let(:milestone_due_at) { project_template.start_at + 6.days }
+        let(:task_due_at)      { project_template.start_at + 5.days }
 
-        it "with all necessary attributes" do
+        it "should clone all necessary attributes" do
           expect(subject.tasks.size).to eq 1
+
           expect(subject.milestones.first.due_at).to eq(milestone.due_at + 1.month)
+          expect(first_task.due_at).to eq(task_template.due_at + 1.month)
 
           expect(first_task.owners).to match_array([user, user2])
           expect(first_task.users).to  match_array([user, user2])
-
-          expect(first_task.due_at).to eq(task_template.due_at + 1.month)
 
           # TODO Clean this messy spec
           # first_task.attributes.except(*MUTABLE_ATTRIBUTES).should ==

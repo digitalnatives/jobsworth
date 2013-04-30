@@ -12,7 +12,7 @@ class Project < AbstractProject
     TaskTemplatesCloner.clone from: template, to: self
 
   rescue ActiveRecord::RecordNotFound => e
-    logger.error "Project.dup_and_get_template(#{template_id})"
+    logger.error "Project.dup_and_get_template(#{template})"
     logger.error e.message
     logger.error e.backtrace.join("\n")
   end
