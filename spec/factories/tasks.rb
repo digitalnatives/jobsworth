@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :abstract_task do
-    sequence(:name) { |n| "#{type} #{n}" }
+    sequence(:name) { |n| "#{type} #{n}".strip }
     description { Faker::Lorem.paragraph }
     weight_adjustment 0
 
