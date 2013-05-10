@@ -321,13 +321,13 @@ describe TaskRecord do
         @task.resource_ids.should == resource_ids
       end
       it "should not change task dependency in database if not changed task dependency" do
-        dependency_ids = @task.dependency_ids
+        dependencies = @task.dependencies
         @params[:users] << @user.id
         @params[:resource][:ids] << @resource.id
         @task.set_users_dependencies_resources(@params, @user)
         @task.save.should == true
         @task.reload
-        @task.dependency_ids.should == dependency_ids
+        expect(@task.dependencies).to match_array dependencies
       end
     end
 

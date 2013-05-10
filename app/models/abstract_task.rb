@@ -24,6 +24,9 @@ class AbstractTask < ActiveRecord::Base
   has_many      :task_watchers, dependent: :destroy, foreign_key: 'task_id'
   has_many      :task_owners,   dependent: :destroy, foreign_key: 'task_id'
 
+  # FIXME The following methods are not working with AREL 3.2.13
+  #       collection_singular_ids
+  #       collection_singular_ids=ids
   has_and_belongs_to_many :dependencies,
     class_name: "AbstractTask", join_table: "dependencies",
     association_foreign_key: "dependency_id", foreign_key: "task_id",
