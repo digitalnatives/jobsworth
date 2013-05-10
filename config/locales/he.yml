@@ -54,9 +54,25 @@ he:
       too_long: 
       too_short: 
       wrong_length: 
+      already_confirmed: 
+      between: 
+      can_not_delete_project: 
+      confirmation_period_expired: 
+      doesnt_match_regex: 
+      expired: 
+      mandatory: 
+      not_found: 
+      not_locked: 
+      not_saved: 
+      reject_destroy_if_exist: 
+      taken_by: 
     template:
       body: 
       header: 
+    models:
+      task_record:
+        task_number:
+          invalid: 
   helpers:
     select:
       prompt: 
@@ -146,6 +162,12 @@ he:
         too_long: 
         too_short: 
         wrong_length: 
+        between: 
+        can_not_delete_project: 
+        doesnt_match_regex: 
+        mandatory: 
+        reject_destroy_if_exist: 
+        taken_by: 
       template:
         body: 
         header: 
@@ -174,6 +196,12 @@ he:
         too_long: 
         too_short: 
         wrong_length: 
+        between: 
+        can_not_delete_project: 
+        doesnt_match_regex: 
+        mandatory: 
+        reject_destroy_if_exist: 
+        taken_by: 
       template:
         body: 
         header: 
@@ -197,6 +225,8 @@ he:
         active: 
         contact_name: 
         name: 
+      customer_id: 
+      resource_type_id: 
     models:
       company: 
       custom_attribute: 
@@ -212,6 +242,18 @@ he:
       trigger: 
       user: 
       work_log: 
+      project: 
+    attribute_values:
+      task_record:
+        open_or_closed:
+          closed: 
+          open: 
+        status:
+          '0': 
+          '1': 
+          '2': 
+          '3': 
+          '4': 
   tasks:
     activity: 
     add_comment: 
@@ -279,6 +321,25 @@ he:
     users_to_notify: 
     work_log_tooltip: 
     work_times: 
+    actions:
+      add_me: 
+      close: 
+      open: 
+    forecats_to_miss: 
+    groupings:
+      by_assigned: 
+      by_client: 
+      by_resolution: 
+      group_by: 
+      not_grouped: 
+    no_todos: 
+    services:
+      quoted: 
+      quoted_title: 
+    target_dates:
+      from_milestone: 
+      manually_overridden: 
+      not_set: 
   actions:
     date_of_action_execution: 
     not_implemented_yet: 
@@ -290,6 +351,11 @@ he:
       action_label: 
       button_label: 
       delete_confirmation: 
+      labels:
+        destroy: 
+      link: 
+      selection_toggle_explanation: 
+      succesfully_destroyed: 
     clear_filters: 
     delete: 
     delete_confirmation: 
@@ -303,9 +369,72 @@ he:
     new_model: 
     pagination:
       one_page: 
+      empty: 
+      entry: 
+      multiple: 
     powered_by: 
     search_field: 
     view: 
+    access_denied:
+      message: 
+    any: 
+    blank_slate:
+      content: 
+      link: 
+    cancel: 
+    comments:
+      add: 
+      author: 
+      author_type: 
+      body: 
+      errors:
+        empty_text: 
+      no_comments_yet: 
+      resource: 
+      resource_type: 
+      title: 
+      title_content: 
+    create_model: 
+    dashboard: 
+    dashboard_welcome:
+      call_to_action: 
+      welcome: 
+    delete_model: 
+    details: 
+    devise:
+      change_password:
+        submit: 
+        title: 
+      links:
+        forgot_your_password: 
+        sign_in: 
+        sign_in_with_omniauth_provider: 
+      login:
+        remember_me: 
+        submit: 
+        title: 
+      reset_password:
+        submit: 
+        title: 
+      unlock:
+        submit: 
+        title: 
+    edit_model: 
+    empty: 
+    has_many_delete: 
+    has_many_new: 
+    has_many_remove: 
+    index_list:
+      block: 
+      blog: 
+      grid: 
+      table: 
+    main_content: 
+    next: 
+    previous: 
+    sidebars:
+      filters: 
+    update_model: 
   activities:
     archived: 
     complete: 
@@ -360,6 +489,8 @@ he:
     to: 
     users: 
     work_time: 
+    download:
+      csv: 
   button:
     add: 
     cancel: 
@@ -378,6 +509,7 @@ he:
     show: 
     submit: 
     update: 
+    move: 
   companies:
     admin_panel: 
     company: 
@@ -391,6 +523,7 @@ he:
     properties: 
     suppressed_email_hint: 
     task: 
+    type: 
   custom_attributes:
     add_another_attribute: 
     add_choice: 
@@ -446,6 +579,7 @@ he:
   form:
     select:
       please_select: 
+      none: 
   locales:
     as_in_days: 
     as_in_hours: 
@@ -475,6 +609,15 @@ he:
     tasks: 
     unscheduled: 
     view_tasks: 
+    client: 
+    owner: 
+    progress: 
+    project: 
+    statuses:
+      closed: 
+      locked: 
+      open: 
+      planning: 
   news_items:
     body: 
     create: 
@@ -498,6 +641,15 @@ he:
     task_updated: 
     thank_you_signature: 
     try_sending_again: 
+    created: 
+    event_types:
+      comment: 
+      reassigned: 
+      resolved: 
+      reverted: 
+      updated: 
+    invalid_email: 
+    tasks_due: 
   org_units:
     active: 
     edit_title: 
@@ -571,6 +723,32 @@ he:
     possible_values: 
     remove_value: 
     select_replacement: 
+    color: 
+    default: 
+    icon_url: 
+    priorities:
+      critical: 
+      high: 
+      low: 
+      lowest: 
+      normal: 
+      urgent: 
+    priority: 
+    severities:
+      blocker: 
+      critical: 
+      major: 
+      minor: 
+      normal: 
+      trivial: 
+    severity: 
+    type: 
+    types:
+      defect: 
+      improvement: 
+      new_feature: 
+      task: 
+    values: 
   resource_types:
     allow_multiple: 
     attributes: 
@@ -681,6 +859,22 @@ he:
     worked_today: 
     yess: 
     yesterday: 
+    action_labels:
+      add_another: 
+      remove: 
+      show_password: 
+    another_attribute: 
+    any_thing: 
+    items_more: 
+    last_x_days: 
+    not_set: 
+    not_specified: 
+    thing_with_count: 
+    tomorrow: 
+    'true': 
+    unknown: 
+    week: 
+    'yes': 
   signup:
     account_created: 
     log_in_link: 
@@ -745,6 +939,9 @@ he:
     shared: 
     task_search_placeholder: 
     update_existing: 
+    my_open: 
+    my_unread: 
+    open: 
   task_templates:
     delete: 
     new_task_template: 
@@ -767,6 +964,7 @@ he:
     task_filter: 
     trigger_title: 
     triggers: 
+    updated_by_trigger: 
   users:
     access_control: 
     access_title: 
@@ -814,6 +1012,7 @@ he:
     welcome_message_optional: 
     widget_key: 
     work_plan: 
+    welcome_message_header: 
   widgets:
     active_tasks: 
     all_tasks: 
@@ -838,6 +1037,15 @@ he:
     type: 
     unassigned: 
     widget_title: 
+    invalid_filter: 
+    newest_tasks: 
+    number_9:
+      completed: 
+      last_completed_tasks: 
+      new: 
+      work_logged: 
+    open_tasks: 
+    top_tasks: 
   wiki:
     by: 
     edit_summary: 
@@ -851,6 +1059,7 @@ he:
     revisions_title: 
     title: 
     under_revision_by: 
+    frontpage: 
   work_logs:
     client: 
     delete_confirmation: 
@@ -860,3 +1069,237 @@ he:
     time_worked: 
     time_worked_tooltip: 
     title: 
+    email_sent_to: 
+    status:
+      approved: 
+      rejected: 
+    status_options:
+      close: 
+      duplicate: 
+      invalid: 
+      leave_closed: 
+      leave_duplicate: 
+      leave_invalid: 
+      leave_open: 
+      leave_wont_fix: 
+      reopen: 
+      wont_fix: 
+    unassigned: 
+  boolean:
+    'false': 
+    'no': 
+    'true': 
+  devise:
+    change_my_password: 
+    change_your_password: 
+    confirmations:
+      confirmed: חשבונך אושר בהצלחה. כעת הנך מחובר/ת.
+      link: לא קיבלת הנחיות לאישור ההרשמה?
+      resend: 
+      send_instructions: בדקות הקרובות יגיע אליך אימייל עם הנחיות כיצד לאשר את הרשמתך.
+      send_paranoid_instructions: 
+    didnt_receive_confirmation_instructions: 
+    didnt_receive_unlock_instructions: 
+    failure:
+      already_authenticated: 
+      inactive: 
+      invalid: 
+      invalid_token: 
+      locked: 
+      not_found_in_database: 
+      timeout: 
+      unauthenticated: 
+      unconfirmed: 
+    mailer:
+      confirmation_instructions: הוראות לאישור הרשמה
+      reset_password_instructions: הוראות לאיפוס סיסמא
+      unlock_instructions: הוראות להסרת נעילה
+    omniauth:
+      sign_in_with: 
+    omniauth_callbacks:
+      failure: 
+      success: 
+    passwords:
+      forgot: 
+      input_your_email: 
+      link: שכחת סיסמתך?
+      no_token: 
+      reset: 
+      send_instructions: בדקות הקרובות יגיע אליך אימייל עם הנחיות כיצד לאפס את סיסמתך.
+      send_me_reset_email: 
+      send_paranoid_instructions: 
+      updated: סיסמתך שונתה בהצלחה. כעת הנך מחובר/ת.
+      updated_not_active: 
+    registrations:
+      cancel: 
+      destroyed: חשבונך נמחק בהצלחה. מקווים לראותך בעתיד.
+      edit: 
+      inactive_signed_up: 
+      leave_it_blank: 
+      link: הרשם/י
+      signed_up: נרשמת בהצלחה. אם נדרש, יישלח אליך אימייל לאישור הרשמתך.
+      signed_up_but_inactive: 
+      signed_up_but_locked: 
+      signed_up_but_unconfirmed: 
+      unhappy: 
+      update_needs_confirmation: 
+      updated: עדכנת בהצלחה את חשבונך.
+      we_need_your_current: 
+    sessions:
+      forget: 
+      inactive: חשבונך טרם הופעל.
+      invalid: כתובת אימייל או סיסמא שגויה.
+      invalid_token: מזהה התחברות שגוי.
+      link: התחבר/י
+      locked: חשבונך ננעל.
+      login: 
+      remember_me: 
+      signed_in: התחברת בהצלחה
+      signed_out: התנתקת בהצלחה.
+      timeout: פג תוקף החיבור לאתר, אנא התחבר מחדש.
+      unauthenticated: עליך להתחבר או להרשם על-מנת להמשיך.
+      unconfirmed: עליך לאשר את הרשמתך לפני שתוכל להמשיך.
+    sign_in: 
+    sign_up: 
+    unlocks:
+      click_to_unlock: 
+      hello: 
+      link: לא קיבלת הוראות להסרת נעילה?
+      locked: 
+      resend: 
+      send_instructions: בדקות הקרובות יישלח אליך אימייל עם הנחיות כיצד להסיר את הנעילה מחשבונך.
+      send_paranoid_instructions: 
+      unlock_my_account: 
+      unlocked: הנעילה הוסרה בהצלחה. כעת הנך מחובר/ת.
+  email:
+    subject:
+      account_created: 
+      mass_email: 
+      signup: 
+      subdomain_changed: 
+  error:
+    company:
+      delete_own_company: 
+      no_internal_customer: 
+    email:
+      secret_incorrect: 
+    sheet:
+      already_saved: 
+    user:
+      delete_self: 
+      send_creation_email: 
+  flash:
+    alert:
+      access_denied: 
+      access_denied_to_model: 
+      admin_permission_needed: 
+      empty_report: 
+      file_not_found: 
+      unauthorized_operation: 
+    error:
+      cant_delete_default_model: 
+      destroy_dependents_of_model: 
+      model_closed: 
+      model_delete: 
+      not_exists_or_no_permission: 
+      pair_already_added: 
+    notice:
+      model_attached_to_other: 
+      model_completed: 
+      model_created: 
+      model_deleted: 
+      model_reverted: 
+      model_saved: 
+      model_updated: 
+      settings_updated: 
+  forms:
+    action:
+      add: 
+      create: 
+    select:
+      none: 
+      please_select: 
+  hint:
+    company:
+      receiving_emails: 
+    milestone:
+      statuses:
+        closed: 
+        locked: 
+        open: 
+        planning: 
+    project:
+      add_users: 
+      project_start_at: 
+      template_start_at: 
+    task:
+      project_needed: 
+      target_date_from_milestone: 
+      target_date_from_start: 
+    user:
+      add_permissions: 
+      avatar: 
+  mailmans:
+    inactive_user: 
+    no_company: 
+    no_related: 
+    wrapper:
+      bad_subject: 
+      blank: 
+      too_large: 
+      too_old: 
+  project_permissions:
+    close: 
+    comment: 
+    create: 
+    edit: 
+    grant: 
+    milestone: 
+    no_message: 
+    read: 
+    reassign: 
+    report: 
+    see_unwatched: 
+    work: 
+  project_templates:
+    delete: 
+    edit: 
+    new_template: 
+  resource_attributes:
+    password_changed: 
+  score_rule_types:
+    fixed: 
+    last_comment_age: 
+    overdue: 
+    task_age: 
+  timetracking:
+    add_earlier: 
+    cancel: 
+    cancel_confirm: 
+    pause: 
+    resume: 
+    start: 
+    stop: 
+    time_worked: 
+  will_paginate:
+    next_label: 
+    page_entries_info:
+      multi_page: 
+      multi_page_html: 
+      single_page: 
+      single_page_html: 
+    page_gap: 
+    previous_label: 
+  worklog_reports:
+    errors:
+      invalid_end_date: 
+      invalid_start_date: 
+    status:
+      approved: 
+      end: 
+      none: 
+      note: 
+      notes: 
+      start: 
+      task: 
+      user: 
