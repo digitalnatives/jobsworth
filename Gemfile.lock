@@ -1,3 +1,10 @@
+  remote: git://github.com/fnando/i18n-js.git
+  revision: eeec14066b50f72876aa789c9b1f226172452798
+  branch: master
+  specs:
+    i18n-js (2.1.2)
+      i18n
+
 PATH
   remote: vendor/engines/omniauth-fluenta
   specs:
@@ -402,6 +409,7 @@ DEPENDENCIES
   gchartrb
   hashie
   human_attribute
+  i18n-js!
   icalendar
   jquery-rails
   jruby-rack-worker

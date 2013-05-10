@@ -54,10 +54,10 @@ module Jobsworth
       g.fixture_replacement :factory_girl
     end
 
-    config.assets.initialize_on_precompile = false
+    config.assets.initialize_on_precompile = true
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w(excanvas.js)
+    config.assets.precompile += %w(excanvas.js i18n-require.js)
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

@@ -38,6 +38,8 @@ gem 'choices'
 
 gem 'localeapp'
 gem 'human_attribute'
+# gem 'i18n-js' # https://github.com/fnando/i18n-js/issues/137
+gem 'i18n-js', github: 'fnando/i18n-js', branch: 'master'
 
 platforms :jruby do
   gem 'warbler'
