@@ -142,7 +142,7 @@ class User < ActiveRecord::Base
     self.time_zone ||= "Australia/Sydney"
     self.date_format ||= "%d/%m/%Y"
     self.time_format ||= "%H:%M"
-    self.locale ||=  "en_US"
+    self.locale ||=  "en"
   end
 
   def generate_uuid
@@ -155,34 +155,36 @@ class User < ActiveRecord::Base
   end
 
   def generate_widgets
-    w = new_widget
-    w.name = I18n.t("widgets.top_tasks")
-    w.widget_type = 0
-    w.number = 5
-    w.mine = true
-    w.order_by = "priority"
-    w.column = 0
-    w.position = 0
-    w.save
+    I18n.with_locale(self.locale) do
+      w = new_widget
+      w.name = I18n.t("widgets.top_tasks")
+      w.widget_type = 0
+      w.number = 5
+      w.mine = true
+      w.order_by = "priority"
+      w.column = 0
+      w.position = 0
+      w.save
 
-    w = new_widget
-    w.name = I18n.t("widgets.newest_tasks")
-    w.widget_type = 0
-    w.number = 5
-    w.mine = false
-    w.order_by = "date"
-    w.column = 0
-    w.position = 1
-    w.save
+      w = new_widget
+      w.name = I18n.t("widgets.newest_tasks")
+      w.widget_type = 0
+      w.number = 5
+      w.mine = false
+      w.order_by = "date"
+      w.column = 0
+      w.position = 1
+      w.save
 
-    w = new_widget
-    w.name = I18n.t("widgets.open_tasks")
-    w.widget_type = 3
-    w.number = 7
-    w.mine = true
-    w.column = 1
-    w.position = 0
-    w.save
+      w = new_widget
+      w.name = I18n.t("widgets.open_tasks")
+      w.widget_type = 3
+      w.number = 7
+      w.mine = true
+      w.column = 1
+      w.position = 0
+      w.save
+    end
   end
 
   def avatar_url(size=32, secure = false)
