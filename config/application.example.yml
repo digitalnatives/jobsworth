@@ -31,6 +31,8 @@ development: &development
 
   # Allow user and company creation?
   contact_creation_allowed: <%= contact_creation %>
+  # Display the SCM changes
+  use_scm_activities: true
 
   # Users can sign up/in via various oauth providers
   # omniauth:
