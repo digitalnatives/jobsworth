@@ -130,22 +130,28 @@ class ApplicationController < ActionController::Base
   # If highlight keys is given, that text will be highlighted in
   # the link.
   # NOTE: The method is deprecated and should be removed later.
-  def link_to_task(task, truncate = true, highlight_keys = [])
-    link = "<strong>#{task.issue_num}</strong> "
-    if task.is_a? Template
-      url = url_for(:id => task.task_num, :controller => 'task_templates', :action => 'edit')
-    else
-      url = url_for(:id => task.task_num, :controller => 'tasks', :action => 'edit')
-    end
+  def link_to_task(task, args = {})
+    truncate       = args.fetch(:truncate)       { false }
+    highlight_keys = args.fetch(:highlight_keys) { [] }
+    show_project   = !!args[:show_project]
 
-    html = {
-      :class => "tasklink #{task.css_classes}",
-    }
+    link = "<strong>#{task.issue_num}</strong> "
+    html = {:class => "tasklink #{task.css_classes}" }
+    url  = url_for(id: task.task_num,
+                   controller: (task.is_a?(Template) ? 'task_templates' : 'tasks'),
+                   action: 'edit')
 
     text = truncate ? task.name : self.class.helpers.truncate(task.name, :length => 80)
     text = highlight_all(text, highlight_keys)
 
-    link += self.class.helpers.link_to(text, url, html)
+    link << self.class.helpers.link_to(text, url, html)
+
+    if show_project
+      project = task.project
+      link << ' '
+      link << self.class.helpers.link_to("(#{project.name})", url_for(project))
+    end
+
     return link.html_safe
   end
 
