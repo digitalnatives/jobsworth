@@ -85,6 +85,7 @@ end
 group :development do
   gem 'annotate'
   gem 'quiet_assets'
+  gem 'xray-rails'
 end
 
 group :test, :cucumber do
