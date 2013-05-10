@@ -17,9 +17,12 @@ module MilestonesHelper
   end
 
   def milestone_status_select_tag(milestone)
-    options = Milestone::STATUSES.each_with_index.map {|status, index|[status, index]}.reject {|p| p[0] == :closed}.collect do |pair|
+    options = Milestone::STATUSES.each_with_index
+                                 .map {|status, index|[status, index]}
+                                 .reject {|p| p[0] == :closed}
+                                 .collect do |pair|
       selected = if pair[0] == milestone.status_name then "selected=\"selected\"" else "" end
-      "<option value=\"#{pair[1]}\" #{selected} title=\"#{milestone_status_tip(pair[0])}\">#{pair[0].to_s}</option>"
+      "<option value=\"#{pair[1]}\" #{selected} title=\"#{milestone_status_tip(pair[0])}\">#{I18n.t pair[0].to_s, scope: 'milestones.statuses'}</option>"
     end
 
     return select_tag("milestone[status]", options.join(' ').html_safe)
