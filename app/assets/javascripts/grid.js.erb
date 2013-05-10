@@ -3,16 +3,16 @@ var jobsworth = jobsworth || {}
 jobsworth.Grid = (function($){
 
   var columns = [
-    {id: 'read', name: "<span class='unread_icon'/>", field: 'read', resizable: false, sortable: true, formatter: UnreadMarkFormatter, width:16},
-    {id: 'id', name: 'id', field: 'id', sortable: true},
-    {id: 'summary', name: 'summary', field: 'summary', formatter: HtmlFormatter, width:300},
-    {id: 'client', name: 'client', field: 'client', sortable: true, formatter: HtmlFormatter},
-    {id: 'milestone', name: 'milestone', field: 'milestone', sortable: true, formatter: HtmlFormatter},
-    {id: 'due', name: 'target date', field: 'due', sortable: true, formatter: HtmlFormatter},
-    {id: 'time', name: 'time', field: 'time', sortable: true, formatter: DurationFormatter},
-    {id: 'assigned', name: 'assigned', field: 'assigned', sortable: true},
-    {id: 'resolution', name: 'resolution', field: 'resolution', sortable: true},
-    {id: 'updated_at', name: 'last comment date', field: 'updated_at', sortable: true, formatter: TimeFormatter}
+    {id: 'read',       name: "<span class='unread_icon'/>", field: 'read', resizable: false, sortable: true, formatter: UnreadMarkFormatter, width:16},
+    {id: 'id',         name: I18n.t('activerecord.attributes.task_record.id'), field: 'id', sortable: true},
+    {id: 'summary',    name: I18n.t('activerecord.attributes.task_record.summary'), field: 'summary', formatter: HtmlFormatter, width:300},
+    {id: 'client',     name: I18n.t('activerecord.attributes.task_record.client'), field: 'client', sortable: true, formatter: HtmlFormatter},
+    {id: 'milestone',  name: I18n.t('activerecord.attributes.task_record.milestone'), field: 'milestone', sortable: true, formatter: HtmlFormatter},
+    {id: 'due',        name: I18n.t('activerecord.attributes.task_record.due'), field: 'due', sortable: true, formatter: HtmlFormatter},
+    {id: 'time',       name: I18n.t('activerecord.attributes.task_record.time'), field: 'time', sortable: true, formatter: DurationFormatter},
+    {id: 'assigned',   name: I18n.t('activerecord.attributes.task_record.assigned'), field: 'assigned', sortable: true},
+    {id: 'resolution', name: I18n.t('activerecord.attributes.task_record.resolution'), field: 'resolution', sortable: true},
+    {id: 'updated_at', name: I18n.t('activerecord.attributes.task_record.updated_at'), field: 'updated_at', sortable: true, formatter: TimeFormatter}
   ];
 
   function Grid(options) {
@@ -105,7 +105,7 @@ jobsworth.Grid = (function($){
     });
 
     this.grid.onSort.subscribe(function(e, args) {
-      self.onSort(e, args); 
+      self.onSort(e, args);
     });
 
     this.dataView.onRowCountChanged.subscribe(function (e, args) {

@@ -281,7 +281,7 @@ hu:
         name: Cég név
         show_wiki: Alkalmazza a Wiki funkciót
         suppressed_email_addresses: Elkobzott e-mailcímek
-        use_billing: ! 'Alkalmazza a Riport funkciót '
+        use_billing: Alkalmazza a Riport funkciót
         use_resource: Alkalmazza az erőforrások funkciót
         use_score_rules: Alkalmazza a súlyozási szabályokat
       custom_attribute:
@@ -297,6 +297,19 @@ hu:
         name: Név
       customer_id: Ügyfél
       resource_type_id: Erőforrás típus
+      task_record:
+        summary: összefoglaló
+        id: id
+        client: ügyfél
+        milestone: mérföldkő
+        due: lejárat napja
+        time: időtartam
+        assigned: felelős
+        resolution: megoldás
+        updated_at: utolsó frissítés
+        severity: komolyság
+        priority: prioritás
+        type: típus
     attribute_values:
       task_record:
         open_or_closed:
