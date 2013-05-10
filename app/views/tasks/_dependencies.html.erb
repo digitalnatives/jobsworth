@@ -42,7 +42,7 @@
       <p for="dependants"><%= t 'tasks.depends_form'%></p>
       <% @task.dependants.accessed_by(current_user).each do |d| %>
         <div class="field_header">
-          <%= link_to_task(d) %>
+          <%= link_to_task(d, show_project: true) %>
         </div>
       <% end %>
     </div>
