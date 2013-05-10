@@ -34,7 +34,7 @@ hu:
       long: ! ' %Y %B %d'
       short: ! '%b %d'
     month_names:
-    - 
+    -
     - január
     - február
     - március
@@ -379,7 +379,7 @@ hu:
       add_me: saját felhasználó hozzáadása
       close: <b>%{task}</b> lezárása
       open: <b>%{task}</b> megnyitása
-    forecats_to_miss: 
+    forecats_to_miss:
     groupings:
       by_assigned: Hozzárendelt szerint csoportosítva
       by_client: Ügyfelek szerint csoportosítva
@@ -409,7 +409,7 @@ hu:
         destroy: Törlés
       link: Létrehozása
       selection_toggle_explanation: (Toggle Selection)
-      succesfully_destroyed: 
+      succesfully_destroyed:
     clear_filters: Szűrők törlése
     delete: Törlés
     delete_confirmation: Biztosan törölni akarja?
@@ -633,7 +633,7 @@ hu:
   form:
     select:
       please_select: Please select
-      none: 
+      none:
   locales:
     as_in_days: napokban
     as_in_hours: órákban
@@ -895,6 +895,7 @@ hu:
     monday_short: Hé
     months: hónap
     never: Soha
+    no: 'nem'
     no_item_found: Nem található ilyen elem.
     none: Nincs
     saturday: Szombat
@@ -932,7 +933,7 @@ hu:
     'true': true
     unknown: ismeretlen
     week: Hét
-    'yes': 
+    yes: 'igen'
   signup:
     account_created: ! '%{user} létrehozta a felhasználói adatait a projekt managment rendszerben.'
     log_in_link: ! 'A továbbiakban ezen a linken keresztül éri el a rendszert: %{product}.'
@@ -953,6 +954,12 @@ hu:
     name: Név
     new_snippet: Új snippet
     snippets: Snippetek
+  statuses:
+    closed: 'Lezárt'
+    duplicate: 'Duplikátum'
+    invalid: 'Érvénytelen'
+    open: 'Nyitott'
+    won_t_fix: 'Nem javítandó'
   tabmenu:
     add_new_widget: Új widget hozzáadása
     billing: Számlázás
@@ -1147,7 +1154,7 @@ hu:
     unassigned: Nincs hozzárendelve
   boolean:
     'false': false
-    'no': 
+    'no':
     'true': true
   devise:
     change_my_password: Jelszó megváltoztatása
