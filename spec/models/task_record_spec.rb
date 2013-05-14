@@ -465,28 +465,37 @@ describe TaskRecord do
   end
 
   describe "#score_rules" do
-    let(:task)          { TaskRecord.make }
-    let(:project)       { Project.make }
-    let(:customer)      { Customer.make }
-    let(:company)       { Company.make }
-    let(:score_rule_1)  { ScoreRule.make }
-    let(:score_rule_2)  { ScoreRule.make }
-    let(:score_rule_3)  { ScoreRule.make }
+    subject { described_class.new company: company }
 
-    before(:each) do
-      project.score_rules  << score_rule_1
-      customer.score_rules << score_rule_2
-      company.score_rules  << score_rule_3
-
-      task.project = project
-      task.company = company
-      task.customers << customer
+    context 'when company does not use score rules' do
+      let(:company)   { Company.new use_score_rules: true }
+      it { expect(subject.score_rules).to eql [] }
     end
 
-    it "should return all the score rules associated with the task" do
-      task.score_rules.should include(score_rule_1)
-      task.score_rules.should include(score_rule_2)
-      task.score_rules.should include(score_rule_3)
+    context 'when company use score rules' do
+      let(:score_rule_project)   { mock_model ScoreRule, id: 'project' }
+      let(:score_rule_company)   { mock_model ScoreRule, id: 'company' }
+      let(:score_rule_customer)  { mock_model ScoreRule, id: 'customer' }
+      let(:score_rule_milestone) { mock_model ScoreRule, id: 'milestone' }
+      let(:score_rule_prop_val)  { mock_model ScoreRule, id: 'property value' }
+
+      let(:company)   { Company.new       score_rules: [score_rule_company], use_score_rules: true }
+      let(:project)   { Project.new       score_rules: [score_rule_project] }
+      let(:company)   { Company.new       score_rules: [score_rule_company] }
+      let(:milestone) { Milestone.new     score_rules: [score_rule_milestone] }
+      let(:customer)  { Customer.new      score_rules: [score_rule_customer] }
+      let(:prop_val)  { PropertyValue.new score_rules: [score_rule_prop_val] }
+
+      subject { described_class.new company: company, project: project,
+                                    milestone: milestone, customers: [customer],
+                                    property_values: [prop_val] }
+
+      it "should return the score rules associated with it's company, project, milestone, customers, and property values" do
+        expect(subject.score_rules).to match_array [
+          score_rule_project, score_rule_company, score_rule_customer,
+          score_rule_milestone, score_rule_prop_val
+        ]
+      end
     end
   end
 end
