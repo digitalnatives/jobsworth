@@ -12,12 +12,6 @@ describe TaskRecord do
   it { should have_many :task_watchers }
   it { should have_many :task_owners }
 
-  it "should create a new instance given valid attributes" do
-    expect { TaskRecord.make }.to_not raise_error
-    expect { FactoryGirl.create :task }.to_not raise_error
-    expect { FactoryGirl.create :task_with_customers }.to_not raise_error
-  end
-
   describe '#user_work' do
     subject { TaskRecord.new }
     let(:user1) { stub :user1 }
