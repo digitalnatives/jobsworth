@@ -2,6 +2,16 @@ require 'spec_helper'
 
 describe TaskRecord do
 
+  it { should belong_to :company }
+  it { should belong_to :project }
+  it { should belong_to :milestone }
+  it { should have_many :users }
+  it { should have_many :owners }
+  it { should have_many :watchers }
+  it { should have_many :task_users }
+  it { should have_many :task_watchers }
+  it { should have_many :task_owners }
+
   it "should create a new instance given valid attributes" do
     expect { TaskRecord.make }.to_not raise_error
     expect { FactoryGirl.create :task }.to_not raise_error
@@ -72,37 +82,21 @@ describe TaskRecord do
   end
 
   describe "associations" do
-    subject { @task = FactoryGirl.create :task }
+    subject { FactoryGirl.create :task }
 
-    it "should create new owner using 'owners' association" do
-      new_owner = User.make
-      subject.owners << new_owner
-      subject.reload
-      subject.owners.should include(new_owner)
-    end
-
-    it "should include all the owners in the 'users' association" do
-      some_user     = FactoryGirl.create :user
-      another_user  = FactoryGirl.create :user
+    it "owners is a subset of users" do
+      some_user = FactoryGirl.create(:user)
       subject.owners << some_user
-      subject.owners << another_user
-      expect(subject.users).to match_array [some_user, another_user]
+
+      subject.users.should include(some_user)
     end
 
-    it "should create a new watcher through the 'watchers' association" do
-      new_watcher = FactoryGirl.create :user
-      subject.watchers << new_watcher
-      subject.reload
-      subject.watchers.should include(new_watcher)
-    end
-
-    it "should include all the watchers in the 'users' association" do
-      some_user  = FactoryGirl.create :user
+    it "watchers is a subset of users" do
+      some_user = FactoryGirl.create(:user)
       subject.watchers << some_user
-      subject.watchers.should include(some_user)
-    end
 
-    it "should include owner's task_user join model in linked_user_notifications"
+      subject.users.should include(some_user)
+    end
   end
 
   describe "access scopes" do
