@@ -22,7 +22,9 @@ describe TaskRecord do
 
     before { subject.stub_chain('work_logs.duration_per_user' => [user_duration1, user_duration2]) }
 
-    its(:user_work) { should == {user1 => 1000, user2 => 500} }
+    it 'should sum up the worked hours grouped by users' do
+      expect(subject.user_work).to eql({user1 => 1000, user2 => 500})
+    end
   end
 
   describe "#public_comments" do
@@ -96,11 +98,11 @@ describe TaskRecord do
   describe "access scopes" do
     before(:each) do
       company = Company.make
-      3.times { Project.make(:company=>company)}
-      @user = User.make(:company=> company)
+      FactoryGirl.create_list :project, 3, company: company
+      @user = FactoryGirl.create :user, company: company
       [0,1].each do |i|
         @user.projects << company.projects[i]
-        2.times { TaskRecord.make(company: company, project: company.projects[i], users: [@user]) }
+        FactoryGirl.create_list(:task, 2, company: company, project: company.projects[i], users: [@user])
         company.projects[i].tasks.make(:company=>company)
       end
       company.projects.last.tasks.make
@@ -163,7 +165,7 @@ describe TaskRecord do
 
   describe "task_property_values attributes assignment using Task#properties=(params) method" do
     before(:each) do
-      @task = TaskRecord.make
+      @task = FactoryGirl.create :task
       @attributes = @task.attributes.with_indifferent_access.except(:id, :type)
       @properties = @task.company.properties
       @task.set_property_value(@properties.first, @properties.first.property_values.first)
@@ -408,45 +410,33 @@ describe TaskRecord do
   end
 
   describe "#snoozed?" do
-    context "when the task it's closed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::CLOSED)
-      end
+    subject { described_class.new status: status, wait_for_customer: wait_for_customer }
 
-      it "should return false" do
-        @task.snoozed?.should be_false
-      end
+    context "when the task is closed and waiting for customer" do
+      let(:status) { described_class::CLOSED }
+      let(:wait_for_customer) { true }
+      it { expect(subject.snoozed?).to be_true }
     end
 
-    context "when the tasks it's not close but it's on snozze" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::OPEN, :wait_for_customer => true)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_true
-      end
+    context "when the task is closed and not waiting for customer" do
+      let(:status) { described_class::CLOSED }
+      let(:wait_for_customer) { false }
+      it { expect(subject.snoozed?).to be_false }
     end
 
-    context "when the task is both closed and snozzed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::CLOSED, :wait_for_customer => true)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_true
-      end
+    context "when the tasks is open and waiting for customer" do
+      let(:status) { described_class::OPEN }
+      let(:wait_for_customer) { true }
+      it { expect(subject.snoozed?).to be_true }
     end
 
-    context "whent the task is not closed and its not snozzed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::OPEN)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_false
-      end
+    context "whent the task is open and not wait for customer" do
+      let(:status) { described_class::OPEN }
+      let(:wait_for_customer) { false }
+      it { expect(subject.snoozed?).to be_false }
     end
+
+    pending 'Many codepaths are missing from testing'
   end
 
   describe "when updating a task from a project that have score rules" do
