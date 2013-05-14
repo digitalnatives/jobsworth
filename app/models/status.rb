@@ -3,14 +3,17 @@ class Status < ActiveRecord::Base
   belongs_to :company
   validates_presence_of :company, :name
 
+  scope :by_company, ->(company) { where(company_id: company) }
+
   # Creates the default statuses expected in the system
   def self.create_default_statuses(company)
-    company.statuses.destroy_all
-    company.statuses.build(:name => "Open").save!
-    company.statuses.build(:name => "Closed").save!
-    company.statuses.build(:name => "Won't fix").save!
-    company.statuses.build(:name => "Invalid").save!
-    company.statuses.build(:name => "Duplicate").save!
+    raise ArgumentError unless company
+
+    transaction do
+      ['Open', 'Closed', "Won't fix", 'Invalid', 'Duplicate'].each do |resolution|
+        by_company(company).where(name: resolution).first_or_create
+      end
+    end
   end
 
   def to_s
