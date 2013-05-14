@@ -1,8 +1,9 @@
-require "test_helper"
+require 'spec_helper'
 
-class StatusTest < ActiveSupport::TestCase
-  should belong_to(:company)
-  should validate_presence_of(:company)
+describe Status do
+  it { should belong_to :company }
+  it { should validate_presence_of :company }
+  it { should validate_presence_of :name }
 end
 
 # == Schema Information

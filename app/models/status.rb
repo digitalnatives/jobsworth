@@ -1,9 +1,9 @@
 # encoding: UTF-8
 class Status < ActiveRecord::Base
   belongs_to :company
-  validates_presence_of :company
+  validates_presence_of :company, :name
 
-  # Creates the default statuses expected in the system 
+  # Creates the default statuses expected in the system
   def self.create_default_statuses(company)
     company.statuses.destroy_all
     company.statuses.build(:name => "Open").save!
