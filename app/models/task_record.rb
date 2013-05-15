@@ -257,26 +257,12 @@ class TaskRecord < AbstractTask
   end
 
   def calculate_score
-    if self.closed?
-      self.weight = 0
-      return
-    end
+    return self.weight = 0   if closed?
+    return self.weight = nil if snoozed?  # If the task is snozzed, score should be nil
 
-    # If the task is snozzed, score should be nil
-    if self.snoozed?
-      self.weight = nil
-      return
-    end
-
-    all_score_rules = score_rules
-
-    if all_score_rules.empty?
-      self.weight = self.weight_adjustment
-    else
-      self.weight = all_score_rules.inject(self.weight_adjustment) do |result, score_rule|
-        result + score_rule.calculate_score_for(self)
-      end
-    end
+    self.weight = score_rules.inject(weight_adjustment) do |result, score_rule|
+                    result + score_rule.calculate_score_for(self)
+                  end
   end
 
   def self.calculate_score
