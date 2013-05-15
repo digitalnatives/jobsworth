@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Template do
 
+  it { should be_an AbstractTask }
+
   describe '#clone_todos' do
     let(:template_with_todos) { FactoryGirl.create :template_with_todos, todos_count: 3 }
     subject { template_with_todos.clone_todos }
