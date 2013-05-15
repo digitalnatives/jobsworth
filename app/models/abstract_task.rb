@@ -11,18 +11,33 @@ class AbstractTask < ActiveRecord::Base
   DUPLICATE    = 4
   MAX_STATUS   = 4
 
-  belongs_to    :company
-  belongs_to    :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
-  belongs_to    :milestone
+  belongs_to :company
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
+  belongs_to :milestone
+  belongs_to :creator, :class_name => "User", :foreign_key => "creator_id"
+  belongs_to :old_owner, :class_name => "User", :foreign_key => "user_id"
 
-  has_many      :users,    through: :task_users,    source: :user, uniq: true
-  has_many      :owners,   through: :task_owners,   source: :user, uniq: true
-  has_many      :watchers, through: :task_watchers, source: :user, uniq: true
+  has_one :ical_entry, :foreign_key=>'task_id'
 
-  #task_watcher and task_owner is subclasses of task_user
-  has_many      :task_users,    dependent: :destroy, foreign_key: 'task_id'
-  has_many      :task_watchers, dependent: :destroy, foreign_key: 'task_id'
-  has_many      :task_owners,   dependent: :destroy, foreign_key: 'task_id'
+  has_many :users,    through: :task_users,    source: :user, uniq: true
+  has_many :owners,   through: :task_owners,   source: :user, uniq: true
+  has_many :watchers, through: :task_watchers, source: :user, uniq: true
+  has_many :attachments, :class_name => "ProjectFile", :dependent => :destroy, :foreign_key=>'task_id'
+  has_many :scm_changesets, :dependent =>:destroy, :foreign_key=>'task_id', :conditions => "task_id IS NOT NULL"
+  has_many :task_customers, :dependent => :destroy, :foreign_key=>'task_id'
+  has_many :customers, :through => :task_customers, :order => "customers.name asc"
+  has_many :task_property_values, :dependent => :destroy, :include => [ :property ], :foreign_key=>'task_id'
+  has_many :task_users,    dependent: :destroy, foreign_key: 'task_id'
+  has_many :task_watchers, dependent: :destroy, foreign_key: 'task_id'
+  has_many :task_owners,   dependent: :destroy, foreign_key: 'task_id'
+  has_many :todos, :order => "completed_at IS NULL desc, completed_at desc, position", :dependent => :destroy,  :foreign_key=>'task_id'
+  has_many :work_logs, :dependent => :destroy, :order => "started_at asc", :foreign_key=>'task_id'
+  has_many :event_logs, :as => :target
+  has_many :sheets,  :foreign_key=>'task_id'
+
+  has_and_belongs_to_many :tags, :join_table => 'task_tags', :foreign_key=>'task_id'
+  has_and_belongs_to_many :resources, :join_table=> 'resources_tasks', :foreign_key=>'task_id'
+  has_and_belongs_to_many :email_addresses, :join_table => 'email_address_tasks', :foreign_key=>'task_id'
 
   # FIXME The following methods are not working with AREL 3.2.13
   #       collection_singular_ids
@@ -36,39 +51,13 @@ class AbstractTask < ActiveRecord::Base
     association_foreign_key: "task_id", foreign_key: "dependency_id",
     order: 'task_id', select: "tasks.*, task_id", uniq: true
 
-  has_many      :attachments, :class_name => "ProjectFile", :dependent => :destroy, :foreign_key=>'task_id'
-  has_many      :scm_changesets, :dependent =>:destroy, :foreign_key=>'task_id', :conditions => "task_id IS NOT NULL"
-
-  belongs_to    :creator, :class_name => "User", :foreign_key => "creator_id"
-  belongs_to    :old_owner, :class_name => "User", :foreign_key => "user_id"
-
-  has_and_belongs_to_many  :tags, :join_table => 'task_tags', :foreign_key=>'task_id'
-
-  has_many :task_property_values, :dependent => :destroy, :include => [ :property ], :foreign_key=>'task_id'
   accepts_nested_attributes_for :task_property_values, :allow_destroy => true
-
-  has_many :task_customers, :dependent => :destroy, :foreign_key=>'task_id'
-  has_many :customers, :through => :task_customers, :order => "customers.name asc"
+  accepts_nested_attributes_for :todos
   adds_and_removes_using_params :customers
 
-  has_many      :todos, :order => "completed_at IS NULL desc, completed_at desc, position", :dependent => :destroy,  :foreign_key=>'task_id'
-  accepts_nested_attributes_for :todos
-
-  has_and_belongs_to_many :resources, :join_table=> 'resources_tasks', :foreign_key=>'task_id'
-
-  has_many      :work_logs, :dependent => :destroy, :order => "started_at asc", :foreign_key=>'task_id'
-  has_many      :event_logs, :as => :target
-
-  has_many      :sheets,  :foreign_key=>'task_id'
-  has_one       :ical_entry, :foreign_key=>'task_id'
-
-  has_and_belongs_to_many :email_addresses, :join_table => 'email_address_tasks', :foreign_key=>'task_id'
-
-  validates_length_of     :name,  :maximum=>200, :allow_nil => true
-  validates_presence_of   :name
-  validates_presence_of   :company
-  validates_presence_of   :project_id
-  validates_uniqueness_of :task_num, :scope => 'company_id', :on => :update
+  validates_presence_of   :name, :company, :project_id
+  validates_length_of     :name,  maximum: 200, allow_nil: true
+  validates_uniqueness_of :task_num, scope: 'company_id', :on => :update
   validate :validate_properties
 
   before_create lambda { self.task_num = nil }
@@ -173,6 +162,10 @@ class AbstractTask < ActiveRecord::Base
 
   def done?
     self.resolved? && self.completed_at != nil
+  end
+
+  def undone?
+    !done?
   end
 
   def overdue?
@@ -366,6 +359,7 @@ class AbstractTask < ActiveRecord::Base
 
   # Custom validation for tasks.
   def validate_properties
+    company &&
     company.properties.mandatory.each do |p|
       unless property_value(p)
         message = [p.name, I18n.t('activerecord.errors.messages.blank')].join ' '
