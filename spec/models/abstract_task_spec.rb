@@ -31,71 +31,60 @@ describe AbstractTask do
     end
   end
 
-  describe 'access scopes' do
-    before(:each) do
-      company = Company.make
-      FactoryGirl.create_list :project, 3, company: company
-      @user = FactoryGirl.create :user, company: company
-      [0,1].each do |i|
-        @user.projects << company.projects[i]
-        FactoryGirl.create_list(:task, 2, company: company, project: company.projects[i], users: [@user])
-        company.projects[i].tasks.make(:company=>company)
-      end
-      company.projects.last.tasks.make
-      Project.make.tasks.make
+  describe '.accessed_by' do
+    before { create_test_data_for_assess_scopes }
+
+    it "should return tasks only from user's company" do
+      company_tasks           = @user.company.tasks
+      tasks_accessed_by_user  = TaskRecord.accessed_by(@user)
+      company_tasks.should include *tasks_accessed_by_user
     end
 
-    describe '.accessed_by' do
-      it "should return tasks only from user's company" do
-        company_tasks           = @user.company.tasks
-        tasks_accessed_by_user  = TaskRecord.accessed_by(@user)
-        company_tasks.should include *tasks_accessed_by_user
-      end
+    it "should the tasks from completed projects" do
+      completed_project = @user.projects.first
+      completed_project.update_attributes(:completed_at => 1.day.ago.utc)
+      tasks_accessed_by_user = TaskRecord.accessed_by(@user)
 
-      it "should the tasks from completed projects" do
-        completed_project = @user.projects.first
-        completed_project.update_attributes(:completed_at => 1.day.ago.utc)
-        tasks_accessed_by_user = TaskRecord.accessed_by(@user)
-
-        tasks_accessed_by_user.should include *completed_project.tasks
-      end
-
-      context "when the user doesn't have can_see_unwatched permission" do
-        it "should return only watched tasks" do
-          permission = @user.project_permissions.first
-          permission.update_attributes(:can_see_unwatched => 0)
-          @user.reload
-          TaskRecord.accessed_by(@user).each do |task|
-            @user.should be_can(task.project, 'see_unwatched') unless task.users.include?(@user)
-          end
-        end
-      end
+      tasks_accessed_by_user.should include *completed_project.tasks
     end
 
-    context '.all_accessed_by' do
-      it "should return tasks only from user's company" do
-        TaskRecord.all_accessed_by(@user).each do |task|
-          @user.company.tasks.should include(task)
-        end
-      end
-
-      it "should return only watched tasks if user not have can_see_unwatched permission" do
-        permission=@user.project_permissions.first
-        permission.remove('see_unwatched')
-        permission.save!
+    context "when the user doesn't have can_see_unwatched permission" do
+      it "should return only watched tasks" do
+        permission = @user.project_permissions.first
+        permission.update_attributes(:can_see_unwatched => 0)
         @user.reload
-        TaskRecord.all_accessed_by(@user).each do |task|
+        TaskRecord.accessed_by(@user).each do |task|
           @user.should be_can(task.project, 'see_unwatched') unless task.users.include?(@user)
         end
       end
+    end
+  end
 
-      it "should return tasks from all users projects, even completed" do
-        project= @user.projects.first
-        project.completed_at= Time.now.utc
-        project.save!
-        TaskRecord.all_accessed_by(@user).should ==
-          TaskRecord.all(:conditions=> ["tasks.project_id in(?)", @user.all_project_ids])
+  describe '.all_accessed_by' do
+    before { create_test_data_for_assess_scopes }
+
+    it "should return tasks only from user's company" do
+      TaskRecord.all_accessed_by(@user).each do |task|
+        @user.company.tasks.should include(task)
       end
+    end
+
+    it "should return only watched tasks if user not have can_see_unwatched permission" do
+      permission=@user.project_permissions.first
+      permission.remove('see_unwatched')
+      permission.save!
+      @user.reload
+      TaskRecord.all_accessed_by(@user).each do |task|
+        @user.should be_can(task.project, 'see_unwatched') unless task.users.include?(@user)
+      end
+    end
+
+    it "should return tasks from all users projects, even completed" do
+      project= @user.projects.first
+      project.completed_at= Time.now.utc
+      project.save!
+      TaskRecord.all_accessed_by(@user).should ==
+        TaskRecord.all(:conditions=> ["tasks.project_id in(?)", @user.all_project_ids])
     end
   end
 
@@ -272,6 +261,19 @@ describe AbstractTask do
         ['First status', 1], ['Second status', 2]
       ]
     end
+  end
+
+  def create_test_data_for_assess_scopes
+    company = Company.make
+    FactoryGirl.create_list :project, 3, company: company
+    @user = FactoryGirl.create :user, company: company
+    [0,1].each do |i|
+      @user.projects << company.projects[i]
+      FactoryGirl.create_list(:task, 2, company: company, project: company.projects[i], users: [@user])
+      company.projects[i].tasks.make(:company=>company)
+    end
+    company.projects.last.tasks.make
+    Project.make.tasks.make
   end
 
 end
