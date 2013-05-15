@@ -46,12 +46,8 @@ class TaskRecord < AbstractTask
   end
 
   def self.expire_hide_until
-    TaskRecord.where("hide_until IS NOT NULL").all.each do |task|
-      if task.hide_until < Time.now.utc
-        task.hide_until=nil
-        task.save!
-      end
-    end
+    TaskRecord.where('hide_until < ?', Time.now.utc)
+              .update_all(hide_until: nil)
   end
 
   def worked_on?

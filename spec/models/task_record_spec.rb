@@ -4,21 +4,6 @@ describe TaskRecord do
 
   it { should be_an AbstractTask }
 
-  describe '#user_work' do
-    subject { TaskRecord.new }
-    let(:user1) { stub :user1 }
-    let(:user2) { stub :user2 }
-
-    let(:user_duration1) { stub _user_: user1, duration: 1000 }
-    let(:user_duration2) { stub _user_: user2, duration: 500 }
-
-    before { subject.stub_chain('work_logs.duration_per_user' => [user_duration1, user_duration2]) }
-
-    it 'should sum up the worked hours grouped by users' do
-      expect(subject.user_work).to eql({user1 => 1000, user2 => 500})
-    end
-  end
-
   describe ".public_comments_for" do
     before(:each) do
       @task       = FactoryGirl.create :task_with_customers
@@ -65,6 +50,24 @@ describe TaskRecord do
     it "should only return tasks with resolution open" do
       expect(described_class.count).to eql 3
       expect(subject).to match_array [open_task]
+    end
+  end
+
+  describe '.expire_hide_until' do
+    before do
+      FactoryGirl.create :task, hide_until: nil
+      FactoryGirl.create :task, hide_until: 3.days.ago
+      FactoryGirl.create :task, hide_until: 3.days.from_now
+    end
+
+    it 'should update the expired hide until dates to nil' do
+      expect(described_class.count).to eql 3
+      expect(described_class.where('hide_until < ?', Time.now.utc).count).to eql 1
+      expect(described_class.where('hide_until IS NOT NULL').count).to eql 2
+
+      described_class.expire_hide_until
+      expect(described_class.where('hide_until < ?', Time.now.utc).count).to eql 0
+      expect(described_class.where('hide_until IS NOT NULL').count).to eql 1
     end
   end
 
@@ -134,6 +137,46 @@ describe TaskRecord do
     end
   end
 
+  describe "when updating a task from a project that have score rules" do
+    before(:each) do
+      @score_rule = ScoreRule.make(:score      => 250,
+                                   :score_type => ScoreRuleTypes::FIXED)
+
+      project = Project.make(:score_rules => [@score_rule])
+      @task   = TaskRecord.make(:project => project, :weight_adjustment => 10)
+    end
+
+    it "should update the weight accordantly" do
+      @task.weight.should == @score_rule.score + @task.weight_adjustment
+      new_weight_adjustment = 50
+      @task.update_attributes(:weight_adjustment => new_weight_adjustment)
+      @task.weight.should == @score_rule.score + new_weight_adjustment
+    end
+
+    it "should update the weight accordantly if company disallow use score rule" do
+      @task.company.update_attribute(:use_score_rules, false)
+      @task.weight.should == @score_rule.score + @task.weight_adjustment
+      new_weight_adjustment = 50
+      @task.update_attributes(:weight_adjustment => new_weight_adjustment)
+      @task.weight.should == new_weight_adjustment
+    end
+  end
+
+  describe '#user_work' do
+    subject { TaskRecord.new }
+    let(:user1) { stub :user1 }
+    let(:user2) { stub :user2 }
+
+    let(:user_duration1) { stub _user_: user1, duration: 1000 }
+    let(:user_duration2) { stub _user_: user2, duration: 500 }
+
+    before { subject.stub_chain('work_logs.duration_per_user' => [user_duration1, user_duration2]) }
+
+    it 'should sum up the worked hours grouped by users' do
+      expect(subject.user_work).to eql({user1 => 1000, user2 => 500})
+    end
+  end
+
   describe '#calculate_score' do
     let(:score_rule_1) { FactoryGirl.create :fixed_score_rule, score: 250 }
     let(:score_rule_2) { FactoryGirl.create :fixed_score_rule, score: 150 }
@@ -184,31 +227,6 @@ describe TaskRecord do
     end
 
     pending 'Many codepaths are missing from testing'
-  end
-
-  describe "when updating a task from a project that have score rules" do
-    before(:each) do
-      @score_rule = ScoreRule.make(:score      => 250,
-                                   :score_type => ScoreRuleTypes::FIXED)
-
-      project = Project.make(:score_rules => [@score_rule])
-      @task   = TaskRecord.make(:project => project, :weight_adjustment => 10)
-    end
-
-    it "should update the weight accordantly" do
-      @task.weight.should == @score_rule.score + @task.weight_adjustment
-      new_weight_adjustment = 50
-      @task.update_attributes(:weight_adjustment => new_weight_adjustment)
-      @task.weight.should == @score_rule.score + new_weight_adjustment
-    end
-
-    it "should update the weight accordantly if company disallow use score rule" do
-      @task.company.update_attribute(:use_score_rules, false)
-      @task.weight.should == @score_rule.score + @task.weight_adjustment
-      new_weight_adjustment = 50
-      @task.update_attributes(:weight_adjustment => new_weight_adjustment)
-      @task.weight.should == new_weight_adjustment
-    end
   end
 
   describe "#score_rules" do
