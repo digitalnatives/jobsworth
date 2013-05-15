@@ -15,7 +15,6 @@ class AbstractTask < ActiveRecord::Base
   belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to :milestone
   belongs_to :creator, :class_name => "User", :foreign_key => "creator_id"
-  belongs_to :old_owner, :class_name => "User", :foreign_key => "user_id"
 
   has_one :ical_entry, :foreign_key=>'task_id'
 

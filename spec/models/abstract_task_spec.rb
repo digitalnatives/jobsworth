@@ -6,7 +6,6 @@ describe AbstractTask do
   it { should belong_to :project }
   it { should belong_to :milestone }
   it { should belong_to :creator }
-  it { should belong_to :old_owner }
   it { should have_many :users }
   it { should have_many :owners }
   it { should have_many :watchers }
