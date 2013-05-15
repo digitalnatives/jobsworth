@@ -260,4 +260,18 @@ describe AbstractTask do
     end
   end
 
+  describe '#statuses_for_select_list' do
+    let(:status_1) { mock_model Status, id: 1, name: 'First status' }
+    let(:status_2) { mock_model Status, id: 2, name: 'Second status' }
+    let(:company)  { mock_model Company, statuses: [status_1, status_2] }
+
+    subject { described_class.new company: company }
+
+    it 'should be a nested array with names and ids of the statuses of company' do
+      expect(subject.statuses_for_select_list).to match_array [
+        ['First status', 1], ['Second status', 2]
+      ]
+    end
+  end
+
 end

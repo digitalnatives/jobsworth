@@ -397,7 +397,7 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def statuses_for_select_list
-    company.statuses.collect{|s| [s.name]}.each_with_index{|s,i| s<< i }
+    company.statuses.map { |s| [s.name, s.id] }
   end
 
   def unknown_emails
