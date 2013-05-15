@@ -16,33 +16,20 @@ class TaskRecord < AbstractTask
 
   after_validation :fix_work_log_error
   before_save :calculate_score
+  after_save :update_calculated_attributes # TODO fix this temporary method
 
-  after_save do |r|
-    r.delay.calculate_dependants_score if r.status_changed?
+  def self.search(user, keys)
+    tf = TaskFilter.new(:user => user)
 
-    r.ical_entry.destroy if r.ical_entry
-    project = r.project
-    project.update_project_stats
-    project.save
-
-    if r.project.id != r.project_id
-      #Task has changed projects, update counts of target project as well
-      p = Project.find(r.project_id)
-      p.update_project_stats
-      p.save
+    conditions = []
+    keys.each do |k|
+      conditions << "tasks.task_num = #{ k.to_i }"
     end
+    name_conds = Search.search_conditions_for(keys, [ "tasks.name" ], :search_by_id => false)
+    conditions << name_conds[1...-1] # strip off surounding parentheses
 
-    if r.milestone
-      r.milestone.update_counts
-      r.milestone.update_status
-    end
-  end
-
-  def snoozed?
-    wait_for_customer? ||
-    dependencies.any?(&:undone?) ||
-    (hide_until && hide_until > Time.now.utc) ||
-    milestone.try(:status_name) == :planning
+    conditions = "(#{ conditions.join(" or ") })"
+    return tf.tasks(conditions)
   end
 
   def self.expire_hide_until
@@ -50,9 +37,16 @@ class TaskRecord < AbstractTask
               .update_all(hide_until: nil)
   end
 
-  def worked_on?
-    self.sheets.size > 0
+  def self.public_comments_for(task)
+    WorkLog.comments.where(customer_id: task.customer_ids).order('started_at DESC')
   end
+
+  def self.calculate_score
+    TaskRecord.open_only.each do |task|
+      task.save(:validate => false)
+    end
+  end
+
 
   def actual_worked_minutes
     work_logs.sum(:duration).to_i
@@ -71,6 +65,32 @@ class TaskRecord < AbstractTask
                       :status => self.class.status_types.index("Open")
   end
 
+  def worked_on?
+    self.sheets.size > 0
+  end
+
+  def snoozed?
+    wait_for_customer? ||
+    dependencies.any?(&:undone?) ||
+    (hide_until && hide_until > Time.now.utc) ||
+    milestone.try(:status_name) == :planning
+  end
+
+  def overworked?
+    (self.adjusted_duration - self.worked_minutes) < 0
+  end
+
+  def unread?(user)
+    unread = false
+
+    user_notifications = self.task_users.select { |n| n.user == user }
+    user_notifications.each do |n|
+      unread ||= n.unread?
+    end
+
+    return unread
+  end
+
   def minutes_left
     d = self.adjusted_duration - self.worked_minutes
     d = self.default_duration.to_i if d < 0
@@ -79,34 +99,6 @@ class TaskRecord < AbstractTask
 
   def adjusted_duration
     self.duration > 0 ? self.duration : self.default_duration
-  end
-
-  def overworked?
-    (self.adjusted_duration - self.worked_minutes) < 0
-  end
-
-  def self.search(user, keys)
-    tf = TaskFilter.new(:user => user)
-
-    conditions = []
-    keys.each do |k|
-      conditions << "tasks.task_num = #{ k.to_i }"
-    end
-    name_conds = Search.search_conditions_for(keys, [ "tasks.name" ], :search_by_id => false)
-    conditions << name_conds[1...-1] # strip off surounding parentheses
-
-    conditions = "(#{ conditions.join(" or ") })"
-    return tf.tasks(conditions)
-  end
-
-  def csv_header
-    ['Client', 'Project', 'Num', 'Name', 'Tags', 'User', 'Milestone', 'Due', 'Created', 'Completed', 'Worked', 'Estimated', 'Resolution'] +
-      company.properties.collect { |property| property.name }
-  end
-
-  def to_csv
-    [customers.uniq.map{|c| c.name}.join(','), project.name, task_num, name, tags.collect(&:name).join(','), owners_to_display, milestone.nil? ? nil : milestone.name, self.due_date, created_at, completed_at, worked_minutes, duration, status_type ] +
-      company.properties.collect { |property| property_value(property).to_s }
   end
 
   # This method return value of property named "Type"
@@ -120,11 +112,8 @@ class TaskRecord < AbstractTask
     @sort_rank ||= company.rank_by_properties(self)
   end
 
-  ###
   # A task is critical if it is in the top 20% of the possible
   # ranking using the companys sort.
-  ###
-
   def critical?
     return false if company.maximum_sort_rank == 0
 
@@ -159,41 +148,17 @@ class TaskRecord < AbstractTask
   # The exclude param should be a user which unread
   # status will not be updated. For example, the person who wrote a
   # comment should probably be excluded.
-  def mark_as_unread(exclude = "")
-    exclude = ["user_id !=?", exclude.id ] if exclude.is_a?(User)
-    self.task_users.where(exclude).update_all(:unread => true)
+  def mark_as_unread(exclude = '')
+    exclude = ['user_id != ?', exclude.id ] if exclude.is_a?(User)
+    self.task_users.where(exclude).update_all(unread: true)
   end
 
-  def self.public_comments_for(task)
-    customer_ids = task.customers.collect { |customer| customer.id }.join(', ')
-    WorkLog.comments.
-            where('customer_id in (?)', customer_ids).
-            order('started_at DESC')
-  end
-
-  ###
   # Sets this task as read for user.
   # If read is passed, and false, sets the task
   # as unread for user.
-  ###
   def set_task_read(user, read = true)
     self.task_users.where(:user_id=> user.id).update_all(:unread => !read)
   end
-
-  ###
-  # Returns true if this task is marked as unread for user.
-  ###
-  def unread?(user)
-    unread = false
-
-    user_notifications = self.task_users.select { |n| n.user == user }
-    user_notifications.each do |n|
-      unread ||= n.unread?
-    end
-
-    return unread
-  end
-
 
   # return a users mapped to the duration of time they have worked on this task
   def user_work
@@ -264,9 +229,40 @@ class TaskRecord < AbstractTask
                   end
   end
 
-  def self.calculate_score
-    TaskRecord.open_only.each do |task|
-      task.save(:validate => false)
+  def csv_header
+    ['Client', 'Project', 'Num', 'Name', 'Tags', 'User', 'Milestone', 'Due',
+     'Created', 'Completed', 'Worked', 'Estimated', 'Resolution'] +
+      company.properties.collect { |property| property.name }
+  end
+
+  def to_csv
+    [customers.uniq.map(&:name).join(','),
+     project.name, task_num, name,
+     tags.map(&:name).join(','),
+     owners_to_display,
+     milestone.try(:name),
+     due_date, created_at, completed_at, worked_minutes, duration, status_type ] +
+      company.properties.collect { |property| property_value(property).to_s }
+  end
+
+private
+  def update_calculated_attributes
+    delay.calculate_dependants_score if status_changed?
+
+    ical_entry.destroy if ical_entry
+    project.update_project_stats
+    project.save
+
+    #Task has changed projects, update counts of target project as well
+    if project.id != project_id
+      p = Project.find(project_id)
+      p.update_project_stats
+      p.save
+    end
+
+    if milestone
+      milestone.update_counts
+      milestone.update_status
     end
   end
 

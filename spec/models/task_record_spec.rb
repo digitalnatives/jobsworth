@@ -3,6 +3,7 @@ require 'spec_helper'
 describe TaskRecord do
 
   it { should be_an AbstractTask }
+  it { should have_many :property_values }
 
   describe ".public_comments_for" do
     before(:each) do
@@ -271,6 +272,7 @@ describe TaskRecord do
 
     it('should return the sum of the work log durations') { expect(subject.actual_worked_minutes).to eql 3.hours.to_i }
   end
+
 end
 
 # == Schema Information
