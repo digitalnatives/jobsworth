@@ -1,16 +1,23 @@
 # encoding: UTF-8
 class Status < ActiveRecord::Base
+
+  OPEN         = 'Open'
+  CLOSED       = 'Closed'
+  WILL_NOT_FIX = "Won't fix"
+  INVALID      = 'Invalid'
+  DUPLICATE    = 'Duplicate'
+  DEFAULT_RESOLUTIONS = [OPEN, CLOSED, WILL_NOT_FIX, INVALID, DUPLICATE]
+
   belongs_to :company
   validates_presence_of :company, :name
 
   scope :by_company, ->(company) { where(company_id: company) }
 
-  # Creates the default statuses expected in the system
   def self.create_default_statuses(company)
     raise ArgumentError unless company
 
     transaction do
-      ['Open', 'Closed', "Won't fix", 'Invalid', 'Duplicate'].each do |resolution|
+      DEFAULT_RESOLUTIONS.each do |resolution|
         by_company(company).where(name: resolution).first_or_create
       end
     end

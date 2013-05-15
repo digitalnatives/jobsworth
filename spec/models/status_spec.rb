@@ -13,7 +13,8 @@ describe Status do
         expect(described_class.by_company(company).count).to eql 0
 
         expect { described_class.create_default_statuses(company) }
-        .to change { described_class.by_company(company).count }.by(5)
+        .to change { described_class.by_company(company).count }
+            .by(Status::DEFAULT_RESOLUTIONS.size)
       end
     end
 
