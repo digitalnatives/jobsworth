@@ -10,11 +10,12 @@
 class TaskRecord < AbstractTask
   has_many :property_values, :through => :task_property_values
 
-  scope :from_this_year, lambda { where('created_at > ?', Time.zone.now.beginning_of_year - 1.month) }
-  scope :open_only, where(:status => 0)
+  scope :from_this_year, -> { where('created_at > ?', Time.zone.now.beginning_of_year - 1.month) }
+  scope :open_only, where(status: 0)
   scope :not_snoozed, where("weight IS NOT NULL")
 
   after_validation :fix_work_log_error
+  before_save :calculate_score
 
   after_save do |r|
     r.delay.calculate_dependants_score if r.status_changed?
@@ -36,8 +37,6 @@ class TaskRecord < AbstractTask
       r.milestone.update_status
     end
   end
-
-  before_save :calculate_score
 
   def snoozed?
     wait_for_customer? ||
