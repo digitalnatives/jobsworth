@@ -40,10 +40,10 @@ class TaskRecord < AbstractTask
   before_save :calculate_score
 
   def snoozed?
-    !self.dependencies.reject{ |t| t.done? }.empty? or
-      self.wait_for_customer or
-      (!self.hide_until.nil? and self.hide_until > Time.now.utc) or
-      (!self.milestone.nil? and self.milestone.status_name == :planning)
+    wait_for_customer? ||
+    dependencies.any?(&:undone?) ||
+    (hide_until && hide_until > Time.now.utc) ||
+    milestone.try(:status_name) == :planning
   end
 
   def self.expire_hide_until
