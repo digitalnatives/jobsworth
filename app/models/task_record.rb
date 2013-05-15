@@ -54,12 +54,16 @@ class TaskRecord < AbstractTask
     self.sheets.size > 0
   end
 
+  def actual_worked_minutes
+    work_logs.sum(:duration).to_i
+  end
+
   def recalculate_worked_minutes
-    self.worked_minutes = WorkLog.where("task_id = ?", self.id).sum(:duration).to_i
+    self.worked_minutes = actual_worked_minutes
   end
 
   def recalculate_worked_minutes!
-    recalculate_worked_minutes and save
+    update_attribute :worked_minutes, actual_worked_minutes
   end
 
   def reopen!

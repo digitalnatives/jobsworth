@@ -263,6 +263,14 @@ describe TaskRecord do
       end
     end
   end
+
+  describe '#actual_worked_minutes' do
+    subject           { FactoryGirl.create :task }
+    let!(:work_log_1) { FactoryGirl.create :work_log, task: subject, duration: 2.hours }
+    let!(:work_log_2) { FactoryGirl.create :work_log, task: subject, duration: 1.hours }
+
+    it('should return the sum of the work log durations') { expect(subject.actual_worked_minutes).to eql 3.hours.to_i }
+  end
 end
 
 # == Schema Information
