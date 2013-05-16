@@ -167,19 +167,12 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def issue_name
-    "[##{self.task_num}] #{self[:name]}"
+    '[#%d] %s' % [task_num, name]
   end
 
   def issue_num
-    if self.status > 0
-      "<strike>##{self.task_num}</strike>".html_safe
-    else
-      "##{self.task_num}"
-    end
-  end
-
-  def status_name
-    "#{self.issue_num} #{self.name}"
+    template = closed? ? '<strike>#%d</strike>' : '#%d'
+    (template % [task_num]).html_safe
   end
 
   def status_type

@@ -263,6 +263,25 @@ describe AbstractTask do
     end
   end
 
+  describe '#issue_name' do
+    subject { described_class.new task_num: 1, name: 'Task name' }
+    specify { expect(subject.issue_name).to eql '[#1] Task name' }
+  end
+
+  describe '#issue_num' do
+    subject { described_class.new task_num: 1 }
+
+    context 'when task is not closed' do
+      before { subject.stub closed?: false }
+      specify { expect(subject.issue_num).to eql '#1' }
+    end
+
+    context 'when task is closed' do
+      before { subject.stub closed?: true }
+      specify { expect(subject.issue_num).to eql '<strike>#1</strike>' }
+    end
+  end
+
   describe '#owners_to_display' do
     subject { described_class.new owners: owners }
 
