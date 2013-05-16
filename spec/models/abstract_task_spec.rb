@@ -263,6 +263,20 @@ describe AbstractTask do
     end
   end
 
+  describe '#owners_to_display' do
+    subject { described_class.new owners: owners }
+
+    context 'when owners exist' do
+      let(:owners) { [mock_model(User, name: 'Jack'), mock_model(User, name: 'Joe')] }
+      specify { expect(subject.owners_to_display).to eql 'Jack and Joe' }
+    end
+
+    context 'when owners exist' do
+      let(:owners) { [] }
+      specify { expect(subject.owners_to_display).to eql 'Unassigned' }
+    end
+  end
+
   def create_test_data_for_assess_scopes
     company = Company.make
     FactoryGirl.create_list :project, 3, company: company

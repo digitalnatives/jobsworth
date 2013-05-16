@@ -191,9 +191,11 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def owners_to_display
-    o = self.owners.collect{ |u| u.name}.join(', ')
-    o = "Unassigned" if o.nil? || o == ""
-    o
+    if owners.present?
+      self.owners.map(&:name).to_sentence
+    else
+      I18n.t 'tasks.owners.zero'
+    end
   end
 
   def set_tags=( tagstring )
