@@ -129,15 +129,15 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def overdue?
-    self.due_date ? (self.due_date.to_time <= Time.now.utc) : false
+    !!due_date && due_date.to_time <= Time.now.utc
   end
 
-  ###
   # This method return due_date - duration
-  # It used only to display task in calendar. User should not start work on task when start_date come.
+  # It used only to display task in calendar. User should not start work on task
+  # when start_date come.
   # For date when user should start work on task we have schedule controller.
-  # Again, do not use this method outside calendar view. And this method should be removed when schedule code will be fixed.
-  ###
+  # Again, do not use this method outside calendar view. And this method should
+  # be removed when schedule code will be fixed.
   def start_date
     return due_date if (duration.nil? or due_date.nil?)
     due_date - (duration/(60*8)).to_i.days
@@ -154,7 +154,7 @@ class AbstractTask < ActiveRecord::Base
     if self.project
       [ERB::Util.h(self.project.full_name), full_tags].join(' / ').html_safe
     else
-      ""
+      ''
     end
   end
 
@@ -166,6 +166,11 @@ class AbstractTask < ActiveRecord::Base
     self.tags.collect{ |t| t.name.capitalize }.join(" / ")
   end
 
+  # TODO this is a duplicate
+  # def status_name
+  #   "#{issue_num} #{name}"
+  # end
+
   def issue_name
     '[#%d] %s' % [task_num, name]
   end
@@ -176,7 +181,6 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def status_type
-    self.company.statuses[self.status].name
   end
 
   def self.status_types
@@ -207,8 +211,9 @@ class AbstractTask < ActiveRecord::Base
     self.company.tags.first.save unless self.company.tags.first.nil? #ugly, trigger tag save callback, needed to cache sweeper
     true
   end
+
   def tagstring
-    tags.map { |t| t.name }.join(', ')
+    tags.map(&:name).join(', ')
   end
 
   def default_duration
@@ -251,7 +256,7 @@ class AbstractTask < ActiveRecord::Base
   # Sets up custom properties using the given form params
   def properties=(params)
     ids=[]
-    attributes= params.collect {  |prop_id, val_id|
+    attributes= params.collect do |prop_id, val_id|
       # task_property_values may be changed elsewhere
       # discards the cached copy of task_property_values
       # reload from the database to avoid duplicate insert conflicts
@@ -269,7 +274,7 @@ class AbstractTask < ActiveRecord::Base
         end
       end
       hash
-    }
+    end
     attributes += (self.task_property_values.collect(&:id) - ids).collect{ |id| { :id=>id, :_destroy=>1 } }
     self.task_property_values_attributes = attributes
   end
@@ -357,15 +362,15 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def unknown_emails
-    email_addresses.map{ |ea| ea.email}.join(', ')
+    email_addresses.pluck(&:email).join(', ')
   end
 
   def unknown_emails=(emails)
     email_addresses.clear
-    (emails || "").split(/$| |,/).map{ |email| email.strip.empty? ? nil : email.strip }.compact.each{ |email|
-      ea= EmailAddress.find_or_create_by_email(email)
-      self.email_addresses<< ea
-    }
+    emails.to_s.split(/$| |,/).map(&:strip).reject(&:blank?).each do |email|
+      ea = EmailAddress.find_or_create_by_email(email)
+      self.email_addresses << ea
+    end
   end
 
   def task_due_calculation(due_at, user)
@@ -502,7 +507,9 @@ class AbstractTask < ActiveRecord::Base
 private
 
   def full_tags
-    self.tags.collect{ |t| "<a href=\"/tasks?tag=#{ERB::Util.h t.name}\" class=\"description\">#{ERB::Util.h t.name.capitalize.gsub(/\"/,'&quot;'.html_safe)}</a>" }.join(" / ").html_safe
+    self.tags.collect do |t|
+      "<a href=\"/tasks?tag=#{ERB::Util.h t.name}\" class=\"description\">#{ERB::Util.h t.name.capitalize.gsub(/\"/,'&quot;'.html_safe)}</a>"
+    end.join(" / ").html_safe
   end
 
   def set_task_num
@@ -513,10 +520,8 @@ private
     self.reload
   end
 
-  ###
   # Sets the owners/watchers of this task from ids.
   # Existing records WILL  be cleared by this method.
-  ###
   def set_user_ids(relation, ids)
     return if ids.nil?
 
@@ -529,10 +534,8 @@ private
     end
   end
 
-  ###
   # Sets up any task owners or watchers from the given params.
   # Any existings ones not in the given params will be removed.
-  ###
   def set_users(params)
     all_users = params[:users] || []
     owners = params[:assigned] || []
@@ -543,11 +546,9 @@ private
     self.unknown_emails = emails.join(',')
   end
 
- ###
   # Sets up any links to resources that should be attached to this
   # task.
   # Clears any existings links to resources.
-  ###
   def set_resource_attributes(params)
     return if !params
 
@@ -561,11 +562,9 @@ private
     end
   end
 
-   ###
   # Sets the dependencies of this this from dependency_params.
   # Existing and unused dependencies WILL be cleared by this method,
   # only if user has access to this dependencies
-  ###
   def set_dependency_attributes(dependency_params, user)
     return if dependency_params.nil?
 
