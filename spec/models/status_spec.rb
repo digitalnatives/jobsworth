@@ -5,6 +5,13 @@ describe Status do
   it { should validate_presence_of :company }
   it { should validate_presence_of :name }
 
+  it { should respond_to :resolved? }
+  it { should respond_to :open? }
+  it { should respond_to :closed? }
+  it { should respond_to :will_not_fix? }
+  it { should respond_to :not_valid? }
+  it { should respond_to :duplicate? }
+
   describe '.create_default_statuses' do
     let(:company) { FactoryGirl.create :company_without_callbacks }
 
@@ -32,25 +39,6 @@ describe Status do
     end
   end
 
-  describe '.get_status!' do
-    let(:company) { FactoryGirl.create :company_without_callbacks }
-
-    context 'when the status exists' do
-      let!(:status) { described_class.create company: company, name: described_class::OPEN }
-
-      it 'should return the existing status' do
-        expect(described_class.get_status!(company, described_class::OPEN))
-        .to eql status
-      end
-    end
-
-    context 'when the status does not exists' do
-      it 'should create and return it' do
-        expect{ described_class.get_status!(company, described_class::OPEN) }
-        .to change { Status.by_company(company).count }.by(1)
-      end
-    end
-  end
 end
 
 # == Schema Information
