@@ -513,10 +513,12 @@ private
   end
 
   def set_task_num
-    AbstractTask.transaction do
-      max = "SELECT * FROM (SELECT 1 + coalesce((SELECT max(task_num) FROM tasks WHERE company_id ='#{self.company_id}'), 0)) AS max"
-      connection.execute("UPDATE tasks set task_num = (#{max}) where id = #{self.id}")
-    end
+    connection.execute(<<-SQL)
+      UPDATE tasks SET task_num = (
+        SELECT COALESCE(MAX(task_num), 0)+1 AS max
+        FROM tasks WHERE company_id = #{company_id}
+      ) WHERE id = #{id}
+    SQL
     self.reload
   end
 
