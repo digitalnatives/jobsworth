@@ -107,10 +107,6 @@ class AbstractTask < ActiveRecord::Base
   def set_task_read(user, status=true); end
   def unread?(user); end
 
-  def has_milestone?
-    self.milestone_id != nil and self.milestone_id != 0
-  end
-
   def resolved?
     status != 0
   end

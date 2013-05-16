@@ -53,7 +53,7 @@ module TasksHelper
                     current_user.company.id, selected_project).
                   to_a
 
-    if @task.has_milestone? and !milestones.include?(@task.milestone)
+    if @task.milestone && !milestones.include?(@task.milestone)
       milestones << @task.milestone
     end
 
