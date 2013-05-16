@@ -17,10 +17,14 @@ class Status < ActiveRecord::Base
     raise ArgumentError unless company
 
     transaction do
-      DEFAULT_RESOLUTIONS.each do |resolution|
-        by_company(company).where(name: resolution).first_or_create
+      DEFAULT_RESOLUTIONS.each do |name|
+        get_status! company, name
       end
     end
+  end
+
+  def self.get_status!(company, name)
+    by_company(company).where(name: name).first_or_create
   end
 
   def to_s

@@ -28,7 +28,27 @@ describe Status do
     end
 
     context 'when company is nil' do
-      it { expect { described_class.create_default_statuses(nil) }.to raise_error(ArgumentError) }
+      specify { expect { described_class.create_default_statuses(nil) }.to raise_error(ArgumentError) }
+    end
+  end
+
+  describe '.get_status!' do
+    let(:company) { FactoryGirl.create :company_without_callbacks }
+
+    context 'when the status exists' do
+      let!(:status) { described_class.create company: company, name: described_class::OPEN }
+
+      it 'should return the existing status' do
+        expect(described_class.get_status!(company, described_class::OPEN))
+        .to eql status
+      end
+    end
+
+    context 'when the status does not exists' do
+      it 'should create and return it' do
+        expect{ described_class.get_status!(company, described_class::OPEN) }
+        .to change { Status.by_company(company).count }.by(1)
+      end
     end
   end
 end
