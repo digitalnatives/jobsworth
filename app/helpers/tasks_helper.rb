@@ -323,6 +323,38 @@ module TasksHelper
     task.worked_minutes > task.duration ? "overtime" : ""
   end
 
+  def task_to_tip(task, options = {})
+    @task_to_tip ||= {}
+    user = options[:user]
+    utz  = user.tz
+
+    unless @task_to_tip[task.id]
+      owners = t('tasks.no_one')
+      owners = self.users.collect{|u| u.name}.to_sentence if self.users.present?
+
+      res = "<table id=\"task_tooltip\" cellpadding=0 cellspacing=0>"
+      res << "<tr><th>#{human_name(:summary)}</td><td>#{escape_twice(self.name)}</tr>"
+      res << "<tr><th>#{human_name(:project)}</td><td>#{escape_twice(self.project.full_name)}</td></tr>"
+      res << "<tr><th>#{human_name(:Tags)}</td><td>#{escape_twice(self.full_tags_without_links)}</td></tr>" unless self.full_tags_without_links.blank?
+      res << "<tr><th>#{human_name(:assigned_to)}</td><td>#{escape_twice(owners)}</td></tr>"
+      res << "<tr><th>#{human_name(:resolution)}</td><td>#{human_value(self.status_type)}</td></tr>"
+      res << "<tr><th>#{human_name(:milestone)}</td><td>#{escape_twice(self.milestone.name)}</td></tr>" if self.milestone_id.to_i > 0
+      res << "<tr><th>#{human_name(:completed)}</td><td>#{I18n.l(utz.utc_to_local(self.completed_at), format: user.date_format)}</td></tr>" if self.completed_at
+      res << "<tr><th>#{human_name(:due_date)}</td><td>#{I18n.l(utz.utc_to_local(due), format: user.date_format)}</td></tr>" if self.due
+      unless self.dependencies.empty?
+        res << "<tr><th valign=\"top\">#{human_name(:dependencies)}</td><td>#{self.dependencies.collect { |t| escape_twice(t.issue_name) }.join('<br />')}</td></tr>"
+      end
+      unless self.dependants.empty?
+        res << "<tr><th valign=\"top\">#{human_name(:depended_on_by)}</td><td>#{self.dependants.collect { |t| escape_twice(t.issue_name) }.join('<br />')}</td></tr>"
+      end
+      res << "<tr><th>#{human_name(:progress)}</td><td>#{TimeParser.format_duration(self.worked_minutes)} / #{TimeParser.format_duration( self.duration.to_i)}</tr>"
+      res << "<tr><th>#{human_name(:description)}</th><td class=\"tip_description\">#{escape_twice(self.description_wrapped).gsub(/\n/, '<br/>').gsub(/\"/,'&quot;')}</td></tr>" unless self.description.blank?
+      res << "</table>"
+      @task_to_tip[task.id] = res.gsub(/\"/,'&quot;')
+    end
+    @task_to_tip[task.id]
+  end
+
   private
 
   def milestones_to_select_tag(milestones)
