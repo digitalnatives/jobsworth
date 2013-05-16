@@ -201,33 +201,40 @@ describe TaskRecord do
   end
 
   describe "#snoozed?" do
-    subject { described_class.new status: status, wait_for_customer: wait_for_customer }
+    let(:wait_for_customer) { false }
+    let(:dependencies) { [] }
+    let(:hide_until) { nil }
+    let(:milestone) { mock_model Milestone, status_name: :other }
 
-    context "when the task is closed and waiting for customer" do
-      let(:status) { described_class::CLOSED }
+    subject { described_class.new wait_for_customer: wait_for_customer,
+                                  dependencies: dependencies,
+                                  hide_until: hide_until,
+                                  milestone: milestone }
+
+    context 'when not waiting for customer and no undone dependencies and no hide_until and milestone is not planning' do
+      specify { expect(subject.snoozed?).to be_false }
+    end
+
+    context "when the task is waiting for customer" do
       let(:wait_for_customer) { true }
-      it { expect(subject.snoozed?).to be_true }
+      specify { expect(subject.snoozed?).to be_true }
     end
 
-    context "when the task is closed and not waiting for customer" do
-      let(:status) { described_class::CLOSED }
-      let(:wait_for_customer) { false }
-      it { expect(subject.snoozed?).to be_false }
+    context 'when there are undone dependencies' do
+      let(:dependencies) { [stub_model(TaskRecord, done?: false)] }
+      specify { expect(subject.snoozed?).to be_true }
     end
 
-    context "when the tasks is open and waiting for customer" do
-      let(:status) { described_class::OPEN }
-      let(:wait_for_customer) { true }
-      it { expect(subject.snoozed?).to be_true }
+    context 'when hide until is in the future' do
+      let(:hide_until) { 1.year.from_now }
+      specify { expect(subject.snoozed?).to be_true }
     end
 
-    context "whent the task is open and not wait for customer" do
-      let(:status) { described_class::OPEN }
-      let(:wait_for_customer) { false }
-      it { expect(subject.snoozed?).to be_false }
+    context 'when milestone is planning' do
+      let(:milestone) { mock_model Milestone, status_name: :planning }
+      specify { expect(subject.snoozed?).to be_true }
     end
 
-    pending 'Many codepaths are missing from testing'
   end
 
   describe "#score_rules" do
