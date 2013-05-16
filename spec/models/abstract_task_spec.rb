@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe AbstractTask do
 
+  it { should belong_to :status }
   it { should belong_to :company }
   it { should belong_to :project }
   it { should belong_to :milestone }
@@ -29,6 +30,10 @@ describe AbstractTask do
 
       subject.users.should include(some_user)
     end
+  end
+
+  describe '.status_types' do
+    pending
   end
 
   describe '.accessed_by' do

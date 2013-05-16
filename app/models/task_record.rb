@@ -11,7 +11,7 @@ class TaskRecord < AbstractTask
   has_many :property_values, :through => :task_property_values
 
   scope :from_this_year, -> { where('created_at > ?', Time.zone.now.beginning_of_year - 1.month) }
-  scope :open_only, where(status: 0)
+  scope :open_only, joins(:status).where('statuses.open' => true)
   scope :not_snoozed, where("weight IS NOT NULL")
 
   after_validation :fix_work_log_error
@@ -247,7 +247,7 @@ class TaskRecord < AbstractTask
 
 private
   def update_calculated_attributes
-    delay.calculate_dependants_score if status_changed?
+    delay.calculate_dependants_score if status_id_changed?
 
     ical_entry.destroy if ical_entry
     project.update_project_stats

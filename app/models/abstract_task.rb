@@ -4,13 +4,7 @@ require "active_record_extensions"
 class AbstractTask < ActiveRecord::Base
   self.table_name = "tasks"
 
-  OPEN         = 0
-  CLOSED       = 1
-  WILL_NOT_FIX = 2
-  INVALID      = 3
-  DUPLICATE    = 4
-  MAX_STATUS   = 4
-
+  belongs_to :status
   belongs_to :company
   belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
   belongs_to :milestone
@@ -54,16 +48,24 @@ class AbstractTask < ActiveRecord::Base
   accepts_nested_attributes_for :todos
   adds_and_removes_using_params :customers
 
-  validates_presence_of   :name, :company, :project_id
+  validates_presence_of   :name, :company, :project
   validates_length_of     :name,  maximum: 200, allow_nil: true
   validates_uniqueness_of :task_num, scope: 'company_id', :on => :update
   validate :validate_properties
 
-  before_create lambda { self.task_num = nil }
+  before_validation :set_status
   after_create :set_task_num
   after_create :schedule_tasks
 
   delegate :billing_enabled?, to: :project, allow_nil: true
+  delegate :resolved?, :open?, :closed?, :will_not_fix?, :invalid?, :duplicate?,
+           to: :status
+
+  scope :by_company, ->(company) { where(company_id: company) }
+
+  def self.status_types
+    company.statuses.map(&:name)
+  end
 
   def self.accessed_by(user)
     readonly(false).joins(
@@ -107,21 +109,12 @@ class AbstractTask < ActiveRecord::Base
   def set_task_read(user, status=true); end
   def unread?(user); end
 
-  def resolved?
-    status != 0
-  end
-
   def open_or_closed
     resolved? ? 'closed' : 'open'
   end
 
-  # define open?, closed?, will_not_fix?, invalid?, duplicate? predicates
-  ['OPEN', 'CLOSED', 'WILL_NOT_FIX', 'INVALID', 'DUPLICATE'].each do |status_name|
-    define_method(status_name.downcase + '?') { status == self.class.const_get(status_name) }
-  end
-
   def done?
-    self.resolved? && self.completed_at != nil
+    !completed_at.nil? && resolved?
   end
 
   def undone?
@@ -181,10 +174,7 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def status_type
-  end
-
-  def self.status_types
-    Company.first.statuses.all.collect {|a| a.name }
+    status.name
   end
 
   def owners_to_display
@@ -636,6 +626,10 @@ private
 
     # add a delayed job to schedule tasks
     self.owners.first.update_column(:need_schedule, true)
+  end
+
+  def set_status
+    self.status ||= Status.default_open(company)
   end
 
 end

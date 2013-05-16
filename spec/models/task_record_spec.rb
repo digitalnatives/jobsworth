@@ -43,10 +43,11 @@ describe TaskRecord do
   end
 
   describe ".open_only" do
-    let!(:open_task)       { FactoryGirl.create :task, status: TaskRecord::OPEN }
-    let!(:duplicated_task) { FactoryGirl.create :task, status: TaskRecord::DUPLICATE }
-    let!(:closed_task)     { FactoryGirl.create :task, status: TaskRecord::CLOSED }
-    subject { described_class.open_only }
+    let(:company)          { FactoryGirl.create :company }
+    let!(:open_task)       { FactoryGirl.create :task, company: company, status: Status.default_open(company) }
+    let!(:duplicated_task) { FactoryGirl.create :task, company: company, status: Status.defalult_duplicate(company) }
+    let!(:closed_task)     { FactoryGirl.create :task, company: company, status: Status.default_closed(company) }
+    subject { described_class.open_only(company) }
 
     it "should only return tasks with resolution open" do
       expect(described_class.count).to eql 3
