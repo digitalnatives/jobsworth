@@ -505,7 +505,7 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def template?
-    self.class == Template
+    false
   end
 
 private
