@@ -2,7 +2,7 @@
 <html lang="<%= I18n.locale %>">
   <head>
     <meta charset='utf-8'>
-    <%= stylesheet_link_tag 'application' %>
+    <%= stylesheet_link_tag 'main' %>
     <%= csrf_meta_tag %>
     <title><%= @page_title || Setting.productName %></title>
 
@@ -11,13 +11,30 @@
     <% end %>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="span12">
-          <%= yield :layout %>
-        </div>
+    <div id="wrap">
+      <div id="header-wide">
+        <div id="header">
+          <div id="header-center">
+            <%= yield :layout %>
+          </div> <!-- end header-center -->
+        
+          <div id="header-menu">
+            <div class="menu-item"><a href="">AT ST</a></div>
+            <div class="clearer"></div>
+          </div> <!-- end header-menu -->
+        
+        </div> <!-- end header -->
+      </div> <!-- end header-wide -->
+      
+      <div id="content">
+        <h1>Content title</h1>
       </div>
     </div>
+    
+    <div id="footer">
+      <div id="footer-center"> (c) 2010-2013 Electool Hungary Ltd. All rights reserved</div>  <!-- end footer-center -->
+      <div class="clearer"></div>
+    </div> <!-- end footer -->
 
   </body>
 </html>
