@@ -54,11 +54,12 @@ class AbstractTask < ActiveRecord::Base
   validate :validate_properties
 
   before_validation :set_status
+  before_create :unset_task_num
   after_create :set_task_num
   after_create :schedule_tasks
 
   delegate :billing_enabled?, to: :project, allow_nil: true
-  delegate :resolved?, :open?, :closed?, :will_not_fix?, :invalid?, :duplicate?,
+  delegate :resolved?, :open?, :closed?, :will_not_fix?, :not_valid?, :duplicate?,
            to: :status, allow_nil: true
 
   scope :by_company, ->(company) { where(company_id: company) }
@@ -495,6 +496,10 @@ private
     self.tags.collect do |t|
       "<a href=\"/tasks?tag=#{ERB::Util.h t.name}\" class=\"description\">#{ERB::Util.h t.name.capitalize.gsub(/\"/,'&quot;'.html_safe)}</a>"
     end.join(" / ").html_safe
+  end
+
+  def unset_task_num
+    self.task_num = nil
   end
 
   def set_task_num

@@ -31,15 +31,15 @@ class Status < ActiveRecord::Base
     get_status! company, name: CLOSED, closed: true, resolved: true
   end
 
-  def self.defalult_will_not_fix(company)
+  def self.default_will_not_fix(company)
     get_status! company, name: WILL_NOT_FIX, will_not_fix: true, resolved: true
   end
 
-  def self.defalult_not_valid(company)
+  def self.default_not_valid(company)
     get_status! company, name: INVALID, not_valid: true, resolved: true
   end
 
-  def self.defalult_duplicate(company)
+  def self.default_duplicate(company)
     get_status! company, name: DUPLICATE, duplicate: true, resolved: true
   end
 
