@@ -74,7 +74,7 @@ module TasksHelper
     if task.project and !current_user.can?(task.project, 'close')
       can_close[:disabled] = "disabled"
     end
-    return select('task', 'status', options, {:selected => @task.status}, can_close)
+    return select('task', 'status_id', options, {:selected => task.status}, can_close)
   end
 
   # Returns a link that add the current user to the current tasks user list
