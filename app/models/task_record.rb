@@ -62,7 +62,7 @@ class TaskRecord < AbstractTask
 
   def reopen!
     update_attributes :completed_at => nil,
-                      :status => self.class.status_types.index("Open")
+                      :status => Status.default_open(company)
   end
 
   def worked_on?

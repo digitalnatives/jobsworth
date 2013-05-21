@@ -347,7 +347,7 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def unknown_emails
-    email_addresses.pluck(&:email).join(', ')
+    email_addresses.pluck(:email).join(', ')
   end
 
   def unknown_emails=(emails)
