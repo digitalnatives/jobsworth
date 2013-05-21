@@ -48,7 +48,7 @@ class AbstractTask < ActiveRecord::Base
   accepts_nested_attributes_for :todos
   adds_and_removes_using_params :customers
 
-  validates_presence_of   :name, :company, :project
+  validates_presence_of   :name, :company, :project, :status
   validates_length_of     :name,  maximum: 200, allow_nil: true
   validates_uniqueness_of :task_num, scope: 'company_id', :on => :update
   validate :validate_properties
@@ -59,7 +59,7 @@ class AbstractTask < ActiveRecord::Base
 
   delegate :billing_enabled?, to: :project, allow_nil: true
   delegate :resolved?, :open?, :closed?, :will_not_fix?, :invalid?, :duplicate?,
-           to: :status
+           to: :status, allow_nil: true
 
   scope :by_company, ->(company) { where(company_id: company) }
 
