@@ -28,7 +28,7 @@ class Status < ActiveRecord::Base
   end
 
   def self.default_closed(company)
-    get_status! company, name: OPEN, closed: true, resolved: true
+    get_status! company, name: CLOSED, closed: true, resolved: true
   end
 
   def self.defalult_will_not_fix(company)
