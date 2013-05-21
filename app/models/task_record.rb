@@ -168,42 +168,6 @@ class TaskRecord < AbstractTask
     end
   end
 
-  def update_group(user, group, value, icon = nil)
-    if group == "milestone"
-      val_arr = value.split("/")
-      task_project = user.projects.find_by_name(val_arr[0])
-      if user.can?(task_project, "milestone")
-        pid = task_project.id
-        if val_arr.size == 1
-          self.milestone_id = nil
-        else
-          mid = Milestone.order("completed_at").where('company_id = ? AND project_id = ? AND LTRIM(name) = ?', user.company.id, pid, val_arr[1].strip).first.id
-          self.milestone_id = mid
-        end
-        self.project_id = pid
-        save
-      end
-    elsif group == "resolution" && user.can?(self.project, 'close')
-      status = TaskRecord::MAX_STATUS
-      self.statuses_for_select_list.each do |arr|
-        status = arr[1] if arr[0] == value
-      end
-      self.status = status
-      save
-    elsif prop = Property.find_by_company_id_and_name(user.company_id, group.camelize)
-      if !value.blank?
-        pv = PropertyValue.find_by_value_and_property_id(value, prop.id)
-      elsif !icon.blank?
-        icon = icon.split("?")[0]
-        pv = PropertyValue.find_by_icon_url_and_property_id(icon, prop.id)
-      end
-      #prevent duplicate entry when user dragging task to same group
-      if TaskPropertyValue.find_by_task_id_and_property_id(self.id, prop.id).try(:property_value_id) != pv.id
-        self.set_property_value(prop, pv)
-      end
-    end
-  end
-
   def score_rules
     score_rules = []
 
