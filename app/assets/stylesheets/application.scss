@@ -26,7 +26,11 @@
  *= require billing
  *= require planning
  *= require email_addresses
+ 
+ *= require header
+ 
  *= require_self
+ 
  */
 
 @import "old";
