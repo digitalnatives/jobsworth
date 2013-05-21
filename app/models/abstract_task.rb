@@ -159,11 +159,6 @@ class AbstractTask < ActiveRecord::Base
     self.tags.collect{ |t| t.name.capitalize }.join(" / ")
   end
 
-  # TODO this is a duplicate
-  # def status_name
-  #   "#{issue_num} #{name}"
-  # end
-
   def issue_name
     '[#%d] %s' % [task_num, name]
   end
