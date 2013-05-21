@@ -301,17 +301,19 @@ describe AbstractTask do
     end
   end
 
-  def create_test_data_for_assess_scopes
-    company = Company.make
-    FactoryGirl.create_list :project, 3, company: company
-    @user = FactoryGirl.create :user, company: company
-    [0,1].each do |i|
-      @user.projects << company.projects[i]
-      FactoryGirl.create_list(:task, 2, company: company, project: company.projects[i], users: [@user])
-      company.projects[i].tasks.make(:company=>company)
+  def create_test_data_for_access_scopes
+    company    = FactoryGirl.create :company
+    p1, p2, p3 = FactoryGirl.create_list :project, 3, company: company
+    p4         = FactoryGirl.create :project
+    @user      = FactoryGirl.create :user, company: company
+
+    [p1, p2].each do |project|
+      @user.projects << project
+      FactoryGirl.create_list(:task, 2, company: company, project: project, users: [@user])
+      FactoryGirl.create_list(:task, 1, company: company, project: project)
     end
-    company.projects.last.tasks.make
-    Project.make.tasks.make
+    FactoryGirl.create_list(:task, 1, company: company, project: p3)
+    FactoryGirl.create_list(:task, 1, project: p4)
   end
 
 end
