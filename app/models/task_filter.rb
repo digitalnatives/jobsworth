@@ -17,8 +17,12 @@ class TaskFilter < ActiveRecord::Base
   validates_presence_of :name
 
   scope :shared, where(:shared => true )
-  scope :visible, where(:system => false, :recent_for_user_id=>nil)
+  scope :not_system, where(system: false)
+  scope :visible, not_system.where(:recent_for_user_id=>nil)
   scope :recent_for, lambda {|user| where(:recent_for_user_id => user.id).order("id desc") }
+  scope :for_user, ->(user) {
+    not_system.where(arel_table['user_id'].eq(user.id).or(arel_table['shared'].eq(true)))
+  }
 
   before_create :set_company_from_user
   after_create :set_task_filter_status, :if => Proc.new{|x| x.recent_for_user_id.blank? && !x.system}
@@ -127,6 +131,7 @@ class TaskFilter < ActiveRecord::Base
                              :word => kw.word)
     end
   end
+
   def select_filter(filter)
     TaskFilter.transaction do
       self.qualifiers.scoped.delete_all
@@ -135,6 +140,7 @@ class TaskFilter < ActiveRecord::Base
       self.save!
     end
   end
+
   def store_for(user)
     ActiveRecord::Base.transaction do
       if (TaskFilter.recent_for(user).count >= 10)

@@ -1258,6 +1258,7 @@ hu:
       empty_report: Üres riport, kérjük határozzon meg több információt.
       file_not_found: Nincs eredménye a keresésnek.
       unauthorized_operation: Nincs jogosultsága ehhez a tevékenységhez.
+      unexpected_error: 'Nem várt hiba következett be: %{message}'
     error:
       cant_delete_default_model: Az alapértelmezett %{model} nem törölhető.
       destroy_dependents_of_model: Kérjük távolítson a kapcsolódó objektumokat - %{model} %{dependents} - mielőtt törli.

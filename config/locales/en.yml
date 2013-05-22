@@ -406,6 +406,7 @@ en:
       access_denied_to_model: You don't have access to %{model}
       unauthorized_operation: You're not authorized to perform the operation.
       file_not_found: No such file.
+      unexpected_error: 'Unexpected error: %{message}'
     error:
       destroy_dependents_of_model: Please delete all %{dependents} for %{model} before deleting it.
       cant_delete_default_model: Default %{model} can't be deleted.
