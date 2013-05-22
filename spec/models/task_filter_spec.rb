@@ -14,36 +14,38 @@ describe TaskFilter do
   end
 
   describe "#store_for(user)" do
-    before(:each) do
-      @user= User.make
-      @filter = TaskFilter.make(:user=>@user, :company=>@user.company)
-      @filter.qualifiers << [TaskFilterQualifier.new(:qualifiable=>Project.make(:company=>@user.company)),
-                             TaskFilterQualifier.new(:qualifiable=>@user.company.statuses.first),
-                             TaskFilterQualifier.new(:qualifiable=>@user)
-                             ]
-      @filter.keywords << Keyword.new(:word=>'keyword')
-      @filter.save!
-      @filter.qualifiers.count.should == 3
-    end
+    let(:company) { FactoryGirl.create :company }
+    let(:user)    { FactoryGirl.create :user, company: company }
+    let(:project) { FactoryGirl.create :project, company: company }
+    let(:keyword) { Keyword.new(:word=>'keyword') }
+    let(:qualifiers) {[
+      TaskFilterQualifier.new(qualifiable: project),
+      TaskFilterQualifier.new(qualifiable: Status.default_open(company)),
+      TaskFilterQualifier.new(qualifiable: user)
+    ]}
+    subject { described_class.create user: user, company: user.company, qualifiers: qualifiers, keywords: [keyword] }
 
-    it "should create new task filter" do
-      count= TaskFilter.count
-      @filter.store_for(@user)
-      TaskFilter.count.should == (count + 1)
-    end
-
-    it "should delete last recent user's filter if user have 10 recent filters" do
-      arr=[]
-      10.times { arr<< TaskFilter.make(:user=>@user, :company=>@user.company); arr[-1].store_for(@user) }
-      TaskFilter.recent_for(@user).count.should == 10
-      @filter.store_for(@user)
-      TaskFilter.recent_for(@user).count.should == 10
-      TaskFilter.recent_for(@user).last.name.should == arr[1].name
+    it 'should create new task filter' do
+      expect { subject.store_for(user) }.to change { described_class.count }.by(1)
     end
 
     it "should include all items(qualifiers or keywords) in filter's name" do
-      @filter.store_for(@user)
-      TaskFilter.recent_for(@user).first.name.split(',').should have(@filter.qualifiers.size + @filter.keywords.size ).items
+      subject.store_for(user)
+
+      expect(described_class.recent_for(user).first.name.split(','))
+      .to have(subject.qualifiers.size + subject.keywords.size ).items
+    end
+
+    context 'when the user have 10 recent filters' do
+      let(:filters) { FactoryGirl.create_list :task_filter, 10, user: user, company: company }
+      before { filters.each { |f| f.store_for(user) } }
+
+      it 'should delete last recent filter' do
+        expect { subject.store_for(user) }.to_not change { described_class.count }
+
+        expect(described_class.recent_for(user).last.name)
+          .to eql filters.second.name
+      end
     end
   end
 end
