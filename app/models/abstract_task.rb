@@ -503,10 +503,13 @@ private
   end
 
   def set_task_num
+    # In mysql you can not use the same table in an update to query OMGLOL
     connection.execute(<<-SQL)
       UPDATE tasks SET task_num = (
-        SELECT COALESCE(MAX(task_num), 0)+1 AS max
-        FROM tasks WHERE company_id = #{company_id}
+        SELECT * FROM (
+          SELECT COALESCE(MAX(task_num), 0)+1 AS max
+          FROM tasks WHERE company_id = #{company_id}
+        ) AS t
       ) WHERE id = #{id}
     SQL
     self.reload
