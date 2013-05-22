@@ -58,16 +58,17 @@ describe Template do
   end
 
   describe 'dependencies validation' do
-    subject { FactoryGirl.build :task_template, project_id: 1, dependencies: [dep1] }
-    let(:dep1) { stub_model Template, project_id: project_id }
+    let(:project) { mock_model(Project) }
+    let(:dep1) { stub_model Template, project: project_dep }
+    subject { FactoryGirl.build :task_template, project: project, dependencies: [dep1] }
 
     context 'when dependency belongs to other project' do
-      let(:project_id) { 2 }
+      let(:project_dep) { mock_model(Project) }
       it { should_not be_valid }
     end
 
     context 'when dependency belongs to the same project' do
-      let(:project_id) { 1 }
+      let(:project_dep) { project }
       it { should be_valid }
     end
   end

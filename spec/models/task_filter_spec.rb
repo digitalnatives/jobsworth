@@ -1,19 +1,15 @@
 require 'spec_helper'
 
 describe TaskFilter do
-  before(:each) do
-    @valid_attributes = {
-
-    }
-  end
 
   describe ".recent_for(user) scope" do
+    let(:user)           { FactoryGirl.create :user }
+    let!(:filters)       { FactoryGirl.create_list :task_filter, 4, user: user, recent_for_user_id: user.id }
+    let!(:other_filters) { FactoryGirl.create_list :task_filter, 4, user: user }
+
     it "should return recent task filters for user" do
-      user=User.make
-      filters=[]
-      4.times{ filters<< TaskFilter.make(:user=>user, :recent_for_user_id=>user.id, :company=>user.company)}
-      4.times{ TaskFilter.make(:user=>user, :company=>user.company)}
-      TaskFilter.recent_for(user).should == filters.reverse
+      expect(described_class.count).to eql 8
+      expect(described_class.recent_for(user).all).to eql filters.reverse
     end
   end
 
@@ -29,11 +25,13 @@ describe TaskFilter do
       @filter.save!
       @filter.qualifiers.count.should == 3
     end
+
     it "should create new task filter" do
       count= TaskFilter.count
       @filter.store_for(@user)
       TaskFilter.count.should == (count + 1)
     end
+
     it "should delete last recent user's filter if user have 10 recent filters" do
       arr=[]
       10.times { arr<< TaskFilter.make(:user=>@user, :company=>@user.company); arr[-1].store_for(@user) }

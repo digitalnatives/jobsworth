@@ -37,7 +37,7 @@ describe AbstractTask do
   end
 
   describe '.accessed_by' do
-    before { create_test_data_for_assess_scopes }
+    before { create_test_data_for_access_scopes }
 
     it "should return tasks only from user's company" do
       company_tasks           = @user.company.tasks
@@ -66,7 +66,7 @@ describe AbstractTask do
   end
 
   describe '.all_accessed_by' do
-    before { create_test_data_for_assess_scopes }
+    before { create_test_data_for_access_scopes }
 
     it "should return tasks only from user's company" do
       TaskRecord.all_accessed_by(@user).each do |task|

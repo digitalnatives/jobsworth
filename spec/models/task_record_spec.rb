@@ -45,21 +45,22 @@ describe TaskRecord do
   describe ".open_only" do
     let(:company)          { FactoryGirl.create :company }
     let!(:open_task)       { FactoryGirl.create :task, company: company, status: Status.default_open(company) }
-    let!(:duplicated_task) { FactoryGirl.create :task, company: company, status: Status.defalult_duplicate(company) }
     let!(:closed_task)     { FactoryGirl.create :task, company: company, status: Status.default_closed(company) }
-    subject { described_class.open_only(company) }
+    let!(:duplicated_task) { FactoryGirl.create :task, company: company, status: Status.default_duplicate(company) }
+    subject { described_class.by_company(company).open_only }
 
     it "should only return tasks with resolution open" do
-      expect(described_class.count).to eql 3
+      expect(described_class.by_company(company).count).to eql 3
       expect(subject).to match_array [open_task]
     end
   end
 
   describe '.expire_hide_until' do
+    let(:company) { FactoryGirl.create :company }
     before do
-      FactoryGirl.create :task, hide_until: nil
-      FactoryGirl.create :task, hide_until: 3.days.ago
-      FactoryGirl.create :task, hide_until: 3.days.from_now
+      FactoryGirl.create :task, company: company, hide_until: nil
+      FactoryGirl.create :task, company: company, hide_until: 3.days.ago
+      FactoryGirl.create :task, company: company, hide_until: 3.days.from_now
     end
 
     it 'should update the expired hide until dates to nil' do

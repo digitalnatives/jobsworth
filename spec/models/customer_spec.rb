@@ -9,7 +9,7 @@ describe Customer do
     end
 
     it "should fetch the right Score Rule instances" do
-      some_score_rule = ScoreRule.make 
+      some_score_rule = ScoreRule.make
       customer.score_rules << some_score_rule
       customer.score_rules.should include(some_score_rule)
     end
@@ -17,9 +17,10 @@ describe Customer do
 
   describe "When adding a new score rule to a customer that have tasks" do
     before(:each) do
-      @open_task    = TaskRecord.make(:status => AbstractTask::OPEN)
-      @closed_task  = TaskRecord.make(:status => AbstractTask::CLOSED)
-      @customer     = Customer.make(:tasks => [@open_task, @closed_task])
+      @company      = FactoryGirl.create :company
+      @open_task    = TaskRecord.make(:status => Status.default_open(@company))
+      @closed_task  = TaskRecord.make(:status => Status.default_closed(@company))
+      @customer     = Customer.make(:tasks => [@open_task, @closed_task], company: @company)
       @score_rule   = ScoreRule.make
     end
 
@@ -37,7 +38,7 @@ describe Customer do
       @closed_task.reload
       calculated_score = @open_task.weight_adjustment + @score_rule.score
       @closed_task.weight.should_not == calculated_score
-    end 
+    end
   end
 end
 
