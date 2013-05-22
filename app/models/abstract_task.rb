@@ -280,8 +280,8 @@ class AbstractTask < ActiveRecord::Base
       task_property_values.delete(existing)
     end
 
+    # only create a new one if property_value is set
     if property_value
-      # only create a new one if property_value is set
       task_property_values.create(:property_id => property.id, :property_value_id => property_value.id)
     end
   end

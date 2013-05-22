@@ -64,78 +64,88 @@ describe TaskRecord do
     end
 
     it 'should update the expired hide until dates to nil' do
-      expect(described_class.count).to eql 3
-      expect(described_class.where('hide_until < ?', Time.now.utc).count).to eql 1
-      expect(described_class.where('hide_until IS NOT NULL').count).to eql 2
+      expect(described_class.by_company(company).count).to eql 3
+      expect(described_class.by_company(company).where('hide_until < ?', Time.now.utc).count).to eql 1
+      expect(described_class.by_company(company).where('hide_until IS NOT NULL').count).to eql 2
 
       described_class.expire_hide_until
-      expect(described_class.where('hide_until < ?', Time.now.utc).count).to eql 0
-      expect(described_class.where('hide_until IS NOT NULL').count).to eql 1
+      expect(described_class.by_company(company).where('hide_until < ?', Time.now.utc).count).to eql 0
+      expect(described_class.by_company(company).where('hide_until IS NOT NULL').count).to eql 1
     end
   end
 
   describe "task_property_values attributes assignment using Task#properties=(params) method" do
-    before(:each) do
-      @task = FactoryGirl.create :task
-      @attributes = @task.attributes.with_indifferent_access.except(:id, :type)
-      @properties = @task.company.properties
-      @task.set_property_value(@properties.first, @properties.first.property_values.first)
-      @task.set_property_value(@properties[1], @properties[1].property_values.first)
-      @task.save!
-      @attributes[:properties]={
-        @properties[0].id => @properties[0].property_values[1].id, #change value of first property
-        @properties[1].id => "",   #second property is blank, so should be removed
-        @properties[2].id => @properties[2].property_values[0].id # third property added
+    subject          { FactoryGirl.create :task, company: company }
+    let!(:company)    { FactoryGirl.create :company }
+    let(:attributes) { subject.attributes.with_indifferent_access.except(:id, :type) }
+    let(:properties) { company.properties }
+    let(:task_property_values) { subject.task_property_values }
+
+    before do
+      company.create_default_properties # Can't understand why this line is needed
+      expect(properties).to have(3).items
+
+      subject.set_property_value(properties[0], properties[0].property_values.first)
+      subject.set_property_value(properties[1], properties[1].property_values.first)
+      subject.save!
+
+      attributes[:properties] = {
+        properties[0].id => properties[0].property_values[1].id, # change value of first property
+        properties[1].id => '',                                  # second property is blank, so should be removed
+        properties[2].id => properties[2].property_values[0].id  # third property added
       }
-      @task_property_values=@task.task_property_values
     end
+
     context "when attributes assigned" do
-      before(:each) do
-        @task.attributes= @attributes
-      end
+      before { subject.attributes = attributes }
 
       it "should changed task_property_values with new values" do
-        @task.attributes= @attributes
-        @task.property_value(@properties[0]).should == @properties[0].property_values[1]
+        expect(subject.property_value(properties[0]))
+          .to eql properties[0].property_values[1]
       end
 
       it "should not delete any task_property_values" do
-        @task.property_value(@properties[1]).should_not be_nil
+        expect(subject.property_value(properties[1])).to_not be_nil
       end
 
       it "should build new task_property_values" do
-        @task.property_value(@properties[2]).should == @properties[2].property_values[0]
+        expect(subject.property_value(properties[2]))
+          .to eql properties[2].property_values[0]
       end
     end
+
     context "when task saved" do
       before(:each) do
-        @task.attributes=@attributes
-        @task.save!
-        @task.reload
+        subject.attributes = attributes
+        subject.save!
+        subject.reload
       end
+
       it "should changed task_property_values with new values" do
-        @task.property_value(@properties[0]).should == @properties[0].property_values[1]
+        subject.property_value(properties[0]).should == properties[0].property_values[1]
       end
 
       it "should delete task_property_values if value is blank" do
-        @task.property_value(@properties[1]).should be_nil
+        subject.property_value(properties[1]).should be_nil
       end
+
       it "should create new task_property_values" do
-        @task.property_value(@properties[2]).should == @properties[2].property_values[0]
+        subject.property_value(properties[2]).should == properties[2].property_values[0]
       end
     end
+
     context "when task not saved" do
-      before(:each) do
-        @attributes[:project_id]=""
-        @task.attributes=@attributes
-        @task.save.should == false
-        @task.reload
+      before do
+        attributes[:project_id] = ''
+        subject.attributes = attributes
+        subject.save.should == false
+        subject.reload
       end
 
       it "should not change task_property_values in database" do
-        @task.property_value(@properties[0]).should == @properties[0].property_values.first
-        @task.property_value(@properties[1]).should == @properties[1].property_values.first
-        @task.property_value(@properties[2]).should == nil
+        subject.property_value(properties[0]).should == properties[0].property_values.first
+        subject.property_value(properties[1]).should == properties[1].property_values.first
+        subject.property_value(properties[2]).should == nil
       end
     end
   end
