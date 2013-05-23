@@ -4,25 +4,33 @@ require "active_record_extensions"
 class AbstractTask < ActiveRecord::Base
   self.table_name = "tasks"
 
-  OPEN         = 0
-  CLOSED       = 1
-  WILL_NOT_FIX = 2
-  INVALID      = 3
-  DUPLICATE    = 4
-  MAX_STATUS   = 4
+  belongs_to :status
+  belongs_to :company
+  belongs_to :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
+  belongs_to :milestone
+  belongs_to :creator, :class_name => "User", :foreign_key => "creator_id"
 
-  belongs_to    :company
-  belongs_to    :project, :class_name => "AbstractProject", :foreign_key => 'project_id'
-  belongs_to    :milestone
+  has_one :ical_entry, :foreign_key=>'task_id'
 
-  has_many      :users,    through: :task_users,    source: :user, uniq: true
-  has_many      :owners,   through: :task_owners,   source: :user, uniq: true
-  has_many      :watchers, through: :task_watchers, source: :user, uniq: true
+  has_many :users,    through: :task_users,    source: :user, uniq: true
+  has_many :owners,   through: :task_owners,   source: :user, uniq: true
+  has_many :watchers, through: :task_watchers, source: :user, uniq: true
+  has_many :attachments, :class_name => "ProjectFile", :dependent => :destroy, :foreign_key=>'task_id'
+  has_many :scm_changesets, :dependent =>:destroy, :foreign_key=>'task_id', :conditions => "task_id IS NOT NULL"
+  has_many :task_customers, :dependent => :destroy, :foreign_key=>'task_id'
+  has_many :customers, :through => :task_customers, :order => "customers.name asc"
+  has_many :task_property_values, :dependent => :destroy, :include => [ :property ], :foreign_key=>'task_id'
+  has_many :task_users,    dependent: :destroy, foreign_key: 'task_id'
+  has_many :task_watchers, dependent: :destroy, foreign_key: 'task_id'
+  has_many :task_owners,   dependent: :destroy, foreign_key: 'task_id'
+  has_many :todos, :order => "completed_at IS NULL desc, completed_at desc, position", :dependent => :destroy,  :foreign_key=>'task_id'
+  has_many :work_logs, :dependent => :destroy, :order => "started_at asc", :foreign_key=>'task_id'
+  has_many :event_logs, :as => :target
+  has_many :sheets,  :foreign_key=>'task_id'
 
-  #task_watcher and task_owner is subclasses of task_user
-  has_many      :task_users,    dependent: :destroy, foreign_key: 'task_id'
-  has_many      :task_watchers, dependent: :destroy, foreign_key: 'task_id'
-  has_many      :task_owners,   dependent: :destroy, foreign_key: 'task_id'
+  has_and_belongs_to_many :tags, :join_table => 'task_tags', :foreign_key=>'task_id'
+  has_and_belongs_to_many :resources, :join_table=> 'resources_tasks', :foreign_key=>'task_id'
+  has_and_belongs_to_many :email_addresses, :join_table => 'email_address_tasks', :foreign_key=>'task_id'
 
   # FIXME The following methods are not working with AREL 3.2.13
   #       collection_singular_ids
@@ -36,46 +44,29 @@ class AbstractTask < ActiveRecord::Base
     association_foreign_key: "task_id", foreign_key: "dependency_id",
     order: 'task_id', select: "tasks.*, task_id", uniq: true
 
-  has_many      :attachments, :class_name => "ProjectFile", :dependent => :destroy, :foreign_key=>'task_id'
-  has_many      :scm_changesets, :dependent =>:destroy, :foreign_key=>'task_id', :conditions => "task_id IS NOT NULL"
-
-  belongs_to    :creator, :class_name => "User", :foreign_key => "creator_id"
-  belongs_to    :old_owner, :class_name => "User", :foreign_key => "user_id"
-
-  has_and_belongs_to_many  :tags, :join_table => 'task_tags', :foreign_key=>'task_id'
-
-  has_many :task_property_values, :dependent => :destroy, :include => [ :property ], :foreign_key=>'task_id'
   accepts_nested_attributes_for :task_property_values, :allow_destroy => true
-
-  has_many :task_customers, :dependent => :destroy, :foreign_key=>'task_id'
-  has_many :customers, :through => :task_customers, :order => "customers.name asc"
+  accepts_nested_attributes_for :todos
   adds_and_removes_using_params :customers
 
-  has_many      :todos, :order => "completed_at IS NULL desc, completed_at desc, position", :dependent => :destroy,  :foreign_key=>'task_id'
-  accepts_nested_attributes_for :todos
-
-  has_and_belongs_to_many :resources, :join_table=> 'resources_tasks', :foreign_key=>'task_id'
-
-  has_many      :work_logs, :dependent => :destroy, :order => "started_at asc", :foreign_key=>'task_id'
-  has_many      :event_logs, :as => :target
-
-  has_many      :sheets,  :foreign_key=>'task_id'
-  has_one       :ical_entry, :foreign_key=>'task_id'
-
-  has_and_belongs_to_many :email_addresses, :join_table => 'email_address_tasks', :foreign_key=>'task_id'
-
-  validates_length_of     :name,  :maximum=>200, :allow_nil => true
-  validates_presence_of   :name
-  validates_presence_of   :company
-  validates_presence_of   :project_id
-  validates_uniqueness_of :task_num, :scope => 'company_id', :on => :update
+  validates_presence_of   :name, :company, :project, :status
+  validates_length_of     :name,  maximum: 200, allow_nil: true
+  validates_uniqueness_of :task_num, scope: 'company_id', :on => :update
   validate :validate_properties
 
-  before_create lambda { self.task_num = nil }
+  before_validation :set_status
+  before_create :unset_task_num
   after_create :set_task_num
   after_create :schedule_tasks
 
   delegate :billing_enabled?, to: :project, allow_nil: true
+  delegate :resolved?, :open?, :closed?, :will_not_fix?, :not_valid?, :duplicate?,
+           to: :status, allow_nil: true
+
+  scope :by_company, ->(company) { where(company_id: company) }
+
+  def self.status_types
+    company.statuses.map(&:name)
+  end
 
   def self.accessed_by(user)
     readonly(false).joins(
@@ -119,72 +110,28 @@ class AbstractTask < ActiveRecord::Base
   def set_task_read(user, status=true); end
   def unread?(user); end
 
-  def has_milestone?
-    self.milestone_id != nil and self.milestone_id != 0
-  end
-
-  def escape_twice(attr)
-    h(String.new(h(attr)))
-  end
-
-  def to_tip(options = {})
-    user = options[:user]
-    utz  = user.tz
-
-    unless @tip
-      owners = t('tasks.no_one')
-      owners = self.users.collect{|u| u.name}.to_sentence if self.users.present?
-
-      res = "<table id=\"task_tooltip\" cellpadding=0 cellspacing=0>"
-      res << "<tr><th>#{human_name(:summary)}</td><td>#{escape_twice(self.name)}</tr>"
-      res << "<tr><th>#{human_name(:project)}</td><td>#{escape_twice(self.project.full_name)}</td></tr>"
-      res << "<tr><th>#{human_name(:Tags)}</td><td>#{escape_twice(self.full_tags_without_links)}</td></tr>" unless self.full_tags_without_links.blank?
-      res << "<tr><th>#{human_name(:assigned_to)}</td><td>#{escape_twice(owners)}</td></tr>"
-      res << "<tr><th>#{human_name(:resolution)}</td><td>#{human_value(self.status_type)}</td></tr>"
-      res << "<tr><th>#{human_name(:milestone)}</td><td>#{escape_twice(self.milestone.name)}</td></tr>" if self.milestone_id.to_i > 0
-      res << "<tr><th>#{human_name(:completed)}</td><td>#{I18n.l(utz.utc_to_local(self.completed_at), format: user.date_format)}</td></tr>" if self.completed_at
-      res << "<tr><th>#{human_name(:due_date)}</td><td>#{I18n.l(utz.utc_to_local(due), format: user.date_format)}</td></tr>" if self.due
-      unless self.dependencies.empty?
-        res << "<tr><th valign=\"top\">#{human_name(:dependencies)}</td><td>#{self.dependencies.collect { |t| escape_twice(t.issue_name) }.join('<br />')}</td></tr>"
-      end
-      unless self.dependants.empty?
-        res << "<tr><th valign=\"top\">#{human_name(:depended_on_by)}</td><td>#{self.dependants.collect { |t| escape_twice(t.issue_name) }.join('<br />')}</td></tr>"
-      end
-      res << "<tr><th>#{human_name(:progress)}</td><td>#{TimeParser.format_duration(self.worked_minutes)} / #{TimeParser.format_duration( self.duration.to_i)}</tr>"
-      res << "<tr><th>#{human_name(:description)}</th><td class=\"tip_description\">#{escape_twice(self.description_wrapped).gsub(/\n/, '<br/>').gsub(/\"/,'&quot;')}</td></tr>" unless self.description.blank?
-      res << "</table>"
-      @tip = res.gsub(/\"/,'&quot;')
-    end
-    @tip
-  end
-
-  def resolved?
-    status != 0
-  end
-
   def open_or_closed
     resolved? ? 'closed' : 'open'
   end
 
-  # define open?, closed?, will_not_fix?, invalid?, duplicate? predicates
-  ['OPEN', 'CLOSED', 'WILL_NOT_FIX', 'INVALID', 'DUPLICATE'].each do |status_name|
-    define_method(status_name.downcase + '?') { status == self.class.const_get(status_name) }
+  def done?
+    !completed_at.nil? && resolved?
   end
 
-  def done?
-    self.resolved? && self.completed_at != nil
+  def undone?
+    !done?
   end
 
   def overdue?
-    self.due_date ? (self.due_date.to_time <= Time.now.utc) : false
+    !!due_date && due_date.to_time <= Time.now.utc
   end
 
-  ###
   # This method return due_date - duration
-  # It used only to display task in calendar. User should not start work on task when start_date come.
+  # It used only to display task in calendar. User should not start work on task
+  # when start_date come.
   # For date when user should start work on task we have schedule controller.
-  # Again, do not use this method outside calendar view. And this method should be removed when schedule code will be fixed.
-  ###
+  # Again, do not use this method outside calendar view. And this method should
+  # be removed when schedule code will be fixed.
   def start_date
     return due_date if (duration.nil? or due_date.nil?)
     due_date - (duration/(60*8)).to_i.days
@@ -201,7 +148,7 @@ class AbstractTask < ActiveRecord::Base
     if self.project
       [ERB::Util.h(self.project.full_name), full_tags].join(' / ').html_safe
     else
-      ""
+      ''
     end
   end
 
@@ -214,33 +161,24 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def issue_name
-    "[##{self.task_num}] #{self[:name]}"
+    '[#%d] %s' % [task_num, name]
   end
 
   def issue_num
-    if self.status > 0
-      "<strike>##{self.task_num}</strike>".html_safe
-    else
-      "##{self.task_num}"
-    end
-  end
-
-  def status_name
-    "#{self.issue_num} #{self.name}"
+    template = closed? ? '<strike>#%d</strike>' : '#%d'
+    (template % [task_num]).html_safe
   end
 
   def status_type
-    self.company.statuses[self.status].name
-  end
-
-  def self.status_types
-    Company.first.statuses.all.collect {|a| a.name }
+    status.name
   end
 
   def owners_to_display
-    o = self.owners.collect{ |u| u.name}.join(', ')
-    o = "Unassigned" if o.nil? || o == ""
-    o
+    if owners.present?
+      self.owners.map(&:name).to_sentence
+    else
+      I18n.t 'tasks.owners.zero'
+    end
   end
 
   def set_tags=( tagstring )
@@ -259,8 +197,9 @@ class AbstractTask < ActiveRecord::Base
     self.company.tags.first.save unless self.company.tags.first.nil? #ugly, trigger tag save callback, needed to cache sweeper
     true
   end
+
   def tagstring
-    tags.map { |t| t.name }.join(', ')
+    tags.map(&:name).join(', ')
   end
 
   def default_duration
@@ -303,7 +242,7 @@ class AbstractTask < ActiveRecord::Base
   # Sets up custom properties using the given form params
   def properties=(params)
     ids=[]
-    attributes= params.collect {  |prop_id, val_id|
+    attributes= params.collect do |prop_id, val_id|
       # task_property_values may be changed elsewhere
       # discards the cached copy of task_property_values
       # reload from the database to avoid duplicate insert conflicts
@@ -321,7 +260,7 @@ class AbstractTask < ActiveRecord::Base
         end
       end
       hash
-    }
+    end
     attributes += (self.task_property_values.collect(&:id) - ids).collect{ |id| { :id=>id, :_destroy=>1 } }
     self.task_property_values_attributes = attributes
   end
@@ -341,8 +280,8 @@ class AbstractTask < ActiveRecord::Base
       task_property_values.delete(existing)
     end
 
+    # only create a new one if property_value is set
     if property_value
-      # only create a new one if property_value is set
       task_property_values.create(:property_id => property.id, :property_value_id => property_value.id)
     end
   end
@@ -366,6 +305,7 @@ class AbstractTask < ActiveRecord::Base
 
   # Custom validation for tasks.
   def validate_properties
+    company &&
     company.properties.mandatory.each do |p|
       unless property_value(p)
         message = [p.name, I18n.t('activerecord.errors.messages.blank')].join ' '
@@ -404,19 +344,19 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def statuses_for_select_list
-    company.statuses.collect{|s| [s.name]}.each_with_index{|s,i| s<< i }
+    company.statuses.map { |s| [s.name, s.id] }
   end
 
   def unknown_emails
-    email_addresses.map{ |ea| ea.email}.join(', ')
+    email_addresses.pluck(:email).join(', ')
   end
 
   def unknown_emails=(emails)
     email_addresses.clear
-    (emails || "").split(/$| |,/).map{ |email| email.strip.empty? ? nil : email.strip }.compact.each{ |email|
-      ea= EmailAddress.find_or_create_by_email(email)
-      self.email_addresses<< ea
-    }
+    emails.to_s.split(/$| |,/).map(&:strip).reject(&:blank?).each do |email|
+      ea = EmailAddress.find_or_create_by_email(email)
+      self.email_addresses << ea
+    end
   end
 
   def task_due_calculation(due_at, user)
@@ -547,27 +487,36 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def template?
-    self.class == Template
+    false
   end
 
 private
 
   def full_tags
-    self.tags.collect{ |t| "<a href=\"/tasks?tag=#{ERB::Util.h t.name}\" class=\"description\">#{ERB::Util.h t.name.capitalize.gsub(/\"/,'&quot;'.html_safe)}</a>" }.join(" / ").html_safe
+    self.tags.collect do |t|
+      "<a href=\"/tasks?tag=#{ERB::Util.h t.name}\" class=\"description\">#{ERB::Util.h t.name.capitalize.gsub(/\"/,'&quot;'.html_safe)}</a>"
+    end.join(" / ").html_safe
+  end
+
+  def unset_task_num
+    self.task_num = nil
   end
 
   def set_task_num
-    AbstractTask.transaction do
-      max = "SELECT * FROM (SELECT 1 + coalesce((SELECT max(task_num) FROM tasks WHERE company_id ='#{self.company_id}'), 0)) AS max"
-      connection.execute("UPDATE tasks set task_num = (#{max}) where id = #{self.id}")
-    end
+    # In mysql you can not use the same table in an update to query OMGLOL
+    connection.execute(<<-SQL)
+      UPDATE tasks SET task_num = (
+        SELECT * FROM (
+          SELECT COALESCE(MAX(task_num), 0)+1 AS max
+          FROM tasks WHERE company_id = #{company_id}
+        ) AS t
+      ) WHERE id = #{id}
+    SQL
     self.reload
   end
 
-  ###
   # Sets the owners/watchers of this task from ids.
   # Existing records WILL  be cleared by this method.
-  ###
   def set_user_ids(relation, ids)
     return if ids.nil?
 
@@ -580,10 +529,8 @@ private
     end
   end
 
-  ###
   # Sets up any task owners or watchers from the given params.
   # Any existings ones not in the given params will be removed.
-  ###
   def set_users(params)
     all_users = params[:users] || []
     owners = params[:assigned] || []
@@ -594,11 +541,9 @@ private
     self.unknown_emails = emails.join(',')
   end
 
- ###
   # Sets up any links to resources that should be attached to this
   # task.
   # Clears any existings links to resources.
-  ###
   def set_resource_attributes(params)
     return if !params
 
@@ -612,11 +557,9 @@ private
     end
   end
 
-   ###
   # Sets the dependencies of this this from dependency_params.
   # Existing and unused dependencies WILL be cleared by this method,
   # only if user has access to this dependencies
-  ###
   def set_dependency_attributes(dependency_params, user)
     return if dependency_params.nil?
 
@@ -686,6 +629,10 @@ private
 
     # add a delayed job to schedule tasks
     self.owners.first.update_column(:need_schedule, true)
+  end
+
+  def set_status
+    self.status ||= Status.default_open(company)
   end
 
 end

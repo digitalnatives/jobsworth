@@ -2,26 +2,10 @@ require 'spec_helper'
 
 describe TaskRecord do
 
-  it "should create a new instance given valid attributes" do
-    expect { TaskRecord.make }.to_not raise_error
-    expect { FactoryGirl.create :task }.to_not raise_error
-    expect { FactoryGirl.create :task_with_customers }.to_not raise_error
-  end
+  it { should be_an AbstractTask }
+  it { should have_many :property_values }
 
-  describe '#user_work' do
-    subject { TaskRecord.new }
-    let(:user1) { stub :user1 }
-    let(:user2) { stub :user2 }
-
-    let(:user_duration1) { stub _user_: user1, duration: 1000 }
-    let(:user_duration2) { stub _user_: user2, duration: 500 }
-
-    before { subject.stub_chain('work_logs.duration_per_user' => [user_duration1, user_duration2]) }
-
-    its(:user_work) { should == {user1 => 1000, user2 => 500} }
-  end
-
-  describe "#public_comments" do
+  describe ".public_comments_for" do
     before(:each) do
       @task       = FactoryGirl.create :task_with_customers
       @customer   = @task.customers.first
@@ -59,404 +43,109 @@ describe TaskRecord do
   end
 
   describe ".open_only" do
-    let!(:open_task)        { FactoryGirl.create :task, status: TaskRecord::OPEN }
-    let!(:duplicated_task)  { FactoryGirl.create :task, status: TaskRecord::DUPLICATE }
-    let!(:closed_task)      { FactoryGirl.create :task, status: TaskRecord::CLOSED }
-
-    subject { described_class.open_only }
+    let(:company)          { FactoryGirl.create :company }
+    let!(:open_task)       { FactoryGirl.create :task, company: company, status: Status.default_open(company) }
+    let!(:closed_task)     { FactoryGirl.create :task, company: company, status: Status.default_closed(company) }
+    let!(:duplicated_task) { FactoryGirl.create :task, company: company, status: Status.default_duplicate(company) }
+    subject { described_class.by_company(company).open_only }
 
     it "should only return tasks with resolution open" do
-      expect(TaskRecord.count).to eql 3
+      expect(described_class.by_company(company).count).to eql 3
       expect(subject).to match_array [open_task]
     end
   end
 
-  describe "associations" do
-    subject { @task = FactoryGirl.create :task }
-
-    it "should create new owner using 'owners' association" do
-      new_owner = User.make
-      subject.owners << new_owner
-      subject.reload
-      subject.owners.should include(new_owner)
+  describe '.expire_hide_until' do
+    let(:company) { FactoryGirl.create :company }
+    before do
+      FactoryGirl.create :task, company: company, hide_until: nil
+      FactoryGirl.create :task, company: company, hide_until: 3.days.ago
+      FactoryGirl.create :task, company: company, hide_until: 3.days.from_now
     end
 
-    it "should include all the owners in the 'users' association" do
-      some_user     = FactoryGirl.create :user
-      another_user  = FactoryGirl.create :user
-      subject.owners << some_user
-      subject.owners << another_user
-      expect(subject.users).to match_array [some_user, another_user]
-    end
+    it 'should update the expired hide until dates to nil' do
+      expect(described_class.by_company(company).count).to eql 3
+      expect(described_class.by_company(company).where('hide_until < ?', Time.now.utc).count).to eql 1
+      expect(described_class.by_company(company).where('hide_until IS NOT NULL').count).to eql 2
 
-    it "should create a new watcher through the 'watchers' association" do
-      new_watcher = FactoryGirl.create :user
-      subject.watchers << new_watcher
-      subject.reload
-      subject.watchers.should include(new_watcher)
-    end
-
-    it "should include all the watchers in the 'users' association" do
-      some_user  = FactoryGirl.create :user
-      subject.watchers << some_user
-      subject.watchers.should include(some_user)
-    end
-
-    it "should include owner's task_user join model in linked_user_notifications"
-  end
-
-  describe "access scopes" do
-    before(:each) do
-      company = Company.make
-      3.times { Project.make(:company=>company)}
-      @user = User.make(:company=> company)
-      [0,1].each do |i|
-        @user.projects << company.projects[i]
-        2.times { TaskRecord.make(company: company, project: company.projects[i], users: [@user]) }
-        company.projects[i].tasks.make(:company=>company)
-      end
-      company.projects.last.tasks.make
-      Project.make.tasks.make
-    end
-
-    describe "accessed_by(user)" do
-      it "should return tasks only from user's company" do
-        company_tasks           = @user.company.tasks
-        tasks_accessed_by_user  = TaskRecord.accessed_by(@user)
-        company_tasks.should include *tasks_accessed_by_user
-      end
-
-      context "when the user doesn't have can_see_unwatched permission" do
-        it "should return only watched tasks" do
-          permission = @user.project_permissions.first
-          permission.update_attributes(:can_see_unwatched => 0)
-          @user.reload
-          TaskRecord.accessed_by(@user).each do |task|
-            @user.should be_can(task.project, 'see_unwatched') unless task.users.include?(@user)
-          end
-        end
-      end
-
-      it "should the tasks from completed projects" do
-        completed_project = @user.projects.first
-        completed_project.update_attributes(:completed_at => 1.day.ago.utc)
-        tasks_accessed_by_user = TaskRecord.accessed_by(@user)
-
-        tasks_accessed_by_user.should include *completed_project.tasks
-      end
-    end
-
-    context "all_accessed_by(user)" do
-      it "should return tasks only from user's company" do
-        TaskRecord.all_accessed_by(@user).each do |task|
-          @user.company.tasks.should include(task)
-        end
-      end
-
-      it "should return only watched tasks if user not have can_see_unwatched permission" do
-        permission=@user.project_permissions.first
-        permission.remove('see_unwatched')
-        permission.save!
-        @user.reload
-        TaskRecord.all_accessed_by(@user).each do |task|
-          @user.should be_can(task.project, 'see_unwatched') unless task.users.include?(@user)
-        end
-      end
-
-      it "should return tasks from all users projects, even completed" do
-        project= @user.projects.first
-        project.completed_at= Time.now.utc
-        project.save!
-        TaskRecord.all_accessed_by(@user).should ==
-          TaskRecord.all(:conditions=> ["tasks.project_id in(?)", @user.all_project_ids])
-      end
+      described_class.expire_hide_until
+      expect(described_class.by_company(company).where('hide_until < ?', Time.now.utc).count).to eql 0
+      expect(described_class.by_company(company).where('hide_until IS NOT NULL').count).to eql 1
     end
   end
 
   describe "task_property_values attributes assignment using Task#properties=(params) method" do
-    before(:each) do
-      @task = TaskRecord.make
-      @attributes = @task.attributes.with_indifferent_access.except(:id, :type)
-      @properties = @task.company.properties
-      @task.set_property_value(@properties.first, @properties.first.property_values.first)
-      @task.set_property_value(@properties[1], @properties[1].property_values.first)
-      @task.save!
-      @attributes[:properties]={
-        @properties[0].id => @properties[0].property_values[1].id, #change value of first property
-        @properties[1].id => "",   #second property is blank, so should be removed
-        @properties[2].id => @properties[2].property_values[0].id # third property added
+    subject          { FactoryGirl.create :task, company: company }
+    let!(:company)    { FactoryGirl.create :company }
+    let(:attributes) { subject.attributes.with_indifferent_access.except(:id, :type) }
+    let(:properties) { company.properties }
+    let(:task_property_values) { subject.task_property_values }
+
+    before do
+      company.create_default_properties # Can't understand why this line is needed
+      expect(properties).to have(3).items
+
+      subject.set_property_value(properties[0], properties[0].property_values.first)
+      subject.set_property_value(properties[1], properties[1].property_values.first)
+      subject.save!
+
+      attributes[:properties] = {
+        properties[0].id => properties[0].property_values[1].id, # change value of first property
+        properties[1].id => '',                                  # second property is blank, so should be removed
+        properties[2].id => properties[2].property_values[0].id  # third property added
       }
-      @task_property_values=@task.task_property_values
     end
+
     context "when attributes assigned" do
-      before(:each) do
-        @task.attributes= @attributes
-      end
+      before { subject.attributes = attributes }
 
       it "should changed task_property_values with new values" do
-        @task.attributes= @attributes
-        @task.property_value(@properties[0]).should == @properties[0].property_values[1]
+        expect(subject.property_value(properties[0]))
+          .to eql properties[0].property_values[1]
       end
 
       it "should not delete any task_property_values" do
-        @task.property_value(@properties[1]).should_not be_nil
+        expect(subject.property_value(properties[1])).to_not be_nil
       end
 
       it "should build new task_property_values" do
-        @task.property_value(@properties[2]).should == @properties[2].property_values[0]
+        expect(subject.property_value(properties[2]))
+          .to eql properties[2].property_values[0]
       end
     end
+
     context "when task saved" do
       before(:each) do
-        @task.attributes=@attributes
-        @task.save!
-        @task.reload
+        subject.attributes = attributes
+        subject.save!
+        subject.reload
       end
+
       it "should changed task_property_values with new values" do
-        @task.property_value(@properties[0]).should == @properties[0].property_values[1]
+        subject.property_value(properties[0]).should == properties[0].property_values[1]
       end
 
       it "should delete task_property_values if value is blank" do
-        @task.property_value(@properties[1]).should be_nil
+        subject.property_value(properties[1]).should be_nil
       end
+
       it "should create new task_property_values" do
-        @task.property_value(@properties[2]).should == @properties[2].property_values[0]
+        subject.property_value(properties[2]).should == properties[2].property_values[0]
       end
     end
+
     context "when task not saved" do
-      before(:each) do
-        @attributes[:project_id]=""
-        @task.attributes=@attributes
-        @task.save.should == false
-        @task.reload
+      before do
+        attributes[:project_id] = ''
+        subject.attributes = attributes
+        subject.save.should == false
+        subject.reload
       end
 
       it "should not change task_property_values in database" do
-        @task.property_value(@properties[0]).should == @properties[0].property_values.first
-        @task.property_value(@properties[1]).should == @properties[1].property_values.first
-        @task.property_value(@properties[2]).should == nil
-      end
-    end
-  end
-
-  describe "add users, resources, dependencies to task using Task#set_users_resources_dependencies" do
-    before(:each) do
-      @company = Company.make
-      @task = TaskRecord.make(:company=>@company)
-      @user = User.make(:company=>@company, :projects=>[@task.project], :admin=>true)
-      @resource = Resource.make(:company=>@company)
-      @task.owners<< User.make(:company=>@company, :projects=>[@task.project])
-      @task.watchers<< User.make(:company=>@company, :projects=>[@task.project])
-      @task.resources<< Resource.make(:company=>@company)
-      @task.dependencies<< TaskRecord.make(:company=>@company, :project=>@task.project)
-      @params = {:dependencies=>[@task.dependencies.first.task_num.to_s],
-                     :resource=>{:name=>'',:ids=>@task.resource_ids},
-                     :assigned=>@task.owner_ids,
-                     :users=>@task.user_ids}
-      @task.save!
-    end
-    context "when task saved" do
-      it "should saved new user in database if add task user" do
-        @params[:users] << @user.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.users.should include(@user)
-      end
-
-      it "should saved task without user in database if delete task user" do
-        @params[:users] = []
-        @params[:assigned] = []
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.users.should == []
-      end
-
-      it "should saved new resource in database if add task resource" do
-        @task.resource_ids.should_not include(@resource.id)
-        @params[:resource][:ids] << @resource.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.resources.should include(@resource)
-      end
-      it "should saved task without resource in database if delete task resource" do
-        @params[:resource][:ids] = []
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.resources.should == []
-      end
-      it "should saved new dependencies if add task dependencies" do
-        dependent = TaskRecord.make(:company => @company, :project => @task.project)
-        @params[:dependencies] << dependent.task_num.to_s
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.dependencies.should include(dependent)
-      end
-      it "should saved task without dependency if delete task dependencies" do
-        @params[:dependencies]=[]
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.dependencies.should == []
-      end
-
-      it "should not change task user in database if not changed task user" do
-        user_ids = @task.user_ids
-        @params[:resource][:ids] << @resource.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.user_ids.should == user_ids
-      end
-      it "should not change task resource in database if not changed task resource" do
-        resource_ids = @task.resource_ids
-        @params[:users] << @user.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        @task.resource_ids.should == resource_ids
-      end
-      it "should not change task dependency in database if not changed task dependency" do
-        dependencies = @task.dependencies
-        @params[:users] << @user.id
-        @params[:resource][:ids] << @resource.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.save.should == true
-        @task.reload
-        expect(@task.dependencies).to match_array dependencies
-      end
-    end
-
-    context "when task not saved" do
-
-      it "should build new user in memory if add task user" do
-        pending
-        @params[:users] << @user.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.project_id = nil
-        @task.save.should == false
-        @task.users.should include(@user)
-        @task.reload
-        @task.users.should_not include(@user)
-      end
-
-      it "should delete exist user from memory if delete task user" do
-        pending
-        @params[:user] = []
-        @params[:assigned] = []
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.project_id = nil
-        @task.save.should == false
-        @task.users.should == []
-        @task.reload
-        @task.users.should_not []
-      end
-
-      it "should build new resource in memory if add task resource" do
-        pending
-        @task.resource_ids.should_not include(@resource.id)
-        @params[:resource][:ids] << @resource.id
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.project_id = nil
-        @task.save.should == false
-        @task.resources.should include(@resource)
-        @task.reload
-        @task.resources.should_not include(@resource)
-      end
-
-      it "should delete exist resource from memory if delete task resource" do
-        pending
-        @task.resources.should_not be_empty
-        ids= @task.resource_ids
-        @params[:resource][:ids] = []
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.project_id = nil
-        @task.save.should == false
-        @task.resources.should be_empty
-        @task.reload
-        @task.resource_ids.should == ids
-      end
-
-      it "should build new dependency in memory if add task dependency" do
-        pending
-        dependent = TaskRecord.make(:company => @company, :project => @task.project)
-        @params[:dependencies] << dependent.task_num.to_s
-        @task.set_users_dependencies_resources(@params, @user)
-        @task.project_id = nil
-        @task.save.should == false
-        @task.dependencies.should include(dependent)
-        @task.reload
-        @task.dependencies.should_not include(dependent)
-      end
-      it "should delete exist dependency from memory if delete task dependency"
-
-      it "should not change task user in database if not change task user"
-      it "should not change task resource in database if not change task resource"
-      it "should not change task dependency in database if not change task dependency"
-    end
-  end
-
-  describe "When creating a new task and the project it belongs to have some score rules" do
-    before(:each) do
-      @score_rule_1 = ScoreRule.make(:score      => 250,
-                                     :score_type => ScoreRuleTypes::FIXED)
-
-      @score_rule_2 = ScoreRule.make(:score      => 150,
-                                     :score_type => ScoreRuleTypes::FIXED)
-
-
-      project = Project.make(:score_rules => [@score_rule_1, @score_rule_2])
-      @task   = TaskRecord.make(:project => project, :weight_adjustment => 10)
-    end
-
-    it "should have the right score" do
-      new_score = @task.weight_adjustment + @score_rule_1.score + @score_rule_2.score
-      @task.weight.should == new_score
-    end
-  end
-
-  describe "#snoozed?" do
-    context "when the task it's closed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::CLOSED)
-      end
-
-      it "should return false" do
-        @task.snoozed?.should be_false
-      end
-    end
-
-    context "when the tasks it's not close but it's on snozze" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::OPEN, :wait_for_customer => true)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_true
-      end
-    end
-
-    context "when the task is both closed and snozzed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::CLOSED, :wait_for_customer => true)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_true
-      end
-    end
-
-    context "whent the task is not closed and its not snozzed" do
-      before(:each) do
-        @task = TaskRecord.make(:status => TaskRecord::OPEN)
-      end
-
-      it "should return true" do
-        @task.snoozed?.should be_false
+        subject.property_value(properties[0]).should == properties[0].property_values.first
+        subject.property_value(properties[1]).should == properties[1].property_values.first
+        subject.property_value(properties[2]).should == nil
       end
     end
   end
@@ -486,31 +175,123 @@ describe TaskRecord do
     end
   end
 
-  describe "#score_rules" do
-    let(:task)          { TaskRecord.make }
-    let(:project)       { Project.make }
-    let(:customer)      { Customer.make }
-    let(:company)       { Company.make }
-    let(:score_rule_1)  { ScoreRule.make }
-    let(:score_rule_2)  { ScoreRule.make }
-    let(:score_rule_3)  { ScoreRule.make }
+  describe '#user_work' do
+    subject { TaskRecord.new }
+    let(:user1) { stub :user1 }
+    let(:user2) { stub :user2 }
 
-    before(:each) do
-      project.score_rules  << score_rule_1
-      customer.score_rules << score_rule_2
-      company.score_rules  << score_rule_3
+    let(:user_duration1) { stub _user_: user1, duration: 1000 }
+    let(:user_duration2) { stub _user_: user2, duration: 500 }
 
-      task.project = project
-      task.company = company
-      task.customers << customer
-    end
+    before { subject.stub_chain('work_logs.duration_per_user' => [user_duration1, user_duration2]) }
 
-    it "should return all the score rules associated with the task" do
-      task.score_rules.should include(score_rule_1)
-      task.score_rules.should include(score_rule_2)
-      task.score_rules.should include(score_rule_3)
+    it 'should sum up the worked hours grouped by users' do
+      expect(subject.user_work).to eql({user1 => 1000, user2 => 500})
     end
   end
+
+  describe '#calculate_score' do
+    let(:score_rule_1) { FactoryGirl.create :fixed_score_rule, score: 250 }
+    let(:score_rule_2) { FactoryGirl.create :fixed_score_rule, score: 150 }
+    let(:company)      { FactoryGirl.create :company, score_rules: [score_rule_1, score_rule_2]  }
+
+    subject { FactoryGirl.create :task, weight_adjustment: 10, company: company }
+
+    context 'when task is not closed or snoozed' do
+      it('weight should be the calculated score') { expect(subject.weight).to eql 10 + 250 + 150 }
+    end
+
+    context 'when task is closed' do
+      before { subject.stub closed?: true; subject.calculate_score }
+      its(:weight) { should be_zero }
+    end
+
+    context 'when task is snoozed' do
+      before { subject.stub snoozed?: true; subject.calculate_score }
+      its(:weight) { should be_nil }
+    end
+  end
+
+  describe "#snoozed?" do
+    let(:wait_for_customer) { false }
+    let(:dependencies) { [] }
+    let(:hide_until) { nil }
+    let(:milestone) { mock_model Milestone, status_name: :other }
+
+    subject { described_class.new wait_for_customer: wait_for_customer,
+                                  dependencies: dependencies,
+                                  hide_until: hide_until,
+                                  milestone: milestone }
+
+    context 'when not waiting for customer and no undone dependencies and no hide_until and milestone is not planning' do
+      specify { expect(subject.snoozed?).to be_false }
+    end
+
+    context "when the task is waiting for customer" do
+      let(:wait_for_customer) { true }
+      specify { expect(subject.snoozed?).to be_true }
+    end
+
+    context 'when there are undone dependencies' do
+      let(:dependencies) { [stub_model(TaskRecord, done?: false)] }
+      specify { expect(subject.snoozed?).to be_true }
+    end
+
+    context 'when hide until is in the future' do
+      let(:hide_until) { 1.year.from_now }
+      specify { expect(subject.snoozed?).to be_true }
+    end
+
+    context 'when milestone is planning' do
+      let(:milestone) { mock_model Milestone, status_name: :planning }
+      specify { expect(subject.snoozed?).to be_true }
+    end
+
+  end
+
+  describe "#score_rules" do
+    subject { described_class.new company: company }
+
+    context 'when company does not use score rules' do
+      let(:company)   { Company.new use_score_rules: true }
+      it { expect(subject.score_rules).to eql [] }
+    end
+
+    context 'when company use score rules' do
+      let(:score_rule_project)   { mock_model ScoreRule, id: 'project' }
+      let(:score_rule_company)   { mock_model ScoreRule, id: 'company' }
+      let(:score_rule_customer)  { mock_model ScoreRule, id: 'customer' }
+      let(:score_rule_milestone) { mock_model ScoreRule, id: 'milestone' }
+      let(:score_rule_prop_val)  { mock_model ScoreRule, id: 'property value' }
+
+      let(:company)   { Company.new       score_rules: [score_rule_company], use_score_rules: true }
+      let(:project)   { Project.new       score_rules: [score_rule_project] }
+      let(:company)   { Company.new       score_rules: [score_rule_company] }
+      let(:milestone) { Milestone.new     score_rules: [score_rule_milestone] }
+      let(:customer)  { Customer.new      score_rules: [score_rule_customer] }
+      let(:prop_val)  { PropertyValue.new score_rules: [score_rule_prop_val] }
+
+      subject { described_class.new company: company, project: project,
+                                    milestone: milestone, customers: [customer],
+                                    property_values: [prop_val] }
+
+      it "should return the score rules associated with it's company, project, milestone, customers, and property values" do
+        expect(subject.score_rules).to match_array [
+          score_rule_project, score_rule_company, score_rule_customer,
+          score_rule_milestone, score_rule_prop_val
+        ]
+      end
+    end
+  end
+
+  describe '#actual_worked_minutes' do
+    subject           { FactoryGirl.create :task }
+    let!(:work_log_1) { FactoryGirl.create :work_log, task: subject, duration: 2.hours }
+    let!(:work_log_2) { FactoryGirl.create :work_log, task: subject, duration: 1.hours }
+
+    it('should return the sum of the work log durations') { expect(subject.actual_worked_minutes).to eql 3.hours.to_i }
+  end
+
 end
 
 # == Schema Information

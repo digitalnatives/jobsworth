@@ -1,20 +1,55 @@
 # encoding: UTF-8
 class Status < ActiveRecord::Base
-  belongs_to :company
-  validates_presence_of :company
 
-  # Creates the default statuses expected in the system 
+  OPEN         = 'Open'
+  CLOSED       = 'Closed'
+  WILL_NOT_FIX = "Will not fix"
+  INVALID      = 'Invalid'
+  DUPLICATE    = 'Duplicate'
+  DEFAULT_RESOLUTIONS = [OPEN, CLOSED]
+
+  belongs_to :company
+  validates_presence_of :company, :name
+
+  scope :by_company, ->(company) { where(company_id: company) }
+
   def self.create_default_statuses(company)
-    company.statuses.destroy_all
-    company.statuses.build(:name => "Open").save!
-    company.statuses.build(:name => "Closed").save!
-    company.statuses.build(:name => "Won't fix").save!
-    company.statuses.build(:name => "Invalid").save!
-    company.statuses.build(:name => "Duplicate").save!
+    raise ArgumentError unless company
+
+    transaction do
+      DEFAULT_RESOLUTIONS.each do |name|
+        public_send 'default_' + name.parameterize('_'), company
+      end
+    end
+  end
+
+  def self.default_open(company)
+    get_status! company, name: OPEN, open: true
+  end
+
+  def self.default_closed(company)
+    get_status! company, name: CLOSED, closed: true, resolved: true
+  end
+
+  def self.default_will_not_fix(company)
+    get_status! company, name: WILL_NOT_FIX, will_not_fix: true, resolved: true
+  end
+
+  def self.default_not_valid(company)
+    get_status! company, name: INVALID, not_valid: true, resolved: true
+  end
+
+  def self.default_duplicate(company)
+    get_status! company, name: DUPLICATE, duplicate: true, resolved: true
   end
 
   def to_s
     name
+  end
+
+private
+  def self.get_status!(company, options)
+    by_company(company).where(options).first_or_create
   end
 
 end
@@ -28,5 +63,8 @@ end
 #  name       :string(255)
 #  created_at :datetime
 #  updated_at :datetime
+#  open
+#  will_not_fix
+#
 #
 

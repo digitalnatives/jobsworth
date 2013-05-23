@@ -3,24 +3,29 @@ require "test_helper"
 class TaskTemplatesControllerTest < ActionController::TestCase
   setup do
     @user = User.make(:admin)
+    @company = @user.company
     sign_in @user
     project = project_with_some_tasks(@user)
     @customer = @user.company.customers.first
     @template = Template.make(:project => project, :company => @user.company)
     ProjectPermission.make(:project => project, :user => @user, :company => @user.company)
   end
+
   should "get list page" do
     get :index
     assert_response :success
   end
+
   should "get new template page" do
     get :new
     assert_response :success
   end
+
   should "get edit template page" do
     get :edit, :id => @template.task_num
     assert_response :success
   end
+
   context 'when create new task template' do
     setup do
       @parameters= {
@@ -28,7 +33,7 @@ class TaskTemplatesControllerTest < ActionController::TestCase
           :name=>'Task template',
           :description=>'Just a test task template',
           :due_at=>'2/2/2010',
-          :status => 0,
+          :status_id => Status.default_open(@company).id,
           :project_id=>@user.company.projects.first.id,
           :customer_attributes=>{@customer.id=>"1"},
           :unknown_emails=>'some@email.com'
@@ -56,6 +61,7 @@ class TaskTemplatesControllerTest < ActionController::TestCase
       assert_equal 0, WorkLog.where(:task_id=>@template.id).all.size
     end
   end
+
   context 'when update task tamplate' do
     setup do
       @template.users.clear
@@ -103,6 +109,7 @@ class TaskTemplatesControllerTest < ActionController::TestCase
       assert_equal 0, WorkLog.where(:task_id=>@template.id).all.size
     end
   end
+
   context 'when create task from given template' do
     context ', a created tasks' do
       should 'copy all attributes from tamplate' do
@@ -116,6 +123,7 @@ class TaskTemplatesControllerTest < ActionController::TestCase
       should 'assing all custom property values' do
       end
     end
+
     context ', the template' do
       should 'not change' do
       end

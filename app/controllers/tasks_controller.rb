@@ -343,14 +343,6 @@ class TasksController < ApplicationController
     end
   end
 
-  def set_group
-    task = TaskRecord.accessed_by(current_user).find_by_task_num(params[:id])
-    task.update_group(current_user, params[:group], params[:value], params[:icon])
-
-    expire_fragment( %r{tasks\/#{task.id}-.*\/*} )
-    render :nothing => true
-  end
-
   def users_to_notify_popup
     # anyone already attached to the task should be removed
     excluded_ids = params[:watcher_ids].blank? ? 0 : params[:watcher_ids]

@@ -44,10 +44,9 @@ class Company < ActiveRecord::Base
 
 #  validates_format_of :contact_email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/
 #  validates_length_of :contact_name,  :in=>3..200
-  validates_length_of           :name,  :maximum=>200
-  validates_presence_of         :name
-  validates_presence_of         :subdomain
-  validates_uniqueness_of       :subdomain
+  validates_presence_of   :name, :subdomain
+  validates_length_of     :name, maximum: 200
+  validates_uniqueness_of :subdomain
 
   after_create :create_default_properties
   after_create :create_default_statuses

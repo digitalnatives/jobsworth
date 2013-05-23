@@ -38,6 +38,10 @@ class Template < AbstractTask
     copied_task
   end
 
+  def template?
+    true
+  end
+
 private
 
   def dependencies_from_project

@@ -93,7 +93,7 @@ class TaskFilterTest < ActiveSupport::TestCase
 
     should "filter on status" do
       s1 = @company.statuses[0]
-      s2 = @company.statuses[3]
+      s2 = @company.statuses[1]
 
       filter = TaskFilter.make_unsaved(:company => @company)
       filter.qualifiers.build(:qualifiable => s1)
@@ -102,8 +102,8 @@ class TaskFilterTest < ActiveSupport::TestCase
 
       # using position of status in list as a way to link to old
       # status for now
-      expected = "tasks.status in (0,3)"
-      assert_not_nil actual.index(expected)
+      expected = "tasks.status_id in (#{[s1, s2].map(&:id).join(',')})"
+      assert_equal expected, actual
     end
 
     should "filter on keywords" do

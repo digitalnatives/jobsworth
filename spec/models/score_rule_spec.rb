@@ -2,72 +2,45 @@ require 'spec_helper'
 
 describe ScoreRule do
 
-  describe "validations" do
+  it { should belong_to :controlled_by }
+  it { should validate_presence_of :name }
+  it { should ensure_length_of(:name).is_at_most(30) }
+  it { should validate_presence_of :exponent }
+  it { should validate_presence_of :score }
+  it { should validate_numericality_of :score }
+  it { should validate_presence_of :score_type }
+  it('should ensure inclusion of score_type in ScoreRuleTypes.all_score_types') do
+    should ensure_inclusion_of(:score_type).in_array(ScoreRuleTypes.all_score_types)
+  end
 
-    before(:each) do
-      @score_rule_attrs = ScoreRule.make.attributes.with_indifferent_access.except(:id, :controlled_by_id, :controlled_by_type, :created_at, :updated_at)
+  describe '#calculate_score_for' do
+    let(:task) { FactoryGirl.build :task }
+    subject { sr.calculate_score_for(task) }
+
+    context 'when score type is fixed' do
+      let(:sr) { FactoryGirl.build :fixed_score_rule }
+
+      it 'should return the score of score rule' do
+        expect(subject).to eql sr.score
+      end
     end
 
-    it "should require a name" do
-      @score_rule_attrs.delete('name')
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid
+    context 'when score type is task age' do
+      subject { FactoryGirl.build :task_age_score_rule }
+      it { pending }
     end
 
-    it "should require a non empty name" do
-      @score_rule_attrs.merge!('name' => '')
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid 
+    context 'when score type is last comment age' do
+      subject { FactoryGirl.build :last_comment_age_score_rule }
+      it { pending }
     end
 
-    it "should reject names that are too long" do
-      long_name = 'bananas' * 100
-      @score_rule_attrs.merge!(:name => long_name)
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid
-    end
-
-    it "should require a score"  do
-      @score_rule_attrs.delete('score')
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid
-    end
-                                 
-    it "should require a non empty score" do
-      @score_rule_attrs.merge!('score' => '')
-      score_rule = ScoreRule.new(@score_rule_attrs) 
-      score_rule.should_not be_valid
-    end
-
-    it "should require a numeric score" do
-      @score_rule_attrs.merge!('score' => 'lol')
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid
-    end
-
-    it "should require a valid score_type value" do
-      @score_rule_attrs.merge!('score_type' => -1)
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.should_not be_valid
-    end
-
-    it "should have a default exponent" do
-      @score_rule_attrs.delete('exponent')
-      score_rule = ScoreRule.new(@score_rule_attrs)
-      score_rule.exponent.should == 1
+    context 'when score type is overdue' do
+      subject { FactoryGirl.build :overdue_score_rule }
+      it { pending }
     end
   end
 
-  describe "associations" do
-
-    before(:each) do
-      @score_rule = ScoreRule.make  
-    end
-
-    it "should have a 'controlled_by' association" do
-      @score_rule.should respond_to(:controlled_by)   
-    end
-  end
 end
 
 

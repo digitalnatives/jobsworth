@@ -83,6 +83,7 @@ group :test do
 end
 
 group :development do
+  gem 'thin'
   gem 'annotate'
   gem 'quiet_assets'
   gem 'xray-rails'

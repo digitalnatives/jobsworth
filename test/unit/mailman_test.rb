@@ -222,20 +222,13 @@ o------ please reply above this line ------o
 
     should "closed tasks get reopened" do
       @task.update_attributes(
-        :status => TaskRecord.status_types.index("Closed"),
+        :status => Status.default_closed(@company),
         :completed_at => Time.now
       )
       assert @task.done?
 
       Mailman.receive(@tmail.to_s)
       assert !@task.reload.done?
-    end
-
-    should "in progress tasks don't get reopened" do
-      status = TaskRecord.status_types.index("In Progress")
-      @task.update_attributes(:status => status)
-      Mailman.receive(@tmail.to_s)
-      assert_equal status, @task.reload.status
     end
   end
 

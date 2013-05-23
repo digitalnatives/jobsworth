@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130411041529) do
+ActiveRecord::Schema.define(:version => 20130523084131) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -527,6 +527,12 @@ ActiveRecord::Schema.define(:version => 20130411041529) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "open",         :default => false
+    t.boolean  "closed",       :default => false
+    t.boolean  "will_not_fix", :default => false
+    t.boolean  "not_valid",    :default => false
+    t.boolean  "duplicate",    :default => false
+    t.boolean  "resolved",     :default => false
   end
 
   create_table "tags", :force => true do |t|
@@ -629,7 +635,7 @@ ActiveRecord::Schema.define(:version => 20130411041529) do
     t.integer  "severity_id",                      :default => 0
     t.integer  "type_id",                          :default => 0
     t.integer  "task_num",                         :default => 0
-    t.integer  "status",                           :default => 0
+    t.integer  "status_id"
     t.integer  "creator_id"
     t.datetime "hide_until"
     t.integer  "worked_minutes",                   :default => 0
