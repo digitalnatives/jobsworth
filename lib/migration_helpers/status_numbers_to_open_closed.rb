@@ -4,7 +4,7 @@
 # - default resolutions are 'open' and 'closed'
 
 class StatusNumbersToOpenClosed
-  def migrate
+  def up
     remove_orphan_tasks
     remove_previous_statuses
 
@@ -18,6 +18,8 @@ class StatusNumbersToOpenClosed
       migrate_filter_qualifiers qualifiers, resolutions
     end
   end
+
+  def down; end
 
 private
   def each_company(&blk)
