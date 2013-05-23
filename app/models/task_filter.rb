@@ -113,6 +113,7 @@ class TaskFilter < ActiveRecord::Base
       "#{ key }/#{ last_task_update.to_i }/#{ user.id }"
     end
   end
+
   def copy_from(filter)
     self.unread_only = filter.unread_only
     filter.qualifiers.each do |q|

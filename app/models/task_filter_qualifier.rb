@@ -12,6 +12,10 @@ class TaskFilterQualifier < ActiveRecord::Base
 
   scope :for, lambda { |type| where(:qualifiable_type => type) }
   scope :reversed, where(:reversed => true)
+  scope :by_qualifiable_type, ->(qtype) { where(qualifiable_type: qtype) }
+  scope :by_company, ->(company) {
+    joins(:task_filter).where('task_filters.company_id' => company)
+  }
 
   private
 
