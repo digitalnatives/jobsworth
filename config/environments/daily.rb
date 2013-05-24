@@ -1,3 +1,5 @@
+ENV['RAILS_RELATIVE_URL_ROOT'] = '/project-management'
+
 Jobsworth::Application.configure do
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -27,4 +29,5 @@ Jobsworth::Application.configure do
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
+  config.action_controller.relative_url_root = ENV['RAILS_RELATIVE_URL_ROOT']
 end
