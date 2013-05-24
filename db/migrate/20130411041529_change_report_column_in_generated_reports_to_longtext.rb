@@ -1,6 +1,6 @@
 class ChangeReportColumnInGeneratedReportsToLongtext < ActiveRecord::Migration
   def up
-    change_column :generated_reports, :report, :text, :limit => 4.gigabytes - 1
+    change_column :generated_reports, :report, :text, :limit => 1.gigabytes - 1
   end
 
   def down
