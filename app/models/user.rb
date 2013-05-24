@@ -142,7 +142,7 @@ class User < ActiveRecord::Base
     self.time_zone ||= "Australia/Sydney"
     self.date_format ||= "%d/%m/%Y"
     self.time_format ||= "%H:%M"
-    self.locale ||=  "en_US"
+    self.locale ||=  "en"
   end
 
   def generate_uuid
