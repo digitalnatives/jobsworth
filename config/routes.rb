@@ -1,8 +1,10 @@
 Jobsworth::Application.routes.draw do
+  scope ActionController::Base.config.relative_url_root || "/" do
 
   mount OmniauthFluenta::Engine => '/'
+  devise_prefix = ActionController::Base.config.relative_url_root.to_s.sub('/', '')
   devise_for :users,
-             :path_prefix => "auth",
+             :path_prefix => [devise_prefix, 'auth'].reject(&:blank?).join('/'),
              :controllers => { :sessions  => "auth/sessions",
                                :passwords => "auth/passwords" }
 
@@ -181,4 +183,5 @@ Jobsworth::Application.routes.draw do
 
   match ":controller(/:action(/:id(.:format)))"
 
+  end
 end
