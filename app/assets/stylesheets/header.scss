@@ -8,16 +8,15 @@ body {
 /* Hedaer */
 
 #header-logged {
-  background: image-url('bg/header_logged.png') top no-repeat;
-  height: 140px;
+  background: image-url('bg/logo_fluenta.png') 14px 11px no-repeat;
+  height: 115px;
   width: 100%;
   color: #FFFFFF;
-  background-position: -160px 0;
 }
 
 #header-logged-center {
   width: 100%;
-  height: 140px;
+  height: 115px;
   margin: 0 auto;
 }
 
@@ -25,7 +24,7 @@ body {
 
 #header-logged-statusline {
   width: auto;
-  height: 89px;
+  height: 64px;
   margin-left: 360px;
 }
 
@@ -33,7 +32,8 @@ body {
   float: right;
   color: #000;
   margin-right: 4px;
-  margin-top: 15px;
+  margin-top: 6px;
+  line-height: 17px;
 }
 
 #header-logged-date {
@@ -56,7 +56,7 @@ body {
 #header-logged-profile {
   float: right;
   width: 114px;
-  height: 88px;
+  height: 64px;
   position: relative;
   &:hover {
     .header-logged-profile-title {
@@ -74,8 +74,8 @@ body {
 .header-logged-profile-title {
   float: right;
   width: 114px;
-  height: 87px;
-  line-height: 111px;
+  height: 63px;
+  line-height: 84px;
   color: #000;
   text-decoration: none;
   text-align: center;
@@ -91,7 +91,7 @@ body {
     background-position: -210px 2px;
     background-image: image-url('icons/icons.png');
     left: 50px;
-    top: 27px;
+    top: 14px;
   }
   &:after {
     position: absolute;
@@ -99,7 +99,7 @@ body {
     width: 0;
     height: 0;
     left: 82px;
-    top: 41px;
+    top: 27px;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid #000;
@@ -111,7 +111,7 @@ body {
   width: 175px;
   height: auto;
   position: absolute;
-  top: 88px;
+  top: 64px;
   left: -2px;
   display: none;
   z-index: 10;
@@ -144,8 +144,8 @@ body {
   a {
     float: right;
     width: 114px;
-    height: 87px;
-    line-height: 108px;
+    height: 62px;
+    line-height: 80px;
     color: #000;
     text-decoration: none;
     text-align: center;
@@ -166,7 +166,7 @@ body {
       background-position: -282px -249px;
       background-image: image-url('icons/icons.png');
       left: 50px;
-      top: 26px;
+      top: 13px;
     }
   }
 }
@@ -372,7 +372,7 @@ body {
   }
   .notification-count a {
     color: white !important;
-    padding: 0px 5px;
+    padding: 0px;
   }
 }
 
