@@ -1,58 +1,27 @@
-<% @page_title = "#{t('devise.sign_in')} - #{Setting.productName}" %>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name),
-             html: {class: "well form-horizontal span8 center"}) do |f| %>
-
-  <legend><%= t('devise.sign_in') %></legend>
-
-  <% if flash[:alert] %>
-     <div class="alert alert-error" id="notice">
-       <%= flash[:alert] %>
-     </div>
+<div id="login">
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name),
+               html: {class: "new_user"}) do |f| %>
+    <div id="login-title"><%= t('devise.sign_in') %></div>
+    <%= f.hidden_field :subdomain, :value => request.subdomains[0] %>
+    <div class="clearer"></div>
+    <div class="input-title"><%= f.label :username %></div>
+    <div class="login-input"><%= f.text_field :username%></div>
+    <div class="input-title"><%= f.label :password %></label></div>
+    <div class="login-input"><%= f.password_field :password %></div>
+    <% if flash[:alert] %>
+       <div class="alert alert-error" id="notice">
+         <%= flash[:alert] %>
+       </div>
+    <% end %>
+    <div id="forgotten-pass"><%= link_to t('devise.sessions.forget'), new_user_password_path  %></div>
+    <div class="login-button"><%= f.submit t('devise.sessions.login') %></div>
+    <div class="clearer"></div>
   <% end %>
-
-  <div class="row-fluid">
-    <div class="<%= Setting.omniauth ? 'span8' : 'span12' %>"
-         style="<%= 'border-right: 1px solid #e5e5e5;' if Setting.omniauth %>">
-      <%= f.hidden_field :subdomain, :value => request.subdomains[0] %>
-
-      <div class="control-group">
-        <%= f.label :username %>
-        <div class="controls">
-          <%= f.text_field :username%>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <%= f.label :password %>
-        <div class="controls">
-          <%= f.password_field :password %>
-        </div>
-      </div>
-
-      <% if devise_mapping.rememberable? -%>
-        <div class="control-group">
-          <div class="controls">
-            <%= f.check_box :remember_me %>
-            <%= f.label :remember_me, :class => "checkbox inline"  %>
-          </div>
-        </div>
-      <% end -%>
-
-      <div class="form-actions">
-        <%= f.submit t('devise.sessions.login'), :class => "btn" %>
-        <%= link_to t('devise.sessions.forget'), new_user_password_path  %>
-      </div>
-    </div>
-
-    <% if Setting.omniauth %>
-      <div class="span4">
-        <%= link_to user_omniauth_authorize_path(:fluenta) do %>
-          <i class="icon-user"></i>
-          <%= t 'devise.omniauth.sign_in_with', kind: 'Fluenta' %>
-        <% end %>
-      </div>
+</div> <!-- end login --> <div class="clearer"></div>
+<% if Setting.omniauth %>
+  <div id='registration'>
+    <%= link_to user_omniauth_authorize_path(:fluenta) do %>
+      <%= t 'devise.omniauth.sign_in_with', kind: 'Fluenta' %>
     <% end %>
   </div>
-
 <% end %>

@@ -1,17 +1,186 @@
-<div id="menu_logo">
-  <% if current_user.company.logo? %>
-    <%= image_tag("/companies/show_logo/#{current_user.company.id}", :alt => "logo" ) %>
+<div id="header-logged">
+  <div id="header-logged-center">
+    <div id="header-logged-statusline">
+      <div id="header-logged-logout"><%= link_to t('tabmenu.log_out'), destroy_user_session_path %></div>
+      <div id="header-logged-profile">
+        <div class="header-logged-profile-title">Profil</div>
+        <div class="header-logged-profile-more">
+          <% if current_user.admin? %>
+            <%= link_to  t('tabmenu.my_account'), edit_user_path(current_user) %>
+            <%= link_to t('tabmenu.company_settings'), :controller => 'companies', :action => 'edit', :id => current_user.company_id %>
+          <% else %>
+            <%= link_to t('tabmenu.my_account'), edit_user_path(current_user) %>
+          <% end %>
+        </div>
+      </div>
+      <div id="header-logged-user">
+        <div id="topper-worktime-area">
+          <% if total_today > 0 %>
+            <small class="pull-right"><%= t("shared.worked_today", time: distance_of_time_in_words(total_today.minutes)) %></small>
+          <% end %>
+
+          <% if @current_sheet && @current_sheet.task %>
+            <%= render :partial => "layouts/sheet_info" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div id="header-logged-mainmenu" class="clearfix">
+      <div class="left-logged-menu">
+        <div class="mainmenu-item selected">
+          <div class="center">
+            <span><a href="#">Jobsworth</a></span>
+            <span class="notification-count"><a href="">2</a></span>
+          </div>
+        </div>
+        <div class="mainmenu-item">
+          <div class="center">
+            <span><a href="#">Igénylések</a></span>
+          </div>
+        </div>
+        <div class="mainmenu-item">
+          <div class="center">
+            <span><a href="#">Útnyilvántartás</a></span>
+          </div>
+        </div>
+        <div class="mainmenu-item">
+          <div class="center">
+            <span><a href="#">Szerződések</a></span>
+          </div>
+        </div>
+      </div>
+      <div class="header-more-logged-menu">
+        <div class="header-more-icon"> >> </div>
+        <div class="header-more-menu">          
+          <div class="mainmenu-item">
+            <div class="center">
+              <span><a href="#">Szállítói adatok</a></span>
+            </div>
+          </div>
+          <div class="mainmenu-item">
+            <div class="center">
+              <span><a href="#">Kimutatások</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-logged-menu">
+        <div class="help-menu">
+          <a href="#" title="Segítség"></a>
+        </div>
+        <div class="admin-menu">
+          <div class="mainmenu-item">
+            <div class="center">
+              <span><a href="#">Admin</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- end header-logged-center -->
+</div> <!-- end header-logged -->
+
+<div id="header-logged-submenu">
+  <% if menu_class("activities") == "active" %>
+    <div class="submenu-item drop-down">
+      <div class="center">
+        <span><a href="#"><%= t('tabmenu.dashboard') %></a></span>
+      </div>
+      <div class="submenu-drop-down">
+        <%= link_to t('tabmenu.add_new_widget'), '#', :id => "add-widget-menu-link" %>
+      </div>
+    </div>
   <% else %>
-    <%= image_tag("logo.gif", :alt => "logo" ) %>
+    <div class="submenu-item">
+      <div class="center">
+        <span><%= link_to t('tabmenu.overview'), :controller => 'activities', :action => 'index' %></span>
+      </div>
+    </div>
   <% end %>
-</div>
+  
+  <div class="submenu-item drop-down">
+    <div class="center">
+      <span><a href="#"><%= t('tabmenu.tasks') %></a></span>
+    </div>
+    <div class="submenu-drop-down">
+      <%= link_to t('tabmenu.list'), :controller => 'tasks', :action => 'index' %>
+      <%= link_to t('tabmenu.new_task'), :controller => 'tasks', :action => 'new' %>
+      <% if current_templates.size > 0 %>
+        <% current_templates.each do |task| %>
+          <%= link_to task, clone_task_path(task.task_num) %>
+        <% end %>
+      <% end %>
+      <% if current_user.admin? %>
+        <%= link_to t('tabmenu.planning'), planning_tasks_path %>
+      <% end %>
+    </div>
+  </div>
 
-<div id="topper-worktime-area">
-  <% if total_today > 0 %>
-    <small class="pull-right"><%= t("shared.worked_today", time: distance_of_time_in_words(total_today.minutes)) %></small>
+  <div class="submenu-item">
+    <div class="center">
+      <span><%= link_to t('tabmenu.planning'), :controller => 'timeline', :action => 'index' %></span>
+    </div>
+  </div>
+  
+  <% if current_user.can_any?(current_user.projects, 'report') %>
+    <div class="submenu-item">
+      <div class="center">
+        <% billing_title = current_user.can_use_billing? ? 'billing' : 'reports'  %>
+        <span><%= link_to t("tabmenu.#{billing_title}"), :controller => 'billing', :action => 'index' %></span>
+      </div>
+    </div>
+  <% end %>
+  
+  <% if current_user.company.show_wiki? %>
+    <div class="submenu-item">
+      <div class="center">
+        <span><%= link_to t('tabmenu.wiki'), :controller => 'wiki', :action => 'show', :id => nil %></span>
+      </div>
+    </div>
   <% end %>
 
-  <% if @current_sheet && @current_sheet.task %>
-    <%= render :partial => "layouts/sheet_info" %>
+  <div class="submenu-item drop-down">
+    <div class="center">
+      <span><a href="#"><%= t('tabmenu.projects') %></a></span>
+    </div>
+    <div class="submenu-drop-down">
+      <%= link_to t('tabmenu.list'), :controller => 'projects', :action => 'index' %>
+      <% if current_user.create_projects? %>
+        <%= link_to t('tabmenu.new_project'), :controller => 'projects', :action => 'new' %>
+      <% if current_user.get_project_templates.size > 0 %>
+        <% current_user.get_project_templates.each do |project_template| %>
+            <%= link_to project_template, clone_project_path(project_template) %>
+        <% end %>
+      <% end %>
+      <% end %>
+      <%= link_to t('tabmenu.milestones'), milestones_path %>
+    </div>
+  </div>
+  
+  <% if Setting.contact_creation_allowed && current_user.can_view_clients? %>
+    <div class="submenu-item drop-down">
+      <div class="center">
+        <span><a href="#"><%= t('tabmenu.contacts') %></a></span>
+      </div>
+      <div class="submenu-drop-down">
+        <%= link_to t('tabmenu.new_company'), :controller => 'customers', :action => 'new' %>
+        <%= link_to t('tabmenu.new_person'), :controller => 'users', :action => 'new' %>
+      </div>
+    </div>
   <% end %>
-</div>
+
+  <% if current_user.use_resources? %>
+    <div class="submenu-item drop-down">
+      <div class="center">
+        <span><a href="#"><%= t('tabmenu.resources') %></a></span>
+      </div>
+      <div class="submenu-drop-down">
+        <%= link_to(t('tabmenu.new_resource'), new_resource_path) %>
+      </div>
+    </div>
+  <% end %>
+  
+  <%= render :partial => "layouts/menubar_search" %>
+
+  <div class="clearer"></div>
+</div> <!-- end header-logged-submenu -->
