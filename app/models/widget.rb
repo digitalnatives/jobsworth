@@ -8,6 +8,8 @@ class Widget < ActiveRecord::Base
 
   validates_presence_of :name
 
+  scope :for_user, ->(user) { where(company_id: user.company_id, user_id: user) }
+
   def name
     res = ""
     if self.filter_by && self.filter_by.length > 0

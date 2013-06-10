@@ -8,54 +8,34 @@ class WidgetsController < ApplicationController
   NEXT_WEEK  = 4
 
   def show
-    begin
-      @widget = Widget.where("company_id = ? AND user_id = ?", current_user.company_id, current_user.id).find(params[:id])
-    rescue
-      render :nothing => true
-      return
-    end
+    @widget = Widget.for_user(current_user).find(params[:id])
 
-    unless @widget.configured?
-      render :partial => "widget_#{@widget.widget_type}_config"
-      return
-    end
+    return render partial: "widget_#{@widget.widget_type}_config" unless @widget.configured?
 
     # TODO use constants
     case @widget.widget_type
-    when 0 then
-      tasks_extracted_from_show
-    when 2 then
-      # Recent Activities : already removed
-    when 3 then
-      task_graph_extracted_from_show
-    when 4 then
-      burndown_extracted_from_show
-    when 5 then
-      burnup_extracted_from_show
-    when 6 then
-      comments_extracted_from_show
-    when 7 then
-      schedule_extracted_from_show
-    when 8 then
-      # Google Gadget
-    when 9 then
-      work_status_extracted_from_show
-    when 10 then
-      sheets_extracted_from_show
+    when 0  then tasks_extracted_from_show
+    when 3  then task_graph_extracted_from_show
+    when 4  then burndown_extracted_from_show
+    when 5  then burnup_extracted_from_show
+    when 6  then comments_extracted_from_show
+    when 7  then schedule_extracted_from_show
+    when 8  then # Google Gadget
+    when 9  then work_status_extracted_from_show
+    when 10 then sheets_extracted_from_show
     end
 
     # TODO unify case's
     case @widget.widget_type
-      when 0 then
-        render :partial => 'tasks/task_list', :locals => { :tasks => @items }
-      when 1 then
-        # removed
-      when 2 then
-        # Recent Activities : already removed
-      when 3..10 then
-        render :partial => "widgets/widget_#{@widget.widget_type}"
+    when 0 then
+      render :partial => 'tasks/task_list', :locals => { :tasks => @items }
+    when 3..10 then
+      render :partial => "widgets/widget_#{@widget.widget_type}"
     end
 
+  # FIXME It's handled on the client side
+  rescue ActiveRecord::RecordNotFound
+    return render :nothing => true
   end
 
   def add
@@ -63,7 +43,7 @@ class WidgetsController < ApplicationController
   end
 
   def destroy
-    @widget = Widget.where(company_id: current_company, user_id: current_user).find(params[:id])
+    @widget = Widget.for_user(current_user).find(params[:id])
     @widget.destroy
 
     render json: {success: true}
@@ -73,12 +53,12 @@ class WidgetsController < ApplicationController
 
   def create
     @widget = Widget.new(params[:widget])
-    @widget.user = current_user
-    @widget.company = current_user.company
+    @widget.user       = current_user
+    @widget.company    = current_user.company
     @widget.configured = false
-    @widget.column = 0
-    @widget.position = 0
-    @widget.collapsed = false
+    @widget.column     = 0
+    @widget.position   = 0
+    @widget.collapsed  = false
 
     unless @widget.save
       return render :json => { :success => false }
@@ -89,22 +69,15 @@ class WidgetsController < ApplicationController
   end
 
   def edit
-    begin
-      @widget = Widget.where("company_id = ? AND user_id = ?", current_user.company_id, current_user.id).find(params[:id])
-    rescue
-      render :nothing => true
-      return
-    end
+    @widget = Widget.for_user(current_user).find(params[:id])
     render :partial => "widget_#{@widget.widget_type}_config.html.erb"
+
+  rescue ActiveRecord::RecordNotFound
+    return render :nothing => true
   end
 
   def update
-    begin
-      @widget = Widget.where("company_id = ? AND user_id = ?", current_user.company_id, current_user.id).find(params[:id])
-    rescue
-      render :nothing => true
-      return
-    end
+    @widget = Widget.for_user(current_user).find(params[:id])
 
     @widget.configured = true
     unless @widget.update_attributes(params[:widget])
@@ -117,6 +90,8 @@ class WidgetsController < ApplicationController
              :gadget_url => @widget.gadget_url,
              :configured => @widget.configured,
              :status => "success" }
+  rescue ActiveRecord::RecordNotFound
+    return render :nothing => true
   end
 
   def save_order
@@ -133,16 +108,14 @@ class WidgetsController < ApplicationController
   end
 
   def toggle_display
-    begin
-      @widget = current_user.widgets.find(params[:id])
-    rescue
-      render :nothing => true, :layout => false
-      return
-    end
+    @widget = current_user.widgets.find(params[:id])
 
     @widget.collapsed = !@widget.collapsed?
     @widget.save
     render :json => {:collapsed => @widget.collapsed?, :dom_id => @widget.dom_id}
+
+  rescue ActiveRecord::RecordNotFound
+    return render :nothing => true
   end
 
   private
