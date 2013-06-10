@@ -304,6 +304,19 @@ function collapsiblePanel(panel) {
   }
 }
 
+function resolve_url(url, data) {
+  var key, u, val;
+  for (key in data) {
+    val = data[key];
+    u = url.replace('{'+key+'}', val);
+    if (u != url) {
+      url = u;
+      delete data[key];
+    }
+  }
+  return url;
+}
+
 jQuery(function(){
   for (i=0; i<jQuery(".collapsable-sidepanel-button").length; i++){
     var panel= jQuery(".collapsable-sidepanel-button").parent().eq(i).attr('id');

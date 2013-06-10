@@ -1,7 +1,13 @@
+<% url = Rails.application.routes.url_helpers %>
+
 var jobsworth = jobsworth || {};
 
 jobsworth.Portal = (function() {
   var $ = jQuery;
+  var save_order_widgets_path    = "<%= CGI.unescape url.save_order_widgets_path %>",
+      toggle_display_widget_path = "<%= CGI.unescape url.toggle_display_widget_path('{id}') %>",
+      edit_widget_path           = "<%= CGI.unescape url.edit_widget_path('{id}') %>",
+      widget_path                = "<%= CGI.unescape url.widget_path('{id}') %>";
 
   function Portal(options) {
     this.options = options;
@@ -28,55 +34,56 @@ jobsworth.Portal = (function() {
         })
       })
 
-      $.post("/widgets/save_order", {order:orders});
+      $.post(save_order_widgets_path, {order:orders});
     })
 
-    $(".widget").live("hover", function() {
-      if ($(this).is(":hover")) {
-        $(".widget-menu", this).removeClass("hide");
-      } else {
-        $(".widget-menu", this).addClass("hide");
-      }
-    })
+    $(document).on('mouseenter', ".widget", function() { $(this).find(".widget-menu").removeClass("hide"); });
+    $(document).on('mouseleave', ".widget", function() { $(this).find(".widget-menu").addClass("hide"); });
 
-    $(".widget a.delete").live("click", function() {
+    $(".widget a.delete").live("click", function(e) {
       var widget = $(this).parents(".widget");
       var widget_id = widget.data("widget-id");
       if( !confirm('Really delete widget?') ) return false;
 
-      $.get('/widgets/destroy/' + widget_id, function(data){
-        if (data.success) {
-          widget.fadeOut("slow");
-          widget.remove();
-        } else {
-          alert("delete widget failed.");
+      $.ajax({
+        url: resolve_url(widget_path, {id: widget_id}),
+        type: 'DELETE',
+        success: function(data){
+          if (data.success) {
+            widget.fadeOut("slow");
+            widget.remove();
+          } else {
+            alert("delete widget failed.");
+          }
         }
       });
-      return false;
-    })
+      e.preventDefault();
+    });
 
-    $(".widget a.edit").live("click", function() {
-      var widget_id = $(this).parents(".widget").data("widget-id");
+    $(".widget a.edit").live("click", function(e) {
+      var widget_id     = $(this).parents(".widget").data("widget-id");
       var widget_dom_id = $(this).parents(".widget").data("widget-dom-id");
       self.edit_widget(widget_id, widget_dom_id);
-      return false;
+
+      e.preventDefault();
     })
 
-    $(".widget a.toggle-display").live("click", function() {
+    $(".widget a.toggle-display").live("click", function(e) {
       var widget_id = $(this).parents(".widget").data("widget-id");
       self.widget_toggle_display(widget_id);
-      return false;
+
+      e.preventDefault();
     })
 
-    $("#add-widget-menu-link").bind("click", function() {
+    $("#add-widget-menu-link").bind("click", function(e) {
       self.add_widget();
-      return false;
+
+      e.preventDefault();
     })
 
     $("form#add_widget").bind("ajax:success", function(event, response, xhr) {
       if (!response.success) {
-        alert("create widget failed.");
-        return;
+        return alert("create widget failed.");
       }
 
       $("#add-widget").addClass("hide");
@@ -87,7 +94,7 @@ jobsworth.Portal = (function() {
 
   Portal.prototype.widget_toggle_display = function(widget_id) {
     $.ajax({
-      url: '/widgets/toggle_display/' + widget_id,
+      url: resolve_url(toggle_display_widget_path, {id: widget_id}),
       dataType: 'json',
       success:function(response) {
         if (response.collapsed) {
@@ -105,12 +112,12 @@ jobsworth.Portal = (function() {
         alert("Invalid request");
       }
     });
-  }
+  };
 
   Portal.prototype.edit_widget = function(id, dom_id) {
     var self = this;
     $.ajax({
-      url: '/widgets/edit/' + id,
+      url: resolve_url(edit_widget_path, {id: id}),
       dataType: 'html',
       success:function(response) {
         if(!$('#config-' + dom_id).size() ) {
@@ -126,7 +133,7 @@ jobsworth.Portal = (function() {
         alert("Invalid request");
       }
     });
-  }
+  };
 
   Portal.prototype.update_widget_callback = function(id, dom_id) {
     var self = this;
@@ -141,7 +148,7 @@ jobsworth.Portal = (function() {
 
   Portal.prototype.show_widget = function(id, dom_id, type, configured, gadget_url) {
     $.ajax({
-      url: '/widgets/show/' + id,
+      url: resolve_url(widget_path, {id: id}),
       dataType: 'html',
       success:function(response) {
         if (configured == true) {

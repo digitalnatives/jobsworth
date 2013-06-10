@@ -177,6 +177,11 @@ Jobsworth::Application.routes.draw do
 
   resources :emails, only: [:create]
 
+  resources :widgets do
+    post :save_order,    on: :collection
+    get :toggle_display, on: :member
+  end
+
   ActiveAdmin.routes(self)
 
   match ':controller/list' => ':controller#index'
