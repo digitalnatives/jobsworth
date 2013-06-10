@@ -66,7 +66,9 @@ module OmniauthFluenta
             record.update_attributes! params
           else
             record = klass.constantize.new params
+            record.no_default_properties = true if klass == 'Company'
             record.save!
+
             create_customer record if klass == 'Company'
           end
           record

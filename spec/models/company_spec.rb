@@ -18,6 +18,20 @@ describe Company do
     end
   end
 
+  describe 'create without defaults' do
+    subject { FactoryGirl.build :company }
+
+    context 'when no default properties set to true' do
+      before { subject.no_default_properties = true }
+      specify { expect { subject.save }.to_not change { Property.count } }
+    end
+
+    context 'when no default statuses set to true' do
+      before { subject.no_default_statuses = true }
+      specify { expect { subject.save }.to_not change { Status.count } }
+    end
+  end
+
   describe "When adding a new score rule to a company that have tasks" do
     before(:each) do
       @open_task    = TaskRecord.make(:status => AbstractTask::OPEN)
