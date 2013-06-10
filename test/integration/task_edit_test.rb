@@ -108,7 +108,7 @@ class TaskEditTest < ActionController::IntegrationTest
         end
 
         should "be able to set the status" do
-          select "Closed", :from => "task_status"
+          select "Closed", :from => "task_status_id"
           click_button "Save"
           assert_equal "Closed", @task.reload.status_type
         end

@@ -92,13 +92,14 @@ class TasksControllerTest < ActionController::TestCase
   should "render error message on project when project not presented on /update" do
     task = @user.tasks.first
     post(:update, :id => task.id, :task => { :project_id =>""})
-    assert assigns['task'].errors[:project_id].any?
+    assert assigns['task'].errors[:project].any?
   end
 
   should "render JSON error message when validation failed on /update?format=js" do
     task = @user.tasks.first
-    post(:update, :format => 'js', :id => task.id, :task => { :project_id =>""})
-    assert assigns['task'].errors[:project_id].any?
+    post(:update, :format => 'js', :id => task.id, :task => { :project_id=>""})
+    assert assigns['task'].errors[:project].present?
+
     json_response = ActiveSupport::JSON.decode(@response.body)
     assert_equal({"messages"=>["Project can't be blank"], "status"=>"error"}, json_response)
   end
@@ -108,7 +109,7 @@ class TasksControllerTest < ActionController::TestCase
       ActionMailer::Base.deliveries = []
       @task = @user.tasks.first
       @task.users << User.make(:company => @user.company)
-      @task.status = 0
+      @task.status = Status.default_open(@user.company)
       @task.save!
       assert_emails 0
     end
@@ -158,7 +159,7 @@ class TasksControllerTest < ActionController::TestCase
 
       second_task = TaskRecord.last
       second_task.users << second_task.company.users
-      second_task.status = 0
+      second_task.status = Status.default_open(@user.company)
       second_task.save!
 
       file = fixture_file_upload('/files/rails.png', 'image/png')
@@ -211,32 +212,6 @@ class TasksControllerTest < ActionController::TestCase
         regexp = Regexp.new(Regexp.escape("<strong>#{field}</strong> ; <script> alert('XSS');</script>"))
         assert_match regexp, mail_body
       end
-    end
-
-    should "update group when user dragging task on task grid" do
-      # custom property
-      property = Property.make(:company => @user.company)
-      property_value = PropertyValue.make(:property => property)
-      TaskPropertyValue.make(:task_id => @task.id, :property => property, :property_value => property_value)
-
-      post :set_group, :id => @task.task_num, :group => property.name, :value => property_value.value
-      tpv = @task.task_property_values.reload.detect { |tpv| tpv.property_id == property.id }
-      assert_equal property_value.id, tpv.property_value_id
-
-      property_value2 = PropertyValue.make(:property => property)
-      post :set_group, :id => @task.task_num, :group => property.name, :value => property_value2.value
-      tpv = @task.task_property_values.reload.detect { |tpv| tpv.property_id == property.id }
-      assert_equal property_value2.id, tpv.property_value_id
-
-      #milestone
-      milestone = Milestone.make(:project => @task.project, :company => @user.company)
-      post :set_group, :id => @task.task_num, :group => 'milestone', :value => "#{milestone.project.name}/#{milestone.name}"
-      assert_equal milestone.id, @task.reload.milestone_id
-
-      #resolution
-      resolution_arr = @task.statuses_for_select_list.clone.delete_if{|x| x[1] == @task.status}.rand
-      post :set_group, :id => @task.task_num, :group => "resolution", :value => resolution_arr[0]
-      assert_equal resolution_arr[1], @task.reload.status
     end
 
     context "one of task's watched attributes changed," do
@@ -375,15 +350,15 @@ class TasksControllerTest < ActionController::TestCase
         end
 
         should "not reopen task when comment on closing" do
-          @parameters[:task][:status] = 1
+          @parameters[:task][:status_id] = Status.default_closed(@user.company).id
           post(:update, @parameters)
-          assert_equal @task.reload.status, 1
+          assert_equal @task.reload.status, Status.default_closed(@user.company)
         end
 
         should "reopen task when comment on closed task" do
-          @task.update_attributes(:status => 1)
+          @task.update_attributes(:status => Status.default_closed(@user.company))
           post(:update, @parameters)
-          assert_equal @task.reload.status, TaskRecord.status_types.index("Open")
+          assert_equal @task.reload.status, Status.default_open(@user.company)
         end
       end
       context "without comment," do

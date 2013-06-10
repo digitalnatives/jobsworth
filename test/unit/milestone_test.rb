@@ -11,7 +11,7 @@ class MilestoneTest < ActiveSupport::TestCase
     @milestone.update_attributes(:status_name => :locked)
 
     @milestone.tasks.each do |t|
-      t.update_attributes(:status => 1, :completed_at => Time.now)
+      t.update_attributes(:status => Status.default_closed(@user.company), :completed_at => Time.now)
     end
 
     assert_equal :closed, @milestone.reload.status_name

@@ -16,24 +16,25 @@ class TaskTest < ActiveRecord::TestCase
   end
 
   def test_done?
-    task = TaskRecord.new
-    task.status = 0
+    task              = TaskRecord.new
+
+    task.status       = Status.default_open(@company)
     task.completed_at = nil
-    assert_not_equal true, task.done?
+    assert !task.done?
 
-    task.status = 2
-    assert_not_equal true, task.done?
+    task.status = Status.default_will_not_fix(@company)
+    assert !task.done?
 
-    task.status = 1
-    assert_not_equal true, task.done?
+    task.status = Status.default_closed(@company)
+    assert !task.done?
 
-    task.status = 0
+    task.status = Status.default_open(@company)
     task.completed_at = Time.now.utc
-    assert_not_equal true, task.done?
+    assert !task.done?
 
-    task.status = 2
+    task.status = Status.default_will_not_fix(@company)
     task.completed_at = Time.now.utc
-    assert_equal true, task.done?
+    assert task.done?
   end
 
   def test_after_save
@@ -94,13 +95,8 @@ class TaskTest < ActiveRecord::TestCase
   def test_issue_num
     assert_equal "#1", @task.issue_num
 
-    @task.status = 2
+    @task.status = Status.default_closed(@company)
     assert_equal "<strike>#1</strike>", @task.issue_num
-  end
-
-  def test_status_name
-    @task.status = 2
-    assert /<strike>#1<\/strike>/ =~ @task.status_name
   end
 
   def test_properties_setter
@@ -303,82 +299,103 @@ class TaskTest < ActiveRecord::TestCase
       assert_equal 1, @task.customers.length
       assert_equal c1, @task.task_customers.first.customer
     end
-    context "with status 0" do
+
+    context "with status 'Open'" do
       setup do
-        @task.status=0
+        @task.status = Status.default_open(@company)
         @task.save!
       end
+
+      # TODO it's not neccessarily true
       should "have status type 'Open'" do
-        assert_equal "Open", @task.status_type
+        assert "Open", @task.status_type
       end
+
       should "not be resolved" do
         assert !@task.resolved?
       end
+
       should "be open" do
         assert @task.open?
       end
     end
-    context "with status 1" do
+
+    context "with status 'Closed'" do
       setup do
-        @task.status=1
+        @task.status = Status.default_closed(@company)
         @task.save!
       end
+
+      # TODO it's not neccessarily true
       should "have status type 'Closed'" do
         assert_equal "Closed", @task.status_type
       end
+
       should "be resolved" do
         assert @task.resolved?
       end
+
       should "be closed" do
         assert @task.closed?
       end
     end
-    context "with status 2" do
+
+    context "with status 'Won't fix'" do
       setup do
-        @task.status=2
+        @task.status = Status.default_will_not_fix(@company)
         @task.save!
       end
+
       should "have status type 'Won't fix'" do
-        assert_equal "Won't fix", @task.status_type
+        assert_equal "Will not fix", @task.status_type
       end
+
       should "be resolved" do
         assert @task.resolved?
       end
+
       should "be will not fix" do
         assert @task.will_not_fix?
       end
     end
-    context "with status 3" do
+
+    context "with status 'Invalid'" do
       setup do
-        @task.status=3
+        @task.status = Status.default_not_valid(@company)
         @task.save!
       end
+
       should "have status type 'Invalid'" do
         assert_equal "Invalid", @task.status_type
       end
+
       should "be resolved" do
         assert @task.resolved?
       end
+
       should "be invalid" do
-        assert @task.invalid?
+        assert @task.not_valid?
       end
     end
-    context "with status 4" do
+
+    context "with status 'Duplicate'" do
       setup do
-        @task.status=4
+        @task.status = Status.default_duplicate(@company)
         @task.save!
       end
+
       should "have status type 'Duplicate'" do
         assert_equal "Duplicate", @task.status_type
       end
+
       should "be resolved" do
         assert @task.resolved?
       end
+
       should "be duplicate" do
         assert @task.duplicate?
       end
     end
-
   end
 
   context "a task with some work logs with times" do
@@ -400,6 +417,7 @@ class TaskTest < ActiveRecord::TestCase
       assert_nil work[@user3]
     end
   end
+
   context "Task.expire_hide_until" do
     setup do
       @future_task = TaskRecord.make(:hide_until=>@date=3.days.from_now)
@@ -457,15 +475,23 @@ class TaskTest < ActiveRecord::TestCase
     end
 
     should "one unresolved dependency get nil" do
-      2.times { @task.dependencies << TaskRecord.make(:project => @task.project, :milestone => @task.milestone, :status => 1, :completed_at => Time.now) }
-      @task.dependencies << TaskRecord.make(:project => @task.project, :milestone => @task.milestone, :status => 0)
+      deps = FactoryGirl.create_list :task, 2,
+              project: @task.project, milestone: @task.milestone,
+              status: Status.default_closed(@company), completed_at: Time.now
+      unresolved = FactoryGirl.create :task, project: @task.project, milestone: @task.milestone, status: Status.default_open(@company)
+      @task.dependencies  = deps
+      @task.dependencies << unresolved
       @task.save
-      assert_equal nil, @task.weight
+
+      assert_nil @task.weight
     end
 
     should "all resolved dependencies get score" do
-      3.times { @task.dependencies << TaskRecord.make(:project => @task.project, :milestone => @task.milestone, :status => 1, :completed_at => Time.now) }
-      @task.save
+      deps = FactoryGirl.create_list :task, 3,
+              project: @task.project, milestone: @task.milestone,
+              status: Status.default_closed(@company), completed_at: Time.now
+      @task.dependencies = deps
+
       assert_not_nil @task.weight
     end
   end
@@ -478,12 +504,17 @@ class TaskTest < ActiveRecord::TestCase
     end
 
     should "task be not snoozed if all its dependencies are resolved" do
-      2.times { @task.dependencies << TaskRecord.make(:project => @task.project, :status => 1, :completed_at => Time.now) }
-      unresolved = TaskRecord.make(:project => @task.project, :status => 0)
+      deps = FactoryGirl.create_list :task, 2,
+              project: @task.project, status: Status.default_closed(@company), completed_at: Time.now
+      unresolved = FactoryGirl.create :task, project: @task.project, status: Status.default_open(@company)
+      @task.dependencies  = deps
       @task.dependencies << unresolved
       @task.save
-      assert_equal nil, @task.reload.weight
-      unresolved.update_attributes(:status => 1, :completed_at => Time.now)
+
+      assert_nil @task.reload.weight
+
+      unresolved.update_attributes(status: Status.default_closed(@company), completed_at: Time.now)
+
       assert !@task.reload.snoozed?
       assert_not_nil @task.reload.weight
     end

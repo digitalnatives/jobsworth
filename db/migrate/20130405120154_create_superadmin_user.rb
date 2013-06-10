@@ -1,19 +1,16 @@
+require 'migration_helpers/create_superadmin'
+
 class CreateSuperadminUser < ActiveRecord::Migration
   def up
-    c = Company.create name: 'Administration',
-                       subdomain: 'administration'
-        User.create    company: c,
-                       username: 'admin',
-                       name: 'Administrator',
-                       email: 'superadmin@getjobsworth.org',
-                       password: '123456',
-                       password_confirmation: '123456',
-                       superadmin: true
+    CreateSuperadmin.new.up
+  rescue
+    puts 'Error while running "CreateSuperadmin.new.up"'
   end
 
   def down
-    Company.destroy_all subdomain: 'administration'
-    User.destroy_all super_admin: true
+    CreateSuperadmin.new.down
+  rescue
+    puts 'Error while running "CreateSuperadmin.new.down"'
   end
 
 end

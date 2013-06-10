@@ -1,53 +1,41 @@
 class ScoreRule < ActiveRecord::Base
   include ScoreRuleTypes
 
-  attr_accessible :name, :score, :score_type, :exponent
   attr_accessor   :final_value
+  attr_accessible :name, :score, :score_type, :exponent
 
-  belongs_to :controlled_by, 
-             :polymorphic => true
+  belongs_to :controlled_by, :polymorphic => true
 
-  validates :exponent,
-            :presence => true
-
-  validates :name, 
-            :presence => true,
-            :length   => { :maximum => 30 }
-
-  validates :score, 
-            :presence     => true, 
-            :numericality => true
-
-  validates :score_type,
-            :presence  => true,
-            :inclusion => { :in => ScoreRuleTypes::all_score_types }
-  
+  validates :exponent,   presence: true
+  validates :score,      presence: true, numericality: true
+  validates :name,       presence: true, length: {maximum: 30}
+  validates :score_type, presence: true, inclusion: {in: ScoreRuleTypes::all_score_types}
 
   def calculate_score_for(task)
     case score_type
-      when FIXED then 
-        result            = score
-        self.final_value  = "#{result.to_i}"
-        result
-      when TASK_AGE then 
-        task_age          = get_task_age_for(task)
-        result            = calculate(score, task_age, exponent)
-        self.final_value  = "#{score} x (#{task_age} ^ #{exponent}) = #{result}"
-        result
-      when LAST_COMMENT_AGE then
-        last_comment_age  = get_last_comment_age_for(task)
-        result            = calculate(score, last_comment_age, exponent)
-        self.final_value  = "#{score} x (#{last_comment_age} ^ #{exponent}) = #{result}"
-        result
-      when OVERDUE then
-        pass_due_age        = get_pass_due_age_for(task)
-        result              = calculate(score, pass_due_age, exponent)
-        self.final_value    = "#{score} x (#{pass_due_age} ^ #{exponent}) = #{result}"
-        result
+    when FIXED
+      result            = score
+      self.final_value  = "#{result.to_i}"
+      result
+    when TASK_AGE
+      task_age          = get_task_age_for(task)
+      result            = calculate(score, task_age, exponent)
+      self.final_value  = "#{score} x (#{task_age} ^ #{exponent}) = #{result}"
+      result
+    when LAST_COMMENT_AGE
+      last_comment_age  = get_last_comment_age_for(task)
+      result            = calculate(score, last_comment_age, exponent)
+      self.final_value  = "#{score} x (#{last_comment_age} ^ #{exponent}) = #{result}"
+      result
+    when OVERDUE
+      pass_due_age      = get_pass_due_age_for(task)
+      result            = calculate(score, pass_due_age, exponent)
+      self.final_value  = "#{score} x (#{pass_due_age} ^ #{exponent}) = #{result}"
+      result
     end
   end
 
-  private 
+  private
 
   def get_task_age_for(task)
     # If the task is brand new 'created_at' should be nil, this code sets
@@ -57,7 +45,7 @@ class ScoreRule < ActiveRecord::Base
   end
 
   def get_last_comment_age_for(task)
-    # Set last_comment_started to a default value (in case the task doesn't 
+    # Set last_comment_started to a default value (in case the task doesn't
     # have comments)
     last_comment_started_at = Time.now.utc
     # Return all the public comments (work logs of type 'comment' and that belong to
@@ -72,12 +60,12 @@ class ScoreRule < ActiveRecord::Base
 
   def get_pass_due_age_for(task)
     target_date = (task.target_date || Time.now.utc).to_date
-    (Time.now.utc.to_date - target_date).to_f 
+    (Time.now.utc.to_date - target_date).to_f
   end
 
   def calculate(score, value, exp)
     result = score * ( value.abs ** exp)
-    result = -result if value < 0 
+    result = -result if value < 0
     result.to_i
   end
 end

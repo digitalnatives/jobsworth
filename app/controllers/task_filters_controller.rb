@@ -118,17 +118,21 @@ class TaskFiltersController < ApplicationController
 
   # Select a search filter which causes the search filter partial to be reloaded
   def select
-    @filter = current_user.company.task_filters.find(params[:id])
+    @filter = current_company.task_filters.for_user(current_user).find(params[:id])
 
-    if @filter.user == current_user or @filter.shared?
-      current_task_filter.select_filter(@filter)
-    else
-      flash[:error] = t('flash.alert.access_denied_to_model', model: TaskFilter.model_name.human)
-    end
+    current_task_filter.select_filter(@filter)
+
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = t('flash.alert.access_denied_to_model', model: TaskFilter.model_name.human)
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = t('flash.alert.unexpected_error', message: e.message)
+  rescue => e
+    logger.error 'Unexpected error while selecting TaskFilter[%s] error:\n %s' % [params[:id], e.message]
+  ensure
     if request.xhr?
       render :partial => "search_filter_keys"
     else
-      redirect_to '/tasks'
+      redirect_to tasks_url
     end
   end
 
