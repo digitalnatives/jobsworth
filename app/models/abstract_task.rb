@@ -404,7 +404,10 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def statuses_for_select_list
-    company.statuses.collect{|s| [s.name]}.each_with_index{|s,i| s<< i }
+    # TODO This should be here, with translation
+    # company.statuses.collect { |s| [s.name, s.id] }
+    company.statuses.collect { |s| [I18n.t(s.name.parameterize('_'), scope: 'statuses', default: s.name)] }
+                    .each_with_index { |s,i| s << i }
   end
 
   def unknown_emails
