@@ -63,13 +63,12 @@ class WidgetsController < ApplicationController
   end
 
   def destroy
-    begin
-      @widget = Widget.where("company_id = ? AND user_id = ?", current_user.company_id, current_user.id).find(params[:id])
-    rescue
-      return render :json => {:success => false}
-    end
+    @widget = Widget.where(company_id: current_company, user_id: current_user).find(params[:id])
     @widget.destroy
-    render :json => {:success => true}
+
+    render json: {success: true}
+  rescue
+    render json: {success: false}
   end
 
   def create

@@ -32,6 +32,7 @@ class Widget < ActiveRecord::Base
     res << " [#{I18n.t("widgets.mine")}]" if self.mine?
     "#{@attributes['name']}#{ res.empty? ? "" : " - #{res}"}"
   end
+
   def calculate_start_step_interval_range_tick(time_zone)
     case self.number
       when 7 then
@@ -55,6 +56,7 @@ class Widget < ActiveRecord::Base
     end
     return start, step, interval, range, tick
   end
+
   def filter_from_filter_by
     return nil unless filter_by
     case filter_by[0..0]
@@ -70,6 +72,7 @@ class Widget < ActiveRecord::Base
       ""
     end
   end
+
   def last_completed
     if mine?
       user.tasks.where("completed_at IS NOT NULL #{filter_from_filter_by}").order("completed_at DESC").limit(number)
@@ -77,6 +80,7 @@ class Widget < ActiveRecord::Base
       TaskRecord.accessed_by(user).where("tasks.completed_at IS NOT NULL #{filter_from_filter_by}").order("tasks.completed_at DESC").limit(number)
     end
   end
+
   def counts
     tz= user.tz
     start=tz.local_to_utc(tz.now.at_midnight)
@@ -100,6 +104,7 @@ class Widget < ActiveRecord::Base
     end
     return counts
   end
+
 private
 
   def tasks_count_created(start, stop)
@@ -113,12 +118,15 @@ private
   def work_logs_sum(start, stop)
     WorkLog.joins(:task).where("tasks.project_id IN (?) AND started_at >= ? AND started_at < ? #{filter_from_filter_by}", user.project_ids, start, stop).sum('work_logs.duration').to_i / 60
   end
+
   def mine_tasks_count_created(start, stop)
     user.tasks.where("tasks.created_at >= ? AND tasks.created_at < ? #{filter_from_filter_by}", start, stop).count
   end
+
   def mine_tasks_count_completed(start, stop)
     user.tasks.where("tasks.completed_at IS NOT NULL AND tasks.completed_at >= ? AND tasks.completed_at < ? #{filter_from_filter_by}", start, stop).count
   end
+
   def mine_work_logs_sum(start, stop)
     WorkLog.joins(:task).where("user_id = ? AND started_at >= ? AND started_at < ? #{filter_from_filter_by}", user.id, start, stop).sum('work_logs.duration').to_i / 60
   end
