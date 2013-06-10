@@ -49,13 +49,14 @@ class Company < ActiveRecord::Base
   validates_presence_of         :subdomain
   validates_uniqueness_of       :subdomain
 
-  after_create :create_default_properties
-  after_create :create_default_statuses
+  attr_accessor :no_default_properties,
+                :no_default_statuses
 
-  ###
+  after_create :create_default_properties, unless: :no_default_properties
+  after_create :create_default_statuses,   unless: :no_default_statuses
+
   # Creates the default properties used for describing tasks.
   # Returns an array of the created properties.
-  ###
   def create_default_properties
     new_props = []
     Property.defaults.each do |property_params, property_values_params|
