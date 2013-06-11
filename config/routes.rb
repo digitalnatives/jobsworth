@@ -1,8 +1,10 @@
 Jobsworth::Application.routes.draw do
   scope ActionController::Base.config.relative_url_root || "/" do
 
-  mount OmniauthFluenta::Engine => '/'
   devise_prefix = ActionController::Base.config.relative_url_root.to_s.sub('/', '')
+
+  match "users/auth/:provider",          to: 'omniauth_fluenta/omniauth_callbacks#passthru', as: :user_omniauth_authorize, constraints: {provider: /fluenta/ }
+  match "users/auth/:provider/callback", to: 'omniauth_fluenta/omniauth_callbacks#fluenta',  as: :user_omniauth_callback, constraints: {provider: /fluenta/ }
   devise_for :users,
              :path_prefix => [devise_prefix, 'auth'].reject(&:blank?).join('/'),
              :controllers => { :sessions  => "auth/sessions",
