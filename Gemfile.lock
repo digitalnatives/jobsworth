@@ -327,6 +327,9 @@ GEM
       multi_json (~> 1.0)
       rubyzip
       websocket (~> 1.0.4)
+    sextant (0.2.3)
+      activesupport (>= 3.2)
+      rails (>= 3.2)
     shoulda (3.4.0)
       shoulda-context (~> 1.0, >= 1.0.1)
       shoulda-matchers (~> 1.0, >= 1.4.1)
@@ -437,6 +440,7 @@ DEPENDENCIES
   ruby-prof
   rufus-scheduler
   sass-rails
+  sextant
   shoulda
   simplecov
   spork

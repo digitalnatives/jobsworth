@@ -86,6 +86,7 @@ group :test do
 end
 
 group :development do
+  gem 'sextant'
   gem 'thin'
   gem 'annotate'
   gem 'quiet_assets'
