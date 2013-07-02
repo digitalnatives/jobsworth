@@ -4,8 +4,9 @@ var jobsworth = jobsworth || {};
 jobsworth.EmailAddresses = (function($) {
 
   var email_addresses_path       = "<%= CGI.unescape url.email_addresses_path %>",
-      email_address_path         = "<%= CGI.unescape url.email_address_path('{id}') %>",
-      default_email_address_path = "<%= CGI.unescape url.default_email_address_path('{id}') %>";
+      email_address_path         = function(id) { return resolve_url("<%= CGI.unescape url.email_address_path('{id}') %>",         {id: id}); },
+      default_email_address_path = function(id) { return resolve_url("<%= CGI.unescape url.default_email_address_path('{id}') %>", {id: id}); };
+
   var ajaxErrorHandler = function() { alert("Sorry, there's an exception, please retry later."); };
 
   function EmailAddresses(user_id) {
@@ -45,7 +46,7 @@ jobsworth.EmailAddresses = (function($) {
   }
 
   EmailAddresses.prototype.deleteEmail = function(id) {
-    var url = resolve_url(email_address_path, {id: id});
+    var url = email_address_path(id);
     $.post(url, {_method: 'delete'}, function(res) {
       if (res.success) {
         $('.email_address[data-id=' + id + ']').remove();
@@ -56,7 +57,7 @@ jobsworth.EmailAddresses = (function($) {
   }
 
   EmailAddresses.prototype.setDefault = function(id) {
-    var url = resolve_url(default_email_address_path, {id: id});
+    var url = default_email_address_path(id);
     $.post(url, {_method: 'put'}, function(res) {
       if (res.success) {
         $('.email_address').removeClass('default');
@@ -68,7 +69,7 @@ jobsworth.EmailAddresses = (function($) {
   }
 
   EmailAddresses.prototype.addEmail = function(email) {
-    var url  = resolve_url(email_addresses_path);
+    var url  = email_addresses_path;
     var data = {user_id: this.user_id, email: email};
 
     $.post(url, {email_address: data}, function(res) {

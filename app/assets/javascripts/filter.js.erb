@@ -8,15 +8,9 @@ jobsworth.Filter = (function($){
       update_current_filter_task_filters_path  = "<%= CGI.unescape url.update_current_filter_task_filters_path %>",
       set_single_task_filter_task_filters_path = "<%= CGI.unescape url.set_single_task_filter_task_filters_path %>",
       new_task_filter_path                     = "<%= CGI.unescape url.new_task_filter_path %>",
-      task_filter_path                         = function(id) {
-                                                 resolve_url("<%= CGI.unescape url.task_filter_path('{id}') %>", {id: id});
-                                               },
-      select_task_filter_path                  = function(id) {
-                                                 resolve_url("<%= CGI.unescape url.select_task_filter_path('{id}') %>", {id: id});
-                                               },
-      toggle_status_task_filter_path           = function(id) {
-                                                 resolve_url("<%= CGI.unescape url.toggle_status_task_filter_path('{id}') %>", {id: id});
-                                               };
+      task_filter_path                         = function(id) { return resolve_url("<%= CGI.unescape url.task_filter_path('{id}') %>",               {id: id}); },
+      select_task_filter_path                  = function(id) { return resolve_url("<%= CGI.unescape url.select_task_filter_path('{id}') %>",        {id: id}); },
+      toggle_status_task_filter_path           = function(id) { return resolve_url("<%= CGI.unescape url.toggle_status_task_filter_path('{id}') %>", {id: id}); };
 
   function Filter() {
     this.init();

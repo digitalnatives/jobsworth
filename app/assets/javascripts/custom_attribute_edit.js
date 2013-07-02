@@ -13,12 +13,12 @@ jobsworth.CustomAttributeEdit = (function($){
 
     $("input.preset-checkbox").live("change", function() {
       self.presetChange(this);
-    })
-  }
+    });
+  };
 
   CustomAttributeEdit.prototype.init = function() {
     var self = this;
-  }
+  };
 
   CustomAttributeEdit.prototype.presetChange = function(checkbox) {
     checkbox = $(checkbox);
@@ -35,14 +35,13 @@ jobsworth.CustomAttributeEdit = (function($){
       maxLength.hide().find("input").val("");
       choices.show();
       choiceLink.show();
-    }
-    else {
+    } else {
       multiple.show();
       maxLength.show();
       choices.hide().html("");
       choiceLink.hide();
     }
-  }
+  };
 
   return CustomAttributeEdit;
 })(jQuery);
