@@ -193,10 +193,11 @@ function showPassword(link, url) {
   Toggles the approval status of the given work log
 */
 function toggleWorkLogApproval(sender, workLogId) {
-  var update_work_log_path = "<%= CGI.unescape url.update_work_log_work_log_path('{id}') %>"
-  jQuery.post(resolve_url(update_work_log_path, {id: workLogId}), {
-    "work_log[status]" : jQuery(sender).val()
-  });
+  var update_work_log_path = "<%= CGI.unescape url.update_work_log_work_log_path('{id}') %>";
+  jQuery.post(
+    resolve_url(update_work_log_path, {id: workLogId}),
+    {"work_log[status]" : jQuery(sender).val()}
+  );
 }
 
 /*
@@ -205,8 +206,9 @@ function toggleWorkLogApproval(sender, workLogId) {
  a hidden field directly before the text field will be updated with the object id.
 */
 function updateAutoCompleteField(event, ui) {
+  var edit_customer_path = "<%= CGI.unescape url.edit_customer_path('{id}') %>";
   jQuery("#resource_customer_id").val(ui.item.id);
-  jQuery('#resource_customer_link').attr("href", "/customers/edit/" + ui.item.id);
+  jQuery('#resource_customer_link').attr("href", resolve_url(edit_customer_path, {id: ui.item.id});
 }
 
 jQuery(document).ready(function() {
