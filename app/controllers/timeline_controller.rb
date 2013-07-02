@@ -2,7 +2,7 @@
 # Filter WorkLogs in different ways, with pagination
 
 class TimelineController < ApplicationController
-  def index
+  def show
     params[:filter_date] ||= 1
     params[:filter_project] ||= 0
     params[:filter_status] ||= -1
@@ -14,4 +14,5 @@ class TimelineController < ApplicationController
       render :index
     end
   end
+  alias_method :index, :show
 end

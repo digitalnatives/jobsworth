@@ -139,6 +139,7 @@ Jobsworth::Application.routes.draw do
 
   resources :scm_projects
   resources :triggers
+  resource :timeline, only: [:show]
 
   match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
 
