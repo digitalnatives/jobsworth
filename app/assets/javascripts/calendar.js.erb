@@ -1,7 +1,9 @@
+<% url = Rails.application.routes.url_helpers %>
+
 function init_calendar() {
   jQuery("#calendar").empty();
   jQuery("#calendar").fullCalendar({
-    events: "/tasks/calendar",
+    events: "<%= CGI.unescape url.calendar_tasks_path %>",
     header: {
       left: '',
       center: 'title',
