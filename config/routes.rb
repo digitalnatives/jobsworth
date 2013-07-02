@@ -196,8 +196,11 @@ Jobsworth::Application.routes.draw do
   end
 
   resources :custom_attributes, only: [:index, :edit, :update] do
-    get 'fields', on: :collection
-    get 'choice', on: :collection # it should be on member, look at action
+    collection do
+      get 'fields'
+      get 'choice' # it should be on member, look at action
+      get 'edit'
+    end
   end
 
   ActiveAdmin.routes(self)
