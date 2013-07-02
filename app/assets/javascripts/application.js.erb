@@ -212,9 +212,11 @@ function updateAutoCompleteField(event, ui) {
 }
 
 jQuery(document).ready(function() {
-  autocomplete('#resource_customer_name', '/customers/auto_complete_for_customer_name', updateAutoCompleteField);
-  autocomplete('#project_customer_name', '/customers/auto_complete_for_customer_name', addCustomerToProject);
-  autocomplete('#user_customer_name', '/customers/auto_complete_for_customer_name', addCustomerToUser);
+  var auto_complete_for_customer_name_customers_path = "<%= CGI.unescape url.auto_complete_for_customer_name_customers_path %>";
+
+  autocomplete('#resource_customer_name', auto_complete_for_customer_name_customers_path, updateAutoCompleteField);
+  autocomplete('#project_customer_name',  auto_complete_for_customer_name_customers_path, addCustomerToProject);
+  autocomplete('#user_customer_name',     auto_complete_for_customer_name_customers_path, addCustomerToUser);
 
   jQuery(".datefield").datepicker({ constrainInput: false, dateFormat: userDateFormat});
 });
