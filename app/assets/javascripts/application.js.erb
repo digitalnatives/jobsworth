@@ -45,9 +45,8 @@
 //= require user_permissions
 //= require project_permissions
 //= require email_addresses
-//
 
-
+<% url = Rails.application.routes.url_helpers %>
 jQuery.noConflict();
 
 // Borrowed from jQuery 1.8.3's source code
@@ -80,15 +79,13 @@ function updateResourceAttributes(select) {
     select = jQuery(select);
     var typeId = select.val();
     var target = jQuery("#attributes");
+    var resource_attributes_url = "<%= CGI.unescape url.attributes_resources_path(type_id: '{type_id}') %>";
 
     if (typeId == "") {
-        target.html("");
-    }
-    else {
-        var url = "/resources/attributes/?type_id=" + typeId;
-        jQuery.get(url, function(data) {
-            target.html(data);
-        }, 'html');
+      target.html("");
+    } else {
+      var url = resolve_url(resource_attributes_url, {type_id: typeId});
+      jQuery.get(url, function(data) { target.html(data); }, 'html');
     }
 }
 
