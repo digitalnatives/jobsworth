@@ -64,6 +64,8 @@ Jobsworth::Application.routes.draw do
       post 'change_task_weight'
       get  'billable'
       get  'planning'
+      get  'calendar'
+      get  'gantt'
     end
     member do
       get 'score'
