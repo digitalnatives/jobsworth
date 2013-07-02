@@ -30,6 +30,10 @@ Jobsworth::Application.routes.draw do
       get :tasks
       get :filters
       match :workplan, :via => [:get, :put]
+      get :project
+    end
+    collection do
+      get :auto_complete_for_project_name
     end
   end
 
