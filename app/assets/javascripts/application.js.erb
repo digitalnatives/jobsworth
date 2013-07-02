@@ -163,14 +163,13 @@ function addAttributeChoices(sender) {
     var choices = jQuery(sender).parent().find('.choices');
     var attribute = jQuery(sender).parents(".attribute");
     var attrId = attribute.attr("id").split("_").pop();
+    var choice_custom_attributes_path = "<%= CGI.unescape url.choice_custom_attributes_path(id: '{id}') %>";
 
     if (attrId == "attribute") {
         // new attribute, so just ignore
         attrId = "";
     }
-    var url = "/custom_attributes/choice/" + attrId;
-
-    jQuery.get(url, function(data) {
+    jQuery.get(resolve_url(choice_custom_attributes_path, {id: attrId}), function(data) {
       jQuery(choices).append(data);
       updatePositionFields(choices);
     }, 'html')

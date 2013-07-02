@@ -188,6 +188,11 @@ Jobsworth::Application.routes.draw do
     get :toggle_display, on: :member
   end
 
+  resources :custom_attributes, only: [:index, :edit, :update] do
+    get 'fields', on: :collection
+    get 'choice', on: :collection # it should be on member, look at action
+  end
+
   ActiveAdmin.routes(self)
 
   match ':controller/list' => ':controller#index'
