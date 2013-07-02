@@ -209,7 +209,7 @@ function updateCustomerIdAndLink(base_id, event, ui) {
   var edit_customer_path = "<%= CGI.unescape url.edit_customer_path('{id}') %>";
 
   jQuery("#"+ base_id +"_id").val(ui.item.id);
-  jQuery("#"+ base_id +"_link").attr("href", resolve_url(edit_customer_path, {id: ui.item.id});
+  jQuery("#"+ base_id +"_link").attr("href", resolve_url(edit_customer_path, {id: ui.item.id}));
 }
 
 function updateAutoCompleteField(event, ui) {

@@ -4,7 +4,7 @@ var jobsworth = jobsworth || {}
 jobsworth.Grid = (function($){
 
   var properties_companies_path = "<%= CGI.unescape url.properties_companies_path %>",
-      tasks_path = function(format) { return resolve_url("<%= CGI.unescape url.tasks_path(format: '{format}') %>", {format: format}); },
+      tasks_path = function(format) { return resolve_url("<%= CGI.unescape url.tasks_path(format: '{format}') %>", {format: format}); };
 
   var columns = [
     {id: 'read',       name: "<span class='unread_icon'/>", field: 'read', resizable: false, sortable: true, formatter: UnreadMarkFormatter, width:16},

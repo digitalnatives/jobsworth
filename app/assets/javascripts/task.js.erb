@@ -4,8 +4,8 @@ jobsworth.Task = (function($){
 
   var tasks_path      = "<%= CGI.unescape url.tasks_path %>",
       new_task_path   = "<%= CGI.unescape url.new_task_path %>",
-      task_path       = function(id) { return resolve_url(<%= CGI.unescape url.task_path('{id}') %>,      {id: id}); },
-      edit_task_path  = function(id) { return resolve_url(<%= CGI.unescape url.edit_task_path('{id}') %>, {id: id}); },
+      task_path       = function(id) { return resolve_url("<%= CGI.unescape url.task_path('{id}') %>",      {id: id}); },
+      edit_task_path  = function(id) { return resolve_url("<%= CGI.unescape url.edit_task_path('{id}') %>", {id: id}); };
 
   function Task(id) {
     this.load(id);

@@ -34,6 +34,7 @@ Jobsworth::Application.routes.draw do
     end
     collection do
       get :auto_complete_for_project_name
+      get :auto_complete_for_user_name
     end
   end
 
@@ -52,7 +53,7 @@ Jobsworth::Application.routes.draw do
     get 'list_completed', :on => :collection
 
     member do
-      get 'ajax_add_permission'
+      get :ajax_add_permission
       get 'clone'
       post :complete
       post :revert

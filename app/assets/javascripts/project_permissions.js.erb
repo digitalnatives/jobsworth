@@ -3,8 +3,8 @@ var jobsworth = jobsworth || {}
 
 jobsworth.ProjectPermissions = (function($){
 
-  var auto_complete_for_user_name_users_path = function(project_id) { return resolve_url("<%= CGI.unescape url.auto_complete_for_user_name_users_path %>", {project_id: project_id}); },
-      ajax_add_permission_project_path       = function(project_id) { return resolve_url("<%= CGI.unescape url.ajax_add_permission_project_path %>",       {project_id: project_id}); };
+  var auto_complete_for_user_name_users_path = function(project_id) { return resolve_url("<%= CGI.unescape url.auto_complete_for_user_name_users_path(project_id: '{project_id}') %>", {project_id: project_id}); },
+      ajax_add_permission_project_path       = function(project_id) { return resolve_url("<%= CGI.unescape url.ajax_add_permission_project_path(id: '{id}') %>", {id: project_id}); };
 
   function ProjectPermissions(projectId) {
     this.projectId = projectId;
