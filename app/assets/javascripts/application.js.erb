@@ -205,19 +205,24 @@ function toggleWorkLogApproval(sender, workLogId) {
  The autocomplete text field itself will be updated with the name, and
  a hidden field directly before the text field will be updated with the object id.
 */
-function updateAutoCompleteField(event, ui) {
+function updateCustomerIdAndLink(base_id, event, ui) {
   var edit_customer_path = "<%= CGI.unescape url.edit_customer_path('{id}') %>";
 
-  jQuery("#resource_customer_id").val(ui.item.id);
-  jQuery('#resource_customer_link').attr("href", resolve_url(edit_customer_path, {id: ui.item.id});
+  jQuery("#"+ base_id +"_id").val(ui.item.id);
+  jQuery("#"+ base_id +"_link").attr("href", resolve_url(edit_customer_path, {id: ui.item.id});
+}
+
+function updateAutoCompleteField(event, ui) {
+  updateCustomerIdAndLink('resource_customer', event, ui);
 }
 
 /*Adds the selected customer to the new project*/
 function addCustomerToProject(event, ui){
-  var edit_customer_path = "<%= CGI.unescape url.edit_customer_path('{id}') %>";
+  updateCustomerIdAndLink('project_customer', event, ui);
+}
 
-  jQuery('#project_customer_id').val(ui.item.id);
-  jQuery('#project_customer_link').attr("href", resolve_url(edit_customer_path, {id: ui.item.id});
+function addCustomerToUser(event, ui){
+  updateCustomerIdAndLink('user_customer', event, ui);
 }
 
 jQuery(document).ready(function() {
@@ -231,10 +236,6 @@ jQuery(document).ready(function() {
 });
 
 
-function addCustomerToUser(event, ui){
-  jQuery('#user_customer_id').val(ui.item.id);
-  jQuery('#user_customer_link').attr("href", "/customers/edit/" + ui.item.id);
-}
 
 function autocomplete(input_field, path, after_callback) {
   jQuery(input_field).autocomplete({
@@ -295,7 +296,7 @@ function flash_message(message) {
 
 function authorize_ajax_form_callback(json) {
   if (json.status == "session timeout") {
-    window.location = "/users/sign_in";
+    window.location = "<%= CGI.unescape url.new_user_session_path %>";
     return false;
   }
 }
