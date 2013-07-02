@@ -1,28 +1,35 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 jobsworth.services = jobsworth.services || {}
 
 jobsworth.services.ServiceEditor = (function($) {
+
+  var service_level_agreements_path                  = "<%= CGI.unescape url.service_level_agreements_path %>",
+      service_level_agreement_path                   = function(id) { return resolve_url("<%= CGI.unescape url.service_level_agreement_path('{id}') %>", {id: id}); },
+      auto_complete_for_customer_name_customers_path = "<%= CGI.unescape url.auto_complete_for_customer_name_customers_path %>",
+      auto_complete_for_service_name_services_path   = "<%= CGI.unescape url.auto_complete_for_service_name_services_path %>";
+
   function ServiceEditor(options) {
     this.options = options;
-    this.bindEvents();   
+    this.bindEvents();
   }
 
   ServiceEditor.prototype.selectCustomerAutoCompleteCallback = function(e, ui) {
-    $.post("/service_level_agreements", {service_level_agreement:{customer_id:ui.item.id, service_id:this.options.service_id}}, function(data) {
+    $.post(service_level_agreements_path, {service_level_agreement:{customer_id:ui.item.id, service_id:this.options.service_id}}, function(data) {
       if(data.success) {
         $(".service-level-agreements").append(data.html);
       } else {
         alert(data.message);
       }
       $("#service-edit-autocomplete-for-customer").val('');
-    }) 
+    })
   }
 
   ServiceEditor.prototype.selectServiceAutoCompleteCallback = function(e, ui) {
-    $.post("/service_level_agreements", {service_level_agreement:{service_id:ui.item.id, customer_id:this.options.customer_id}}, function(data) {
+    $.post(service_level_agreements_path, {service_level_agreement:{service_id:ui.item.id, customer_id:this.options.customer_id}}, function(data) {
       if(data.success) {
         $(".service-level-agreements").append(data.html);
       } else {
@@ -37,7 +44,7 @@ jobsworth.services.ServiceEditor = (function($) {
     $("img.ajax", $sla_node).removeClass("hide");
     $.ajax({
       type: "PUT",
-      url: "/service_level_agreements/" + sla_id,
+      url: service_level_agreement_path(sla_id),
       data: {service_level_agreement:{billable:billable}},
       success: function(data) {
         $("img.ajax", $sla_node).addClass("hide");
@@ -55,7 +62,7 @@ jobsworth.services.ServiceEditor = (function($) {
 
     // set up autocomplete for customer
     $("#service-edit-autocomplete-for-customer").autocomplete({
-      source: "/customers/auto_complete_for_customer_name",
+      source: auto_complete_for_customer_name_customers_path,
       delay: 800,
       minlength: 3,
       select: function(e, ui) { self.selectCustomerAutoCompleteCallback(e, ui); }
@@ -63,7 +70,7 @@ jobsworth.services.ServiceEditor = (function($) {
 
     // set up autocomplete for service
     $("#service-edit-autocomplete-for-service").autocomplete({
-      source: "/services/auto_complete_for_service_name",
+      source: auto_complete_for_service_name_services_path,
       delay: 800,
       minlength: 3,
       select: function(e, ui) { self.selectServiceAutoCompleteCallback(e, ui); }
@@ -85,7 +92,7 @@ jobsworth.services.ServiceEditor = (function($) {
       $("img.ajax", $sla_node).removeClass("hide");
       $.ajax({
         type: "DELETE",
-        url: "/service_level_agreements/" + sla_id,
+        url: service_level_agreement_path(sla_id),
         success: function(data) {
         $("img.ajax", $sla_node).addClass("hide");
           if(data.success) {
