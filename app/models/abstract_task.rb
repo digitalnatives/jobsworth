@@ -170,7 +170,7 @@ class AbstractTask < ActiveRecord::Base
   end
 
   def status_type
-    status.name
+    status.try(:name)
   end
 
   def owners_to_display
