@@ -193,9 +193,10 @@ function showPassword(link, url) {
   Toggles the approval status of the given work log
 */
 function toggleWorkLogApproval(sender, workLogId) {
-    jQuery.post("/work_logs/update_work_log", {
-        id : workLogId,
-        "work_log[status]" : jQuery(sender).val() });
+  var update_work_log_path = "<%= CGI.unescape url.update_work_log_work_log_path('{id}') %>"
+  jQuery.post(resolve_url(update_work_log_path, {id: workLogId}), {
+    "work_log[status]" : jQuery(sender).val()
+  });
 }
 
 /*

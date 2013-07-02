@@ -110,7 +110,7 @@ Jobsworth::Application.routes.draw do
   end
 
   resources :work_logs do
-    match :update_work_log, :on=> :member
+    match 'update_work_log', on: :member
   end
 
   resources :tags do
