@@ -7,7 +7,7 @@
   filter_count = 0
 %>
 
-<%= form_tag('/timeline/index') do %>
+<%= form_tag timeline_path, method: :get do %>
 
   <% if current_user.projects.any? %>
     <select name="filter_project" id="filter_project">
