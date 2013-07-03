@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+  <li class="<%= 'active' if active == 'index'    %>"><a href="<%= tasks_path %>"><i class="icon-list"></i> <%= t("tasks.icon_list") %> </a></li>
+  <li class="<%= 'active' if active == 'calendar' %>"><a href="<%= calendar_tasks_path %>"><i class="icon-calendar"></i> <%= t("tasks.icon_calendar") %> </a></li>
+  <li class="<%= 'active' if active == 'gantt'    %>"><a href="<%= gantt_tasks_path %>"><i class="icon-align-left"></i> <%= t("tasks.icon_gantt") %> </a></li>
+</ul>

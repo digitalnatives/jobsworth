@@ -5,12 +5,7 @@
 <% end %>
 
 <%= render(:partial => "task_filters/search_filter", :locals => { :redirect_params => { :tag => params[:tag] }}) %>
-
-<ul class="nav nav-tabs">
-  <li class="active"><a href="<%= tasks_path %>"><i class="icon-list"></i> <%= t("tasks.icon_list") %> </a></li>
-  <li><a href="<%= calendar_tasks_path %>"><i class="icon-calendar"></i> <%= t("tasks.icon_calendar") %> </a></li>
-  <li><a href="<%= gantt_tasks_path %>"><i class="icon-align-left"></i> <%= t("tasks.icon_gantt") %> </a></li>
-</ul>
+<%= render 'tabbar', active: 'index' %>
 
 <div id="task_grid"></div>
 <div id="groupBy" class="clearfix"><%= select_tag("chngroup", options_for_changegroup) %></div>
