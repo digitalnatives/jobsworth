@@ -1,12 +1,14 @@
 <% @page_title = t("projects.edit_title", title: "#{@project.name} - #{Setting.productName}") %>
 
-<%= form_for(@project, :html => {:class => "form-horizontal"}) do %>
+<%= form_for(@project, :html => {:class => "form-horizontal"}) do |f| %>
   <fieldset id="project_form">
     <legend><%= @project.template? ? t("project_templates.edit") : t("projects.edit") %>
-    <legend><%=  %>
+    <legend>
       <%= link_to_tasks_filtered_by(t('projects.view_tasks'), @project, :class => "btn btn-success pull-right") %>
     </legend>
+
     <%= render :partial => "form" %>
+
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Save</button>
       <% if current_user.admin?%>
@@ -63,7 +65,7 @@
       <div class="tab-pane" id="score-rules-pane">
         <%= render 'shared/score_rules_container',
            :container_name => (@project.template? ? 'project_templates' : 'projects'),
-          :container_id   => @project.id %>
+           :container_id   => @project.id %>
         </div>
       <% end %>
     <% if current_user.can?( @project, 'grant' ) %>

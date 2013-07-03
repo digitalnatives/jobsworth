@@ -152,6 +152,7 @@ Jobsworth::Application.routes.draw do
   end
 
   resources :projects, :customers, :property_values do
+    get 'list_completed', on: :collection
     resources :score_rules
   end
 
