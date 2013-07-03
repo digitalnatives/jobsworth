@@ -7,6 +7,7 @@ class TimelinesController < ApplicationController
     params[:filter_date]    ||= 1
     params[:filter_project] ||= 0
     params[:filter_status]  ||= -1
+    params[:offset]         ||= 0
     @logs = EventLog.event_logs_for_timeline(current_user, params)
 
     respond_to do |format|
