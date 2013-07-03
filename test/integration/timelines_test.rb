@@ -33,11 +33,11 @@ class TimelinesTest < ActionController::IntegrationTest
 
         @log = @task.reload.work_logs.detect { |wl| wl.body == "<script>alert('Body!!!');</script>" }
         assert_not_nil @log, "log"
-        visit "/timeline/list"
+        visit timeline_path
       end
 
       should "see unescaped worklog body on timeline/list page" do
-        assert page.has_content?('Timeline'), "visit timeline/list"
+        assert page.has_content?('Timeline'), "visit /timeline"
         assert page.has_content?("<script>alert('Body!!!');</script>"), "log body"
       end
 
