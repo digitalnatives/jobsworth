@@ -1,10 +1,10 @@
 require 'test_helper'
 
-class TimelineTest < ActionController::IntegrationTest
+class TimelinesTest < ActionController::IntegrationTest
   context "with using envjs a logged in user" do
     setup do
       @user = login
-      @user.option_tracktime=true
+      @user.option_tracktime = true
       @user.save!
     end
 
