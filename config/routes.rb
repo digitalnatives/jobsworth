@@ -144,9 +144,10 @@ Jobsworth::Application.routes.draw do
 
   resources :scm_projects
   resources :triggers
+
   resource :timeline, only: [:show]
 
-  match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
+  resources(:billings, only: :index) { get :get_csv, on: :collection }
 
   resources :projects, :customers, :property_values do
     resources :score_rules
@@ -205,6 +206,7 @@ Jobsworth::Application.routes.draw do
 
   ActiveAdmin.routes(self)
 
+  match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
   match ':controller/list' => ':controller#index'
 
   match ":controller(/:action(/:id(.:format)))"
