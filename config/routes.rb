@@ -145,9 +145,11 @@ Jobsworth::Application.routes.draw do
   resources :scm_projects
   resources :triggers
 
-  resource :timeline, only: [:show]
+  resource :timeline, only: :show
 
-  resources(:billings, only: :index) { get :get_csv, on: :collection }
+  resources :billings, only: :index do
+    get :get_csv, on: :collection
+  end
 
   resources :projects, :customers, :property_values do
     resources :score_rules
