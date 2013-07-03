@@ -30,6 +30,11 @@ Jobsworth::Application.routes.draw do
       get :tasks
       get :filters
       match :workplan, :via => [:get, :put]
+      get :project
+    end
+    collection do
+      get :auto_complete_for_project_name
+      get :auto_complete_for_user_name
     end
   end
 
@@ -48,7 +53,7 @@ Jobsworth::Application.routes.draw do
     get 'list_completed', :on => :collection
 
     member do
-      get 'ajax_add_permission'
+      get :ajax_add_permission
       get 'clone'
       post :complete
       post :revert
@@ -64,6 +69,8 @@ Jobsworth::Application.routes.draw do
       post 'change_task_weight'
       get  'billable'
       get  'planning'
+      get  'calendar'
+      get  'gantt'
     end
     member do
       get 'score'
@@ -108,7 +115,7 @@ Jobsworth::Application.routes.draw do
   end
 
   resources :work_logs do
-    match :update_work_log, :on=> :member
+    match 'update_work_log', on: :member
   end
 
   resources :tags do
@@ -131,15 +138,21 @@ Jobsworth::Application.routes.draw do
     collection do
       get :remove_property_value_dialog
       post :remove_property_value
+      post :order
     end
   end
 
   resources :scm_projects
   resources :triggers
 
-  match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
+  resource :timeline, only: :show
+
+  resources :billings, only: :index do
+    get :get_csv, on: :collection
+  end
 
   resources :projects, :customers, :property_values do
+    get 'list_completed', on: :collection
     resources :score_rules
   end
 
@@ -186,8 +199,17 @@ Jobsworth::Application.routes.draw do
     get :toggle_display, on: :member
   end
 
+  resources :custom_attributes, only: [:index, :edit, :update] do
+    collection do
+      get 'fields'
+      get 'choice' # it should be on member, look at action
+      get 'edit'
+    end
+  end
+
   ActiveAdmin.routes(self)
 
+  match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
   match ':controller/list' => ':controller#index'
 
   match ":controller(/:action(/:id(.:format)))"

@@ -7,6 +7,6 @@
 
 <% if current_user.completed_projects.size > 0 %>
   <%= link_to t("projects.n_completed_projects", n: current_user.completed_projects.size),
-              controller: 'projects', action: 'list_completed' %>
+              list_completed_projects_path %>
 <% end %>
 

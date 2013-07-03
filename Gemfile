@@ -70,8 +70,11 @@ group :assets do
   gem 'bootstrap-sass', '2.3.0.1'
 end
 
-group :test, :development do
+group :debugger do
   gem 'debugger', platform: :mri
+end
+
+group :test, :development do
   gem "machinist",        '1.0.6'
   gem 'factory_girl_rails'
 end
@@ -91,7 +94,6 @@ group :development do
   gem 'annotate'
   gem 'quiet_assets'
   gem 'xray-rails'
-  gem 'thin'
 end
 
 group :test, :cucumber do

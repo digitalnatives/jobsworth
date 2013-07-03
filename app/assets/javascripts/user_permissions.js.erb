@@ -1,0 +1,32 @@
+<% url = Rails.application.routes.url_helpers %>
+var jobsworth = jobsworth || {}
+
+jobsworth.UserPermissions = (function($){
+
+  var auto_complete_for_project_name_users_path = function(user_id) {
+        return resolve_url("<%= CGI.unescape url.auto_complete_for_project_name_users_path(user_id: '{user_id}') %>", {user_id: user_id});
+      },
+      project_user_path = function(user_id, project_id) {
+        return resolve_url("<%= CGI.unescape url.project_user_path(id: '{id}', project_id: '{project_id}') %>", {id: user_id, project_id: project_id});
+      }
+
+  function UserPermissions(userId) {
+    this.userId = userId;
+
+    var self = this;
+    autocomplete('#user_project_name_autocomplete', auto_complete_for_project_name_users_path(userId) , function(event, ui) {
+      self.addProjectToUser(event, ui);
+      $(this).val("");
+
+      return false;
+    });
+  }
+
+  UserPermissions.prototype.addProjectToUser = function(event, ui) {
+    $.get(project_user_path(this.userId, ui.item.id), function(data) {
+      $("#add_user").before(data);
+    }, 'html');
+  }
+
+  return UserPermissions;
+})(jQuery)

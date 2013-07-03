@@ -113,7 +113,7 @@ class TaskFiltersController < ApplicationController
       end
     end
 
-    redirect_using_js_if_needed("/tasks")
+    redirect_using_js_if_needed tasks_url
   end
 
   # Select a search filter which causes the search filter partial to be reloaded
@@ -144,7 +144,7 @@ class TaskFiltersController < ApplicationController
     if request.xhr?
       render :partial => 'search_filter_keys'
     else
-      redirect_to(params[:redirect_action] || "/tasks")
+      redirect_to(params[:redirect_action] || tasks_url)
     end
   end
 
@@ -162,7 +162,7 @@ class TaskFiltersController < ApplicationController
     if request.xhr?
       render :partial => "/task_filters/list"
     else
-      redirect_to "/tasks"
+      redirect_to tasks_url
     end
   end
 

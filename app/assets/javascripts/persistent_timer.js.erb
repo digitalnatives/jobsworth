@@ -1,3 +1,4 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {};
 
 jobsworth.PersistentTimer = (function() {
@@ -16,7 +17,7 @@ jobsworth.PersistentTimer = (function() {
   }
 
   PersistentTimer.prototype.refresh = function() {
-    $.getJSON("/work/refresh", function(data) {
+    $.getJSON("<%= CGI.unescape url.refresh_work_index_path %>", function(data) {
       $("#current-sheet-duration").text(data.duration);
       $("#current-sheet-total").text(data.total);
       $("#current-sheet-percent").text(data.percent);

@@ -17,7 +17,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render :template => "tasks/index.json"}
+      format.json
     end
   end
 
@@ -81,9 +81,7 @@ class TasksController < ApplicationController
   def gantt
     respond_to do |format|
       format.html
-      format.json{
-        @tasks = current_task_filter.tasks_for_gantt(params)
-      }
+      format.json { @tasks = current_task_filter.tasks_for_gantt(params) }
     end
   end
 

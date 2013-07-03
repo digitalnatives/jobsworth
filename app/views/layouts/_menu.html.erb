@@ -1,5 +1,6 @@
 <div id="header-logged">
   <div id="header-logged-center">
+
     <div id="header-logged-statusline">
       <div id="header-logged-logout"><%= link_to t('tabmenu.log_out'), destroy_user_session_path %></div>
       <div id="header-logged-profile">
@@ -7,7 +8,7 @@
         <div class="header-logged-profile-more">
           <% if current_user.admin? %>
             <%= link_to  t('tabmenu.my_account'), edit_user_path(current_user) %>
-            <%= link_to t('tabmenu.company_settings'), :controller => 'companies', :action => 'edit', :id => current_user.company_id %>
+            <%= link_to t('tabmenu.company_settings'), edit_company_path(current_user.company_id) %>
           <% else %>
             <%= link_to t('tabmenu.my_account'), edit_user_path(current_user) %>
           <% end %>
@@ -44,7 +45,7 @@
   <% else %>
     <div class="submenu-item">
       <div class="center">
-        <span><%= link_to t('tabmenu.overview'), :controller => 'activities', :action => 'index' %></span>
+        <span><%= link_to t('tabmenu.overview'), activities_path %></span>
       </div>
     </div>
   <% end %>
@@ -54,8 +55,8 @@
       <span><a href="#"><%= t('tabmenu.tasks') %></a></span>
     </div>
     <div class="submenu-drop-down">
-      <%= link_to t('tabmenu.list'), :controller => 'tasks', :action => 'index' %>
-      <%= link_to t('tabmenu.new_task'), :controller => 'tasks', :action => 'new' %>
+      <%= link_to t('tabmenu.list'), tasks_path %>
+      <%= link_to t('tabmenu.new_task'), new_task_path %>
       <% if current_templates.size > 0 %>
         <% current_templates.each do |task| %>
           <%= link_to task, clone_task_path(task.task_num) %>
@@ -69,7 +70,7 @@
 
   <div class="submenu-item">
     <div class="center">
-      <span><%= link_to t('tabmenu.planning'), :controller => 'timeline', :action => 'index' %></span>
+      <span><%= link_to t('tabmenu.timeline'), timeline_path %></span>
     </div>
   </div>
 
@@ -77,7 +78,7 @@
     <div class="submenu-item">
       <div class="center">
         <% billing_title = current_user.can_use_billing? ? 'billing' : 'reports'  %>
-        <span><%= link_to t("tabmenu.#{billing_title}"), :controller => 'billing', :action => 'index' %></span>
+        <span><%= link_to t("tabmenu.#{billing_title}"), billings_path %></span>
       </div>
     </div>
   <% end %>

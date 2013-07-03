@@ -1,6 +1,10 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 
 jobsworth.TaskPropertyEdit = (function($){
+
+  var remove_property_value_dialog_properties_path = "<%= CGI.unescape url.remove_property_value_dialog_properties_path %>"
+      order_properties_path                        = "<%= CGI.unescape url.order_properties_path %>"
 
   function TaskPropertyEdit(options) {
     this.options = options;
@@ -61,8 +65,7 @@ jobsworth.TaskPropertyEdit = (function($){
       maxLength.hide().find("input").val("");
       choices.show();
       choiceLink.show();
-    }
-    else {
+    } else {
       multiple.show();
       maxLength.show();
       choices.hide().html("");
@@ -72,7 +75,7 @@ jobsworth.TaskPropertyEdit = (function($){
 
   TaskPropertyEdit.prototype.removePropertyValue = function(pv_id, callback) {
     $("#remove_property_value_dialog").remove();
-    $.get("/properties/remove_property_value_dialog", {property_value_id: pv_id}, function(data) {
+    $.get(remove_property_value_dialog_properties_path, {property_value_id: pv_id}, function(data) {
       $('body').prepend(data);
       $('#remove_property_value_dialog').modal('show');
 
@@ -89,13 +92,11 @@ jobsworth.TaskPropertyEdit = (function($){
 
   TaskPropertyEdit.prototype.reorderPropertyValue = function(event, ui) {
     var pvs = [];
-    $.each(
-      $('li.property_value'),
-      function(index, element){
-        pvs.push($(element).attr("id").replace("property_value_", ""));
-      }
-    );
-    $.post('/properties/order', { property_values: pvs } );
+    $.each( $('li.property_value'), function(index, element){
+      pvs.push($(element).attr("id").replace("property_value_", ""));
+    });
+
+    $.post(order_properties_path, { property_values: pvs } );
   }
 
   return TaskPropertyEdit;
