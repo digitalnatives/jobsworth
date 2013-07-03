@@ -1,6 +1,6 @@
 require "test_helper"
 
-class BillingControllerTest < ActionController::TestCase
+class BillingsControllerTest < ActionController::TestCase
   setup do
     @user = User.make(:admin)
     sign_in @user
@@ -27,7 +27,7 @@ class BillingControllerTest < ActionController::TestCase
 
     assert_report_works(WorklogReport::PIVOT,
                         :range => 7,
-                        :start_date => start_date, 
+                        :start_date => start_date,
                         :end_date => end_date)
   end
 
@@ -45,7 +45,7 @@ class BillingControllerTest < ActionController::TestCase
 
     params[:range] ||= 0
     params[:type] = type
-    post :index, :report => params
+    get :index, :report => params
     assert_response :success
     assert_not_nil assigns["generated_report"]
 

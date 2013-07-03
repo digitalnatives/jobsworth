@@ -46,16 +46,16 @@
     <li class="divider"></li>
     <li class="nav-header"><%= t("companies.properties") %></li>
     <li class="<%= active_class(selected, "users-properties") %>">
-      <%= link_to t("companies.person"), "/custom_attributes/edit?type=User" %>
+      <%= link_to t("companies.person"), edit_custom_attributes_path(type: 'User') %>
     </li>
     <li class="<%= active_class(selected, "customers-properties") %>">
-      <%= link_to Company.model_name.human(:count => 1), "/custom_attributes/edit?type=Customer" %>
+      <%= link_to Company.model_name.human(:count => 1), edit_custom_attributes_path(type: 'Customer') %>
     </li>
     <li class="<%= active_class(selected, "organizational-units-properties") %>">
-      <%= link_to t("companies.company_location"), "/custom_attributes/edit?type=OrganizationalUnit" %>
+      <%= link_to t("companies.company_location"), edit_custom_attributes_path(type: 'OrganizationalUnit') %>
     </li>
     <li class="<%= active_class(selected, "work-logs-properties") %>">
-      <%= link_to WorkLog.model_name.human(:count => 1), "/custom_attributes/edit?type=WorkLog" %>
+      <%= link_to WorkLog.model_name.human(:count => 1), edit_custom_attributes_path(type: 'WorkLog') %>
     </li>
     <li class="<%= active_class(selected, "task-properties") %>">
       <%= link_to TaskRecord.model_name.human(:count => 1), properties_path %>

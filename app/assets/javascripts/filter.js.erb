@@ -1,7 +1,17 @@
-
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 
 jobsworth.Filter = (function($){
+
+  var task_filters_path                        = "<%= CGI.unescape url.task_filters_path %>",
+      search_task_filters_path                 = "<%= CGI.unescape url.search_task_filters_path %>",
+      update_current_filter_task_filters_path  = "<%= CGI.unescape url.update_current_filter_task_filters_path %>",
+      set_single_task_filter_task_filters_path = "<%= CGI.unescape url.set_single_task_filter_task_filters_path %>",
+      new_task_filter_path                     = "<%= CGI.unescape url.new_task_filter_path %>",
+      task_filter_path                         = function(id) { return resolve_url("<%= CGI.unescape url.task_filter_path('{id}') %>",               {id: id}); },
+      select_task_filter_path                  = function(id) { return resolve_url("<%= CGI.unescape url.select_task_filter_path('{id}') %>",        {id: id}); },
+      toggle_status_task_filter_path           = function(id) { return resolve_url("<%= CGI.unescape url.toggle_status_task_filter_path('{id}') %>", {id: id}); };
+
   function Filter() {
     this.init();
     this.bind();
@@ -11,7 +21,7 @@ jobsworth.Filter = (function($){
     var self = this;
 
     $('#search_filter').catcomplete({
-      source: '/task_filters/search',
+      source: search_task_filters_path,
       select: function(event, ui) {
         self.addSearchFilter(event, ui);
         $(this).val("");
@@ -158,15 +168,17 @@ jobsworth.Filter = (function($){
     var sender = $(link);
     var tf_id = sender.parent().parent().attr("id").split("_")[1];
     var senderParentClass = sender.parent().attr('class');
+
     if(sender.hasClass('do_hide') || sender.hasClass('do_show')) {
-      var url = "/task_filters/" + tf_id + "/toggle_status";
+      var url = toggle_status_task_filter_path(tf_id);
       var type = "get";
     } else if (sender.hasClass('do_delete')) {
       var warning = confirm("Are you sure to delete this filter?");
       if(!warning) { return false; }
-      var url = "/task_filters/" + tf_id;
+      var url = task_filter_path(tf_id);
       var type = "delete";
     }
+
     $.ajax({
       url: url,
       dataType: 'html',
@@ -189,7 +201,7 @@ jobsworth.Filter = (function($){
 
   Filter.prototype.saveFilter = function() {
     if ($("#save-current-filter-dialog").length == 0) {
-      $.get("/task_filters/new", function(data) {
+      $.get(new_task_filter_path, function(data) {
         $('body').append(data);
         $('#save-current-filter-dialog').modal({backdrop: false})
       }, 'html')

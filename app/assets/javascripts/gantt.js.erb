@@ -1,6 +1,9 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 
 jobsworth.Gantt = (function($){
+
+  var gantt_tasks_path = function(format) { return resolve_url("<%= CGI.unescape url.gantt_tasks_path(format: '{format}') %>", {format: format}) };
 
   function Gantt(options) {
     this.options = options;
@@ -15,16 +18,14 @@ jobsworth.Gantt = (function($){
   Gantt.prototype.init = function() {
     var self = this;
     this.options.container.gantt({
-      source: "/tasks/gantt?format=json",
-      scale: "days",
-      minScale: "days",
-      maxScale: "months",
+      source:       gantt_tasks_path('json'),
+      scale:        "days",
+      minScale:     "days",
+      maxScale:     "months",
       itemsPerPage: 20,
-      navigate: "scroll",
-      onItemClick: function(data) {
-      },
-      onAddClick: function(dt, rowId) {
-      },
+      navigate:     "scroll",
+      onItemClick:  function(data) {},
+      onAddClick:   function(dt, rowId) {},
       onRender: function() {
         $(".bar", self.options.container).each(function() {
           var dataObj = $(this).data("dataObj");

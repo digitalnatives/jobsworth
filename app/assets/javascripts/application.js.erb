@@ -45,9 +45,8 @@
 //= require user_permissions
 //= require project_permissions
 //= require email_addresses
-//
 
-
+<% url = Rails.application.routes.url_helpers %>
 jQuery.noConflict();
 
 // Borrowed from jQuery 1.8.3's source code
@@ -80,15 +79,13 @@ function updateResourceAttributes(select) {
     select = jQuery(select);
     var typeId = select.val();
     var target = jQuery("#attributes");
+    var resource_attributes_url = "<%= CGI.unescape url.attributes_resources_path(type_id: '{type_id}') %>";
 
     if (typeId == "") {
-        target.html("");
-    }
-    else {
-        var url = "/resources/attributes/?type_id=" + typeId;
-        jQuery.get(url, function(data) {
-            target.html(data);
-        }, 'html');
+      target.html("");
+    } else {
+      var url = resolve_url(resource_attributes_url, {type_id: typeId});
+      jQuery.get(url, function(data) { target.html(data); }, 'html');
     }
 }
 
@@ -166,14 +163,13 @@ function addAttributeChoices(sender) {
     var choices = jQuery(sender).parent().find('.choices');
     var attribute = jQuery(sender).parents(".attribute");
     var attrId = attribute.attr("id").split("_").pop();
+    var choice_custom_attributes_path = "<%= CGI.unescape url.choice_custom_attributes_path(id: '{id}') %>";
 
     if (attrId == "attribute") {
         // new attribute, so just ignore
         attrId = "";
     }
-    var url = "/custom_attributes/choice/" + attrId;
-
-    jQuery.get(url, function(data) {
+    jQuery.get(resolve_url(choice_custom_attributes_path, {id: attrId}), function(data) {
       jQuery(choices).append(data);
       updatePositionFields(choices);
     }, 'html')
@@ -197,9 +193,11 @@ function showPassword(link, url) {
   Toggles the approval status of the given work log
 */
 function toggleWorkLogApproval(sender, workLogId) {
-    jQuery.post("/work_logs/update_work_log", {
-        id : workLogId,
-        "work_log[status]" : jQuery(sender).val() });
+  var update_work_log_path = "<%= CGI.unescape url.update_work_log_work_log_path('{id}') %>";
+  jQuery.post(
+    resolve_url(update_work_log_path, {id: workLogId}),
+    {"work_log[status]" : jQuery(sender).val()}
+  );
 }
 
 /*
@@ -207,29 +205,37 @@ function toggleWorkLogApproval(sender, workLogId) {
  The autocomplete text field itself will be updated with the name, and
  a hidden field directly before the text field will be updated with the object id.
 */
+function updateCustomerIdAndLink(base_id, event, ui) {
+  var edit_customer_path = "<%= CGI.unescape url.edit_customer_path('{id}') %>";
+
+  jQuery("#"+ base_id +"_id").val(ui.item.id);
+  jQuery("#"+ base_id +"_link").attr("href", resolve_url(edit_customer_path, {id: ui.item.id}));
+}
+
 function updateAutoCompleteField(event, ui) {
-  jQuery("#resource_customer_id").val(ui.item.id);
-  jQuery('#resource_customer_link').attr("href", "/customers/edit/" + ui.item.id);
+  updateCustomerIdAndLink('resource_customer', event, ui);
+}
+
+/*Adds the selected customer to the new project*/
+function addCustomerToProject(event, ui){
+  updateCustomerIdAndLink('project_customer', event, ui);
+}
+
+function addCustomerToUser(event, ui){
+  updateCustomerIdAndLink('user_customer', event, ui);
 }
 
 jQuery(document).ready(function() {
-  autocomplete('#resource_customer_name', '/customers/auto_complete_for_customer_name', updateAutoCompleteField);
-  autocomplete('#project_customer_name', '/customers/auto_complete_for_customer_name', addCustomerToProject);
-  autocomplete('#user_customer_name', '/customers/auto_complete_for_customer_name', addCustomerToUser);
+  var auto_complete_for_customer_name_customers_path = "<%= CGI.unescape url.auto_complete_for_customer_name_customers_path %>";
+
+  autocomplete('#resource_customer_name', auto_complete_for_customer_name_customers_path, updateAutoCompleteField);
+  autocomplete('#project_customer_name',  auto_complete_for_customer_name_customers_path, addCustomerToProject);
+  autocomplete('#user_customer_name',     auto_complete_for_customer_name_customers_path, addCustomerToUser);
 
   jQuery(".datefield").datepicker({ constrainInput: false, dateFormat: userDateFormat});
 });
 
-/*Adds the selected customer to the new project*/
-function addCustomerToProject(event, ui){
-  jQuery('#project_customer_id').val(ui.item.id);
-  jQuery('#project_customer_link').attr("href", "/customers/edit/" + ui.item.id);
-}
 
-function addCustomerToUser(event, ui){
-  jQuery('#user_customer_id').val(ui.item.id);
-  jQuery('#user_customer_link').attr("href", "/customers/edit/" + ui.item.id);
-}
 
 function autocomplete(input_field, path, after_callback) {
   jQuery(input_field).autocomplete({
@@ -290,7 +296,7 @@ function flash_message(message) {
 
 function authorize_ajax_form_callback(json) {
   if (json.status == "session timeout") {
-    window.location = "/users/sign_in";
+    window.location = "<%= CGI.unescape url.new_user_session_path %>";
     return false;
   }
 }

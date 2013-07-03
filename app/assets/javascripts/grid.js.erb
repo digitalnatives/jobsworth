@@ -1,6 +1,10 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 
 jobsworth.Grid = (function($){
+
+  var properties_companies_path = "<%= CGI.unescape url.properties_companies_path %>",
+      tasks_path = function(format) { return resolve_url("<%= CGI.unescape url.tasks_path(format: '{format}') %>", {format: format}); };
 
   var columns = [
     {id: 'read',       name: "<span class='unread_icon'/>", field: 'read', resizable: false, sortable: true, formatter: UnreadMarkFormatter, width:16},
@@ -50,7 +54,7 @@ jobsworth.Grid = (function($){
   Grid.prototype.init = function() {
     var self = this;
 
-    $.getJSON("/companies/properties", function(data) {
+    $.getJSON(properties_companies_path, function(data) {
       for(var index in data) {
         var property = data[index]["property"]
         columns.push({
@@ -61,7 +65,7 @@ jobsworth.Grid = (function($){
           formatter: HtmlFormatter
         });
       }
-      $.getJSON("/tasks?format=json", function(rows) {
+      $.getJSON(tasks_path('json'), function(rows) {
         self.createGrid(rows);
       })
     })
@@ -69,7 +73,7 @@ jobsworth.Grid = (function($){
 
   Grid.prototype.reload = function() {
     var self = this;
-    $.getJSON("/tasks?format=json", function(rows) {
+    $.getJSON(tasks_path('json'), function(rows) {
       self.dataView.setItems(rows);
       self.grid.invalidate();
       self.grid.render();

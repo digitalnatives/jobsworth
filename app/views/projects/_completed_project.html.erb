@@ -1,0 +1,6 @@
+<tr>
+  <td><%= "#{completed_project.customer.name} / #{completed_project.name}" %></td>
+  <td><%= tz.utc_to_local(completed_project.completed_at).strftime(current_user.date_format) %></td>
+  <td><%= completed_project.tasks.size %></td>
+  <td><%= link_to( t("projects.revert"), revert_project_path(completed_project), :method => :post, :confirm => t("shared.are_you_sure") ) %></td>
+</tr>

@@ -1,9 +1,16 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {};
 
 jobsworth.EmailAddresses = (function($) {
+
+  var email_addresses_path       = "<%= CGI.unescape url.email_addresses_path %>",
+      email_address_path         = function(id) { return resolve_url("<%= CGI.unescape url.email_address_path('{id}') %>",         {id: id}); },
+      default_email_address_path = function(id) { return resolve_url("<%= CGI.unescape url.default_email_address_path('{id}') %>", {id: id}); };
+
+  var ajaxErrorHandler = function() { alert("Sorry, there's an exception, please retry later."); };
+
   function EmailAddresses(user_id) {
     this.user_id = user_id;
-
     this.bindEvents();
   }
 
@@ -39,48 +46,40 @@ jobsworth.EmailAddresses = (function($) {
   }
 
   EmailAddresses.prototype.deleteEmail = function(id) {
-    var jqXHR = $.post('/email_addresses/' + id, {_method: 'delete'}, function(res) {
+    var url = email_address_path(id);
+    $.post(url, {_method: 'delete'}, function(res) {
       if (res.success) {
         $('.email_address[data-id=' + id + ']').remove();
       } else {
         alert(res.message);
       }
-    })
-
-    jqXHR.error(function() {
-      alert("Sorry, there's an exception, please retry later.");
-    })
+    }).error(ajaxErrorHandler);
   }
 
   EmailAddresses.prototype.setDefault = function(id) {
-    var jqXHR = $.post('/email_addresses/' + id + '/default', {_method: 'put'}, function(res) {
+    var url = default_email_address_path(id);
+    $.post(url, {_method: 'put'}, function(res) {
       if (res.success) {
         $('.email_address').removeClass('default');
         $('.email_address[data-id=' + id + ']').addClass('default');
       } else {
         alert(res.message);
       }
-    })
-
-    jqXHR.error(function() {
-      alert("Sorry, there's an exception, please retry later.");
-    })
+    }).error(ajaxErrorHandler);
   }
 
   EmailAddresses.prototype.addEmail = function(email) {
+    var url  = email_addresses_path;
     var data = {user_id: this.user_id, email: email};
-    var jqXHR = $.post('/email_addresses', {email_address: data}, function(res) {
+
+    $.post(url, {email_address: data}, function(res) {
       if (res.success) {
         $('#emails-container').append(res.html);
         $('#add-email-container input#email').val('');
       } else {
         alert(res.message);
       }
-    })
-
-    jqXHR.error(function() {
-      alert("Sorry, there's an exception, please retry later.");
-    })
+    }).error(ajaxErrorHandler);
   }
 
   return EmailAddresses;
