@@ -1,26 +1,19 @@
 language: ruby
-bundler_args: --without debugger development
+bundler_args: --without debugger development mysql sqlite
+
 rvm:
   - 1.9.3
 
 env:
-  matrix:
-    - "DB=postgres BUNDLE_WITHOUT=mysql:sqlite"
-  global:
-    secure: "Cqu98Fne4YYtnVyn1WwuAt3yj9XdzayF/r6tEOwa7y7gzgS8/33XGUfcsCyU\nB9ywir3JCbMa+19wWrgBt4Mv+BcVsryRtbcIuZz303HBHis+yrG+AtM5rjM7\ng6IW7+BIMIvTWIlJ31q4MmjAeq4riNr7ZxTd9kHeQL3YTiLyKWk="
-
+  - "DB=postgres"
 
 before_script:
   - sh -c "cp config/database.$DB.yml config/database.yml"
   - sh -c "cp config/application.travis.yml config/application.yml"
-  - sh -c "if [ \"$DB\" = 'postgres' ]; then psql -c 'create database jobsworth_test;' -U postgres; fi"
-  - sh -c "if [ \"$DB\" = 'mysql' ];    then mysql -e 'create database jobsworth_test;'; fi"
+  - sh -c "psql -c 'create database jobsworth_test;' -U postgres"
 
 script:
   - "bundle exec rake ci:build"
-
-notifications:
-  hipchat: <%= ENV['HIPCHAT_TOKEN'] %>@Procurementtool
 
 # To stop Travis from running tests for a new commit,
 # add the following to your commit message: [ci skip]
