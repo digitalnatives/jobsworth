@@ -13,8 +13,8 @@ jobsworth.tasks.TaskNotificationEditor = (function($) {
   var new_task_path   = "<%= CGI.unescape url.new_task_path %>";
   var task_path       = function(id) { return resolve_url("<%= CGI.unescape url.task_path('{id}') %>",      {id: id}); };
   var edit_task_path  = function(id) { return resolve_url("<%= CGI.unescape url.edit_task_path('{id}') %>", {id: id}); };
-  var get_watcher_task_path                       = function(id) { return resolve_url("<%= CGI.unescape url.get_watcher_task_path('{id}') %>", {id: id}); };
-  var users_to_notify_popup_task_path             = function(id, watcher_ids) { return resolve_url("<%= CGI.unescape url.users_to_notify_popup_task_path(id: '{id}', watcher_ids: '{watcher_ids}') %>", {id: id, watcher_ids: watcher_ids}); };
+  var get_watcher_task_path = function(id) { return resolve_url("<%= CGI.unescape url.get_watcher_task_path('{id}') %>", {id: id}); };
+  var users_to_notify_popup_task_path = function(id, watcher_ids) { return resolve_url("<%= CGI.unescape url.users_to_notify_popup_task_path(id: '{id}', watcher_ids: '{watcher_ids}') %>", {id: id, watcher_ids: watcher_ids}); };
   var get_default_watchers_for_customer_tasks_path = "<%= CGI.unescape url.get_default_watchers_for_customer_tasks_path %>";
   var get_default_customers_tasks_path = "<%= CGI.unescape url.get_default_customers_tasks_path %>";
   var get_default_watchers_tasks_path = "<%= CGI.unescape url.get_default_watchers_tasks_path %>";
@@ -127,7 +127,7 @@ jobsworth.tasks.TaskNotificationEditor = (function($) {
   }
 
   TaskNotificationEditor.prototype.userAddHandler = function(event, ui) {
-    this.addUser(get_watcher_task_path(this.options.taskId), { user_id : userId, id });
+    this.addUser(get_watcher_task_path(this.options.taskId), { user_id: userId, id: this.options.taskId });
 
     $("#user_name_auto_complete").val("");
     return false;
