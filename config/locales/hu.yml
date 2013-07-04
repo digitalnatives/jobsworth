@@ -1,337 +1,4 @@
 hu:
-  actions:
-    date_of_action_execution: ! 'Teljesítés dátuma + napok:'
-    not_implemented_yet: Még nem került megvalósításra
-    reassign_task_to: Feladat újradelegálása
-    send_email_to: E-mail küldése
-    set_due_date: Lejárat napja
-  active_admin:
-    access_denied:
-      message: Nincs jogosultsága ehhez a funkcióhoz.
-    any: Minden
-    batch_actions:
-      action_label: ! '%{title} kiválasztva'
-      button_label: Batch tevékenységek
-      delete_confirmation: Biztosan tötölni akarja a %{plural_model}? Ez a művelet nem vonható vissza.
-      labels:
-        destroy: Törlés
-      link: Létrehozása
-      selection_toggle_explanation: (Toggle Selection)
-      succesfully_destroyed: 
-    blank_slate:
-      content: ! '%{resource_name} még nem létezik.'
-      link: Létrehozás
-    cancel: Mégsem
-    clear_filters: Szűrők törlése
-    comments:
-      add: Hozzászólás
-      author: Szerző
-      author_type: Szerző típus
-      body: Body
-      errors:
-        empty_text: A szövegmező üres volt, a megjegyzés nem lett elmentve.
-      no_comments_yet: Nincs megjegyzés.
-      resource: Erőforrás
-      resource_type: Erőforrás típusa
-      title: Megjegyzés
-      title_content: (%{count} megjegyzés
-    create_model: Új %{model}
-    dashboard: Kezdőlap
-    dashboard_welcome:
-      call_to_action: to add dashboard sections, kijelentkezés 'app/admin/dashboard.rb'
-      welcome: Üdvözöljük Aktív Admin. Ez az alapértelmezett nyitó oldal.
-    delete: Törlés
-    delete_confirmation: Biztosan törölni akarja?
-    delete_model: ! '%{model} törlése'
-    details: ! '%{model} részletek'
-    devise:
-      change_password:
-        submit: Jelszó megváltoztatása
-        title: Változtassa meg jelszavát.
-      links:
-        forgot_your_password: Elfelejtette jelszavát?
-        sign_in: Bejelentkezés
-        sign_in_with_omniauth_provider: Bejelentkezés %{provider}-rel
-      login:
-        remember_me: Jelszó-emlékeztető
-        submit: Bejelentkezés
-        title: Bejelentkezés
-      reset_password:
-        submit: Jelszó visszaállítása
-        title: Elfelejtette jelszavát?
-      unlock:
-        submit: Nem zárolt utasítások újraküldése
-        title: Utasítás újraküldése
-    download: Letöltés
-    edit: Szerkesztés
-    edit_model: ! '%{model} szerkesztése'
-    empty: Üres
-    equal_to: Egyenlő
-    filter: Szűrő
-    greater_than: Nagyobb mint
-    has_many_delete: Törlés
-    has_many_new: Új %{model} hozzáadása
-    has_many_remove: Eltávolítás
-    index_list:
-      block: Lista
-      blog: Blog
-      grid: grid
-      table: Táblázat
-    less_than: Kevesebb
-    logout: Kijelentkezés
-    main_content: Kérjük hozza létre a %{model}#main_content-et hogy a tartalom megjelenjen.
-    new_model: Új %{model}
-    next: Következő
-    pagination:
-      empty: nincs %{model} találat
-      entry: belépési feltétel
-      multiple: ! '%{model} <b>%{from}&nbsp;-&nbsp;%{to}</b>%{total}</b> teljes megjelenítése'
-      one_page: ! '%{model} <b>all %{n}</> megjelenítése'
-    powered_by: ! '%{active_admin} által %{version} fejlesztve'
-    previous: Előző
-    search_field: ! '%{field} keresés'
-    sidebars:
-      filters: Szűrő feltételek
-    update_model: ! '%{model} szerkesztése'
-    view: Nézet
-  activemodel:
-    errors:
-      format: ! '%{attribute} %{message}'
-      messages:
-        accepted: Jóváhagyás szükséges
-        between: az értéknek %{num1} és %{num2} közti számnak kell lennie
-        blank: Kitöltetlen mezőket tartalmaz
-        can_not_delete_project: A projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatot.
-        confirmation: Ellentmondásos információkat tartalmaz
-        doesnt_match_regex: ! '%{ attr_name } nem egyezik a regex-szel'
-        empty: Kitöltetlen mezőket tartalmaz
-        equal_to: az értéknek %{count}-nak kell lennie
-        even: az értékeknek meg kell egyezniük
-        exclusion: fenntartott
-        greater_than: az értéknek nagyobbnak kell lennie mint %{count}
-        greater_than_or_equal_to: nagyobbnak vagy egyenlőnek kell lennie mint %{count}
-        inclusion: a lista nem tartalmazza
-        invalid: érvénytelen
-        less_than: az értéknek kisebbnek kell lennie mint %{count}
-        less_than_or_equal_to: az értéknek kisebbnek vagy egyenlőnek kell lennie mint %{count}
-        mandatory: ! '%{attr_name} hiányzó kötelező mező'
-        not_a_number: ! 'Rögzítendő érték: szám'
-        not_an_integer: ! 'Rögzítendő érték: szám'
-        odd: ! 'Rögzítendő érték: páratlan szám'
-        record_invalid: ! 'A jóváhagyás sikertelen: %{errors}'
-        reject_destroy_if_exist: A felhasználó %{association}, kérjük távolítsa el vagy deaktiválja a felhasználót.
-        taken: Már rögzítésre került
-        taken_by: ! '%{email} már el lett küldve %{user}-től'
-        too_long: a beírt szöveg megengedettnél hosszabb (maximum %{count} karakter)
-        too_short: a beírt szöveg a megengedettnél rövidebb (minimum %{count} karakter)
-        wrong_length: a beírt szöveg nem megfelelő hosszúságú (%{count} karakter a megfelelő)
-      template:
-        body: ! 'Problémák jelentkeztek a következő mezőknél:'
-        header: ! '%{model} mentése %{count} hiba miatt nem lehetséges'
-  activerecord:
-    attribute_values:
-      task_record:
-        open_or_closed:
-          closed: Lezárt
-          open: Nyitott
-        status:
-          '0': Megnyit
-          '1': Lezárt
-          '2': Nem végleges
-          '3': Érvénytelen
-          '4': duplicate
-    attributes:
-      company:
-        logo: Jelenlegi logo
-        name: Cég név
-        show_wiki: Alkalmazza a Wiki funkciót
-        suppressed_email_addresses: Elkobzott e-mailcímek
-        use_billing: ! 'Alkalmazza a Riport funkciót '
-        use_resource: Alkalmazza az erőforrások funkciót
-        use_score_rules: Alkalmazza a súlyozási szabályokat
-      custom_attribute:
-        display_name: Név
-        ldap_attribute_type: LDAP név
-        mandatory: kötelező
-        max_length: maximális mező hosszúság
-        multiple: multiple engedélyezése
-        preset: Alkalmazza az előzetesen beállítottakat
-      customer_id: Ügyfél
-      customers:
-        active: aktív
-        contact_name: Kapcsolattartó személy neve
-        name: Név
-      resource_type_id: Erőforrás típus
-    errors:
-      format: ! '%{attribute} %{message}'
-      messages:
-        accepted: jóvá kell hagynia
-        between: ! '%{num1} és %{num2} érték közti számnak kell lennie'
-        blank: hiányosan nem tölthető fel
-        can_not_delete_project: Projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatokat.
-        confirmation: nem egyezik a megerősítéssel
-        doesnt_match_regex: ! '%{ attr_name} nem egyezik a regex-szel.'
-        empty: nem lehet üres
-        equal_to: ! '%{count}-al egyezőnek kell lennie'
-        even: must be even
-        exclusion: is reserved
-        greater_than: nagyobbnak kell lennie mint %{count}
-        greater_than_or_equal_to: nagyobbnak vagy egyenlőnek kell lennie mint %{count}
-        inclusion: nem tartalmazza a lista
-        invalid: érvénytelen
-        less_than: kisebbnek kell lennie mint %{count}
-        less_than_or_equal_to: kisebbnek vagy egyenlőnek kell lennie mint %{count}
-        mandatory: ! '%{attr_name} kitöltetlen kötelező mező.'
-        not_a_number: egész szám rögzítése szükséges
-        not_an_integer: tört szám rögzítése szükséges
-        odd: páratlan szám rögzítése szükséges
-        record_invalid: ! 'Érvényességi hiba: %{errors}'
-        reject_destroy_if_exist: A felhasználó %{association}, ezért kérjük először távolítsa el vagy deaktiválja a felhasználót.
-        taken: már elküldött
-        taken_by: ! '%{email} elküldésre került %{user} részére.'
-        too_long: nem megfelelő hosszúságú (maximum %{count} karakter)
-        too_short: nem megfelelő hosszúságú (minimum %{count} karakter)
-        wrong_length: ! 'nem megfelelő hosszúságú (igény: %{count} karakter)'
-      template:
-        body: ! 'A következő mezők kitöltése nem megfelelő:'
-        header: ! '%{count} hiba miatt a %{model} mentése nem lehetséges.'
-    models:
-      company: Cég(ek)
-      custom_attribute: Egyedi tulajdonságok
-      customer: Ügyfel(ek)
-      news_item: Új tétel
-      organizational_unit: Szervezeti egység
-      project: Projekt
-      resource_type: Erőforrás típusa
-      score_rule: Súlyozási szabály
-      service: Szolgáltatás(ok)
-      snippet: Töredék
-      task_record: Feladat(ok)
-      template: Feladat sablon
-      trigger: Programindító
-      user: Felhasználó(k)
-      work_log: munka log
-  activities:
-    archived: Archivált
-    complete: Lezárás
-    dashboard: Kezdőlap
-    file_added: File hozzáadása
-    new_comment: Új megjegyzés
-    reverted: Visszaállított
-    wiki_page_added: Hozzáadott Wiki oldal
-    wiki_page_modified: Módosított Wiki oldal
-    work_done: ! 'Lezárt munka '
-  admin_stats:
-    active_users: Aktív felhasználók
-    admin: ! '[Admin]'
-    admin_stats: Admin
-    company: Cég
-    created: Létrehozott
-    email: e-mail
-    last_registered_users: Utoljára regisztrált felhasználó(k)
-    name: Név
-    news: ! '[Hírek]'
-    projects: Projekt(ek)
-    timezone: Időzóna
-    total: Összes
-    user_registrations: Felhasználói regisztrációk
-  billings:
-    active_projects: ! '[Aktív projekt(ek)]'
-    any_client: ! '[Minden Ügyfél]'
-    any_project: ! '[Minden projekt]'
-    any_user: ! '[Minden felhasználó]'
-    billing: Riport
-    billing_reports: Lehívható riport(ok)
-    clients: Ügyfelek
-    closed_projects: ! '[Lezárt projektek]'
-    columns: Oszlopok
-    comment: Megjegyzés
-    custom: Egyéni
-    date: Dátum
-    download:
-      csv: A riport letöltése CSV fájl-ként
-    from: -tól
-    hide_approved_logs: Jóváhagyott rögzítések elrejtése
-    hide_rejected_logs: Visszautasított projektek elrejtése
-    milestones: Mérföldkövek
-    pivot: Pivot
-    projects: Projektek
-    report_filter: Riport szűrő
-    requested_by: Igénylő
-    rows: Sorok
-    run_report: Riport lekérdezése
-    tags: Cimke
-    task_resolution: Feladat meghatározás
-    tasks: Feladatok
-    time_sheet: Idő beosztás
-    to: -ig
-    users: Felhasználók
-    work_time: Munkaidő
-  boolean:
-    'false': false
-    'no': 
-    'true': true
-  button:
-    add: Hozzáad
-    cancel: Törlés
-    create: Létrehozás
-    delete: Törlés
-    destroy: Lezárás
-    download: Letöltés
-    edit: Szerkesztés
-    hide: Elrejtés
-    move: Áthelyezés
-    new: Új
-    next: Következő
-    ok: OK
-    or: vagy
-    prev: Előző
-    save: Mentés
-    show: Mutat
-    submit: Mentés
-    update: Frissítés
-  companies:
-    admin_panel: Admin panel
-    company: Cég
-    company_location: Cég székhelye
-    company_settings: Céges beállítások
-    general: Általános
-    incoming_email_project: Bejövő e-mail projekt
-    logo_hint: (250x50px felbontás az ajánlott. A logo a jelenlegi Jobsworth logo helyén jelenik meg, valamint a bejelentkező oldalon.)
-    new_logo: Új logo
-    person: Személy
-    properties: Tulajdonságok
-    suppressed_email_hint: (egyes e-mail címek elválasztása vesszővel ill. új sorban)
-    task: Feladat
-    type: Típus
-  custom_attributes:
-    add_another_attribute: Adjon meg egy másik tulajdonságot
-    add_choice: Adjon meg más lehetőséget
-    choice: Választás
-    color: Szín
-    custom_attributes: Egyedi beállítások
-    custom_properties: Egyedi tulajdonságok
-    remove_attribute: Beállítások eltávolítása
-    remove_choice: Választások eltávolítása
-  custom_scripts:
-    custom_scripts: Egyéni script
-    explanation: ! 'Custom ruby scripts can be placed in the lib/scripts directory. They will then be listed below and can be executed against the current Jobsworth database. '
-    no_scripts_found: ! 'Nincs egyéni script találat. Amennyiben van, ellenőrizze az ".rb" file végződéseket illetve a %{rails_root}/lib/scripts mappát. '
-  customers:
-    active_users: Aktív felhasználók
-    completed_projects: Befejezett projektek
-    create_resource: Erőforrás létrehozása
-    create_site: Oldal létrehozása
-    current_projects: Futó projektek
-    inactive_users: Inaktív felhasználók
-    new: Új ügyfél
-    no_project_completed: Nincs lezárt projekt
-    no_project_in_process: Nincs futó projekt
-    resources: Erőforrások
-    score_rules: Prioritási szabályok
-    sites: Oldalak
-    slas: SLA-k
-    view_tasks: Feladatok nézete
   date:
     abbr_day_names:
     - Vas
@@ -367,7 +34,7 @@ hu:
       long: ! ' %Y %B %d'
       short: ! '%b %d'
     month_names:
-    - 
+    -
     - január
     - február
     - március
@@ -413,7 +80,1097 @@ hu:
       month: perc
       second: másodperc
       year: év
+  errors:
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: jóváhagyásra vár
+      blank: kitöltetelen mezőt tartalmaz
+      confirmation: a mező tartalma nem felel meg
+      empty: kitöltetelen mezőt tartalmaz
+      equal_to: egyeznie kell %{count}-el
+      even: az értékeknek egyezniük kell
+      exclusion: fentartott
+      greater_than: nagyobbnak kell lennie %{count}-nál
+      greater_than_or_equal_to: az értéknek nagyobbnak vagy egyenlőnek kell lennie mint %{count}
+      inclusion: a lista nem tartalmazza
+      invalid: érvénytelen érték
+      less_than: az értéknek kisebbnek kell lennie mint %{count}
+      less_than_or_equal_to: az értéknek kisebbnek vagy egyenlőnek kell lennie mint %{count}
+      not_a_number: nem szám
+      not_an_integer: az érték szám típusú legyen
+      odd: az érték páratlan szám legyen
+      record_invalid: ! 'jóváhagyási hiba: %{errors}'
+      taken: beállítva
+      too_long: a beírt szöveg nem megfelelő (maximum %{count} karakter)
+      too_short: a beírt szöveg nem megfelelő (minimum %{count} karakter)
+      wrong_length: a beírt szöveg nem megfelelő (%{count} karakter szükséges)
+      already_confirmed: már meg van erősítve
+      between: ! '%{num1} és %{num2} közti szám értéknek kell lennie.'
+      can_not_delete_project: Projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatokat.
+      confirmation_period_expired: needs to be confirmed within %{period}, please request a new one
+      doesnt_match_regex: ! '%{ attr_name } nem egyezik a regex-szel.'
+      expired: lejárt, igényelj egy újat
+      mandatory: ! '%{attr_name} kitöltetlen kötelező mező'
+      not_found: nem található
+      not_locked: nincs zárolva
+      not_saved:
+        one: ! '1 hiba miatt %{resource} mentése nem lehetséges:'
+        other: ! '%{count} hiba miatt %{resource} mentése nem lehetésges:'
+      reject_destroy_if_exist: A felhasználó %{association}, kérjük távolítsa el vagy deaktiválja a felhasználót.
+      taken_by: ! '%{email} elküldve a %{user} nevében'
+    template:
+      body: ! 'A következő mezőkkel probléma van:'
+      header: A %{model} mentése nem lehetséges %{count} hiba miatt
+    models:
+      task_record:
+        task_number:
+          invalid: Érvénytelen feladat szám
+  helpers:
+    select:
+      prompt: Kérem válassza ki
+    submit:
+      create: Új %{model}
+      submit: ! '%{model} Mentése'
+      update: ! '%{model} Módosítása'
+  number:
+    currency:
+      format:
+        delimiter: .
+        format: ! '%n %u'
+        precision: 2
+        separator: ! ','
+        significant: true
+        strip_insignificant_zeros: true
+        unit: Ft
+    format:
+      delimiter: ! ' .'
+      precision: 3
+      separator: ! ','
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Milliárd
+          million: Millió
+          quadrillion: Kvadrillió
+          thousand: Ezer
+          trillion: Trillió
+          unit: unit
+      format:
+        delimiter: delimiter
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: bájt
+            other: bájt
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: delimiter
+    precision:
+      format:
+        delimiter: delimiter
+  support:
+    array:
+      last_word_connector: ! ' és '
+      two_words_connector: ! ' és '
+      words_connector: ! ', '
+  time:
+    am: de.
+    formats:
+      default: ! '%Y. %b %e., %H:%M'
+      long: ! '%Y. %B %e., %A, %H:%M'
+      short: ! '%b %e., %H:%M'
+    pm: du.
+  activemodel:
+    errors:
+      format: ! '%{attribute} %{message}'
+      messages:
+        accepted: Jóváhagyás szükséges
+        blank: Kitöltetlen mezőket tartalmaz
+        confirmation: Ellentmondásos információkat tartalmaz
+        empty: Kitöltetlen mezőket tartalmaz
+        equal_to: az értéknek %{count}-nak kell lennie
+        even: az értékeknek meg kell egyezniük
+        exclusion: fenntartott
+        greater_than: az értéknek nagyobbnak kell lennie mint %{count}
+        greater_than_or_equal_to: nagyobbnak vagy egyenlőnek kell lennie mint %{count}
+        inclusion: a lista nem tartalmazza
+        invalid: érvénytelen
+        less_than: az értéknek kisebbnek kell lennie mint %{count}
+        less_than_or_equal_to: az értéknek kisebbnek vagy egyenlőnek kell lennie mint %{count}
+        not_a_number: ! 'Rögzítendő érték: szám'
+        not_an_integer: ! 'Rögzítendő érték: szám'
+        odd: ! 'Rögzítendő érték: páratlan szám'
+        record_invalid: ! 'A jóváhagyás sikertelen: %{errors}'
+        taken: Már rögzítésre került
+        too_long: a beírt szöveg megengedettnél hosszabb (maximum %{count} karakter)
+        too_short: a beírt szöveg a megengedettnél rövidebb (minimum %{count} karakter)
+        wrong_length: a beírt szöveg nem megfelelő hosszúságú (%{count} karakter a megfelelő)
+        between: az értéknek %{num1} és %{num2} közti számnak kell lennie
+        can_not_delete_project: A projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatot.
+        doesnt_match_regex: ! '%{ attr_name } nem egyezik a regex-szel'
+        mandatory: ! '%{attr_name} hiányzó kötelező mező'
+        reject_destroy_if_exist: A felhasználó %{association}, kérjük távolítsa el vagy deaktiválja a felhasználót.
+        taken_by: ! '%{email} már el lett küldve %{user}-től'
+      template:
+        body: ! 'Problémák jelentkeztek a következő mezőknél:'
+        header: ! '%{model} mentése %{count} hiba miatt nem lehetséges'
+  activerecord:
+    errors:
+      format: ! '%{attribute} %{message}'
+      messages:
+        accepted: jóvá kell hagynia
+        blank: hiányosan nem tölthető fel
+        confirmation: nem egyezik a megerősítéssel
+        empty: nem lehet üres
+        equal_to: ! '%{count}-al egyezőnek kell lennie'
+        even: must be even
+        exclusion: is reserved
+        greater_than: nagyobbnak kell lennie mint %{count}
+        greater_than_or_equal_to: nagyobbnak vagy egyenlőnek kell lennie mint %{count}
+        inclusion: nem tartalmazza a lista
+        invalid: érvénytelen
+        less_than: kisebbnek kell lennie mint %{count}
+        less_than_or_equal_to: kisebbnek vagy egyenlőnek kell lennie mint %{count}
+        not_a_number: egész szám rögzítése szükséges
+        not_an_integer: tört szám rögzítése szükséges
+        odd: páratlan szám rögzítése szükséges
+        record_invalid: ! 'Érvényességi hiba: %{errors}'
+        taken: már elküldött
+        too_long: nem megfelelő hosszúságú (maximum %{count} karakter)
+        too_short: nem megfelelő hosszúságú (minimum %{count} karakter)
+        wrong_length: ! 'nem megfelelő hosszúságú (igény: %{count} karakter)'
+        between: ! '%{num1} és %{num2} érték közti számnak kell lennie'
+        can_not_delete_project: Projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatokat.
+        doesnt_match_regex: ! '%{ attr_name} nem egyezik a regex-szel.'
+        mandatory: ! '%{attr_name} kitöltetlen kötelező mező.'
+        reject_destroy_if_exist: A felhasználó %{association}, ezért kérjük először távolítsa el vagy deaktiválja a felhasználót.
+        taken_by: ! '%{email} elküldésre került %{user} részére.'
+      template:
+        body: ! 'A következő mezők kitöltése nem megfelelő:'
+        header: ! '%{count} hiba miatt a %{model} mentése nem lehetséges.'
+    models:
+      work_log: munka log
+      company: Cég(ek)
+      custom_attribute: Egyedi tulajdonságok
+      customer: Ügyfel(ek)
+      news_item: Új tétel
+      organizational_unit: Szervezeti egység
+      resource_type: Erőforrás típusa
+      score_rule: Súlyozási szabály
+      service: Szolgáltatás(ok)
+      snippet: Töredék
+      task_record: Feladat(ok)
+      template: Feladat sablon
+      trigger: Programindító
+      user: Felhasználó(k)
+      project: Projekt
+    attributes:
+      company:
+        logo: Jelenlegi logo
+        name: Cég név
+        show_wiki: Alkalmazza a Wiki funkciót
+        suppressed_email_addresses: Elkobzott e-mailcímek
+        use_billing: Alkalmazza a Riport funkciót
+        use_resource: Alkalmazza az erőforrások funkciót
+        use_score_rules: Alkalmazza a súlyozási szabályokat
+      custom_attribute:
+        display_name: Név
+        ldap_attribute_type: LDAP név
+        mandatory: kötelező
+        max_length: maximális mező hosszúság
+        multiple: multiple engedélyezése
+        preset: Alkalmazza az előzetesen beállítottakat
+      customers:
+        active: aktív
+        contact_name: Kapcsolattartó személy neve
+        name: Név
+      customer_id: Ügyfél
+      resource_type_id: Erőforrás típus
+      task_record:
+        summary: összefoglaló
+        id: id
+        client: ügyfél
+        milestone: mérföldkő
+        due: lejárat napja
+        time: időtartam
+        assigned: felelős
+        resolution: megoldás
+        updated_at: utolsó frissítés
+        severity: komolyság
+        priority: prioritás
+        type: típus
+    attribute_values:
+      task_record:
+        open_or_closed:
+          closed: Lezárt
+          open: Nyitott
+        status:
+          '0': Megnyit
+          '1': Lezárt
+          '2': Nem végleges
+          '3': Érvénytelen
+          '4': duplicate
+  tasks:
+    activity: Tevékenység
+    add_comment: Megjegyzés hozzáadása...
+    archive_task_html: <b>%{task}</b> archív mappába helyezése.
+    assigned: Hozzárendelve
+    attachment_files: File-ok
+    attributes: Attributumok
+    billable: fizethető
+    calendar_title: Feladat naptár - %{title}
+    client: Ügyfél
+    commits: commits
+    companies: Cégek
+    create_snippet: Snippet létrehozása
+    custom_time: meghatározott idő
+    customer_response: Ügyfél visszajelzés
+    duration_title: ! 'Az érték rögzítésénak módja: 3ó 30p formátum.'
+    enter_task_desc: Írja be a feladat leírását...
+    enter_task_name: Írja ide a feladat nevét...
+    forecast_date: Előrejelzés dátum
+    forecast_to_miss: Célok előrejelzése
+    gantt_title: Feladat Gantt mátrix - %{title}
+    icon_calendar: Naptár
+    icon_gantt: Gantt
+    icon_list: Lista
+    index_title: Feladatok - %{title}
+    linked_resources: Hozzákötött erőforrás
+    manage_snippets: Snippet kezelése
+    milestone: Mérföldkő
+    more_tasks: több...
+    new_log_entry: Új napló bejegyzés
+    new_title: Új feladat - %{title}
+    next_tasks: Új feladatok
+    no_one: Nincs
+    no_time: nincs idő
+    notifications: Értesítések
+    owners:
+      zero: 'Nincs felelős'
+    project: Projekt
+    reorder_task: újrarendezett feladat
+    resolution: státusz
+    resources: Erőforrások
+    restore_task_html: Áthelyezés a <b>%{task}</b> az Archiv mappából.
+    save_and_log: Ráfordítás rögzítés
+    score: Súly
+    score_adjustment: Súlyozási szabály
+    score_exponent: Kitevő
+    score_final_value: Végső érték
+    score_name: Név
+    score_type: Típus
+    search_by: Keresés feladat szám vagy cím alapján
+    service: Szolgáltatás
+    service_tip: Szolgáltatás Tip
+    show_open_tasks: ! '%{user} nyitott feladatainak megjelenítése'
+    simple_title: Feladat
+    snooze_until: Feladat indítás feltétele
+    start: Kezdet
+    tags: Cimkék
+    target_date: Célként kitűzött dátum
+    template_title: Feladat (sablon)
+    time_default: alapértelmezett
+    time_estimate: Becsült idő
+    time_worked: Ráfordított idő
+    title: ! 'Feladat #%{num} : %{title}'
+    unbillable: nem számlázható
+    until_customer_responds: Ügyfél visszajelzésig
+    user_task_planning: Felhasználói feladat tervezés
+    users_to_notify: Értesítendő felhasználók
+    work_log_tooltip: 3h 4m
+    work_times: Ráfordított idő
+    actions:
+      add_me: saját felhasználó hozzáadása
+      close: <b>%{task}</b> lezárása
+      open: <b>%{task}</b> megnyitása
+    forecats_to_miss:
+    groupings:
+      by_assigned: Hozzárendelt szerint csoportosítva
+      by_client: Ügyfelek szerint csoportosítva
+      by_resolution: resolution szerint csoportosítva
+      group_by: ! '%{thing} szerint csoportosítva'
+      not_grouped: Nincs csoportosítás
+    no_todos: ! '[tennivaló]'
+    services:
+      quoted: quoted
+      quoted_title: Ez a feladat quoted
+    target_dates:
+      from_milestone: ! '%{milestone} mérföldkőtől'
+      manually_overridden: manually overriden
+      not_set: not set
+  actions:
+    date_of_action_execution: ! 'Teljesítés dátuma + napok:'
+    not_implemented_yet: Még nem került megvalósításra
+    reassign_task_to: Feladat újradelegálása
+    send_email_to: E-mail küldése
+    set_due_date: Lejárat napja
+  active_admin:
+    batch_actions:
+      action_label: ! '%{title} kiválasztva'
+      button_label: Batch tevékenységek
+      delete_confirmation: Biztosan tötölni akarja a %{plural_model}? Ez a művelet nem vonható vissza.
+      labels:
+        destroy: Törlés
+      link: Létrehozása
+      selection_toggle_explanation: (Toggle Selection)
+      succesfully_destroyed:
+    clear_filters: Szűrők törlése
+    delete: Törlés
+    delete_confirmation: Biztosan törölni akarja?
+    download: Letöltés
+    edit: Szerkesztés
+    equal_to: Egyenlő
+    filter: Szűrő
+    greater_than: Nagyobb mint
+    less_than: Kevesebb
+    logout: Kijelentkezés
+    new_model: Új %{model}
+    pagination:
+      one_page: ! '%{model} <b>all %{n}</> megjelenítése'
+      empty: nincs %{model} találat
+      entry: belépési feltétel
+      multiple: ! '%{model} <b>%{from}&nbsp;-&nbsp;%{to}</b>%{total}</b> teljes megjelenítése'
+    powered_by: ! '%{active_admin} által %{version} fejlesztve'
+    search_field: ! '%{field} keresés'
+    view: Nézet
+    access_denied:
+      message: Nincs jogosultsága ehhez a funkcióhoz.
+    any: Minden
+    blank_slate:
+      content: ! '%{resource_name} még nem létezik.'
+      link: Létrehozás
+    cancel: Mégsem
+    comments:
+      add: Hozzászólás
+      author: Szerző
+      author_type: Szerző típus
+      body: Body
+      errors:
+        empty_text: A szövegmező üres volt, a megjegyzés nem lett elmentve.
+      no_comments_yet: Nincs megjegyzés.
+      resource: Erőforrás
+      resource_type: Erőforrás típusa
+      title: Megjegyzés
+      title_content: (%{count} megjegyzés
+    create_model: Új %{model}
+    dashboard: Kezdőlap
+    dashboard_welcome:
+      call_to_action: to add dashboard sections, kijelentkezés 'app/admin/dashboard.rb'
+      welcome: Üdvözöljük Aktív Admin. Ez az alapértelmezett nyitó oldal.
+    delete_model: ! '%{model} törlése'
+    details: ! '%{model} részletek'
+    devise:
+      change_password:
+        submit: Jelszó megváltoztatása
+        title: Változtassa meg jelszavát.
+      links:
+        forgot_your_password: Elfelejtette jelszavát?
+        sign_in: Bejelentkezés
+        sign_in_with_omniauth_provider: Bejelentkezés %{provider}-rel
+      login:
+        remember_me: Jelszó-emlékeztető
+        submit: Bejelentkezés
+        title: Bejelentkezés
+      reset_password:
+        submit: Jelszó visszaállítása
+        title: Elfelejtette jelszavát?
+      unlock:
+        submit: Nem zárolt utasítások újraküldése
+        title: Utasítás újraküldése
+    edit_model: ! '%{model} szerkesztése'
+    empty: Üres
+    has_many_delete: Törlés
+    has_many_new: Új %{model} hozzáadása
+    has_many_remove: Eltávolítás
+    index_list:
+      block: Lista
+      blog: Blog
+      grid: grid
+      table: Táblázat
+    main_content: Kérjük hozza létre a %{model}#main_content-et hogy a tartalom megjelenjen.
+    next: Következő
+    previous: Előző
+    sidebars:
+      filters: Szűrő feltételek
+    update_model: ! '%{model} szerkesztése'
+  activities:
+    archived: Archivált
+    complete: Teljes
+    dashboard: Kezdőlap
+    file_added: File hozzáadása
+    new_comment: Új megjegyzés
+    reverted: Visszaállított
+    wiki_page_added: Hozzáadott Wiki oldal
+    wiki_page_modified: Módosított Wiki oldal
+    work_done: ! 'Lezárt munka '
+  admin_stats:
+    active_users: Aktív felhasználók
+    admin: ! '[Admin]'
+    admin_stats: Admin
+    company: Cég
+    created: Létrehozott
+    email: e-mail
+    last_registered_users: Utoljára regisztrált felhasználó(k)
+    name: Név
+    news: ! '[Hírek]'
+    projects: Projekt(ek)
+    timezone: Időzóna
+    total: Összes
+    user_registrations: Felhasználói regisztrációk
+  billings:
+    active_projects: ! '[Aktív projekt(ek)]'
+    any_client: ! '[Bármelyik Ügyfél]'
+    any_project: ! '[Bármelyik projekt]'
+    any_user: ! '[Bármelyik felhasználó]'
+    billing: Riport
+    billing_reports: Lehívható riport(ok)
+    clients: Ügyfelek
+    closed_projects: ! '[Lezárt projektek]'
+    columns: Oszlopok
+    comment: Megjegyzés
+    custom: Tulajdonság
+    date: Dátum
+    from: -tól
+    hide_approved_logs: Jóváhagyott rögzítések elrejtése
+    hide_rejected_logs: Visszautasított projektek elrejtése
+    milestones: Mérföldkövek
+    pivot: Pivot
+    projects: Projektek
+    report_filter: Riport szűrő
+    requested_by: Igénylő
+    rows: Sorok
+    run_report: Riport futtatása
+    tags: Cimke(k)
+    task_resolution: Feladat meghatározás
+    tasks: Feladatok
+    time_sheet: Idő beosztás
+    to: -ig
+    users: Felhasználók
+    work_time: Munkaidő
+    download:
+      csv: A riport letöltése CSV fájl-ként
+  button:
+    add: Hozzáad
+    cancel: Törlés
+    create: Létrehozás
+    delete: Törlés
+    destroy: Lezárás
+    download: Letöltés
+    edit: Szerkesztés
+    hide: Elrejtés
+    new: Új
+    next: Következő
+    ok: OK
+    or: vagy
+    prev: Előző
+    save: Mentés
+    show: Mutat
+    submit: Mentés
+    update: Frissítés
+    move: Áthelyezés
+  companies:
+    admin_panel: Admin panel
+    company: Cég
+    company_location: Cég székhelye
+    company_settings: Céges beállítások
+    general: Általános
+    incoming_email_project: Bejövő e-mail projekt
+    logo_hint: (250x50px felbontás az ajánlott. A logo a jelenlegi Jobsworth logo helyén jelenik meg, valamint a bejelentkező oldalon.)
+    new_logo: Új logo
+    person: Személy
+    properties: Tulajdonságok
+    suppressed_email_hint: (egyes e-mail címek elválasztása vesszővel ill. új sorban)
+    task: Feladat
+    type: Típus
+  custom_attributes:
+    add_another_attribute: Adjon meg egy másik tulajdonságot
+    add_choice: Adjon meg más lehetőséget
+    choice: Választás
+    color: Szín
+    custom_attributes: Egyedi beállítások
+    custom_properties: Egyedi tulajdonságok
+    remove_attribute: Beállítások eltávolítása
+    remove_choice: Választások eltávolítása
+  custom_scripts:
+    custom_scripts: Egyéni script
+    explanation: ! 'Custom ruby scripts can be placed in the lib/scripts directory. They will then be listed below and can be executed against the current Jobsworth database. '
+    no_scripts_found: ! 'Nincs egyéni script találat. Amennyiben van, ellenőrizze az ".rb" file végződéseket illetve a %{rails_root}/lib/scripts mappát. '
+  customers:
+    active_users: Aktív felhasználók
+    completed_projects: Befejezett projektek
+    create_resource: Erőforrás létrehozása
+    create_site: Oldal létrehozása
+    current_projects: Futó projektek
+    inactive_users: Inaktív felhasználók
+    new: Új ügyfél
+    no_project_completed: Nincs lezárt projekt
+    no_project_in_process: Nincs futó projekt
+    resources: Erőforrások
+    score_rules: Prioritási szabályok
+    sites: Oldalak
+    slas: SLA-k
+    view_tasks: Feladatok nézete
   delete_todo_html: delete to do
+  email_addresses:
+    attach: e-mail cím csatolása a felhasználóhoz
+    input_title: Kérjük adja meg a felhasználónevét.
+    orphaned: e-mail cím
+    orphaned_emails_link: e-mail-ek
+    select: Kérjük az alábbi listából válassza ki a megfelelő e-mail címet, melyhez hozzárendelheti a rendszerben már regisztrált felhasználót. Ennek következtében a kiválasztott e-mail címhez automatikusan hozzárendelésre kerülnek az üzenetek.
+    set_as_default: Beállítás alapértelmezettként
+  filter_date:
+    custom: Egyéni
+    now: most
+    start_point: ! '[kezdő időpont]'
+  filter_status:
+    any_type: ! '[Összes típus]'
+    closed: Lezárt
+    comment: Megjegyzés
+    created: Létrehozott
+    modified: Módosított
+    password_request: Erőforrás jelszó lekérés
+    resolution_change: Jóváhagyás módosítás
+    wiki_addictions: wiki addiction
+    wiki_additions: Wiki összesítés
+    wiki_changes: Wiki változások
+    work_log: Tevékenységi lista
+  form:
+    select:
+      please_select: Please select
+      none:
+  locales:
+    as_in_days: napokban
+    as_in_hours: órákban
+    as_in_minutes: percekben
+    as_in_weeks: hetekben
+    no_live_changes: A módosítások nem azonnal kerülnek átvezetésre.
+    plural: többesszám
+    same_as_in_english: Megegyezik az angollal
+    singular: Egyesszám
+    translate: Fordítás
+  milestones:
+    complete: Teljes
+    completed: Lezárt
+    create: Mérföldkő létrehozása
+    description: Leírás
+    due_date: Lejárat napja
+    edit: Mérföldkő szerkesztése
+    edit_title: ! 'Mérföldő: %{title}'
+    milestones: Mérföldkövek
+    name: Név
+    new: Új mérföldkő
+    new_title: ! 'Új mérföldkő: %{title}'
+    reopen: Újranyitás
+    revert: Visszaállított
+    score_rules: Prioritási szabályok
+    status: Státusz
+    tasks: Feladatok
+    unscheduled: Nem ütemezett
+    view_tasks: Feladatok listázása
+    client: Ügyfél
+    owner: Létrehozó
+    progress: Folyamat
+    project: Projekt
+    statuses:
+      closed: lezárt
+      locked: zárolt
+      open: nyitott
+      planning: tervezett
+  news_items:
+    body: Törzs
+    create: Új tétel létrehozása
+    edit: Új tétel szerkesztése
+    new: new news items
+    public: Nyilvános
+  notifications:
+    assigned_to: ! 'Hozzárendelve a következő személyhez:'
+    client: Ügyfél
+    description: Leírás
+    due: Esedékes
+    due_today: Ma esedékes feladatok
+    due_tomorrow: Holnap esedékes feladatok
+    email_thank_you: Köszönjük levelét, mely a %{product} tracking rendszeréhez lett továbbítva.
+    further_comments: Amennyiben további észrevételei vannak, kérjük válaszoljon jelen e-mail-re (vonal alatti mezőben).
+    history_visit: ! 'A feladat történetének megtekintéséhez kérjük látogasson el:'
+    milestone: Mérföldkő
+    overdue: Lejárt feladatok
+    process_error: Kérjük határozzon meg több információt mivel a művelet a %{cause} miatt nem hajtható végre.
+    project: Projekt
+    task_updated: ! '%{num} számú feladat firssítve lett, az alábbi információk szerint.'
+    thank_you_signature: ! 'Köszönjük.
+
+      Üdvözlettel,
+
+      %{name}'
+    try_sending_again: Kérjük a probléma megoldása után ismételje meg az e-mail küldést.
+    created: Létrehozott
+    event_types:
+      comment: Megjegyzés
+      reassigned: Újra hozzárendelve
+      resolved: Megoldva
+      reverted: visszaállítva
+      updated: Frissítve
+    invalid_email: ! '%{prefix} érvénytelen e-mail'
+    tasks_due: Feladataok esedékessége
+  org_units:
+    active: Aktív
+    edit_title: ! '%{unit} szervezeti egység szerkesztése'
+    name: Név
+    new_title: ! '%{customer} új szervezeti egysége'
+  permissions:
+    administrator: Adminisztrátor
+    all: Mindenki
+    approve_work_logs: Tevékenységnapló jóváhagyása
+    assign: Delegálva
+    close: Lezárás
+    comment: Megjegyzés
+    comment_access_level: Megjegyzés megtekintésének szintje
+    copy_permissions: Szabály másolásának forrása
+    create: Létrehozás
+    create_clients: Ügyfelek létrehozása
+    create_projects: Projektek létrehozásának joga
+    edit: Szerkesztés
+    edit_clients: Ügyfelek adatainak szerkesztése
+    grant: Grant
+    milestones: Mérföldkő
+    read: Olvasás
+    read_clients: Ügyfelek adatainak megtekintése
+    reports: Riportok
+    see_unwatched: see unwatched
+    use_resources: Erőforrások elérése
+    work: Munka
+  projects:
+    access_control: Hozzáférés ellenőrzés
+    billing_tip: Ne rögzítsen időt ehhez a projekthez.
+    company: Cég
+    complete: Lezárás
+    completed: Lezárt
+    completed_milestones: Lezárt mérföldkövek
+    completed_projects: Lezárt projektek
+    completed_title: Lezárt projektek - %{title}
+    customer: Ügyfél
+    default_estimate: Alapértelmezett becslés
+    description: Leírás
+    edit: Projekt szerkesztése
+    edit_project_html: <b>%{project}</b> projekt szerkesztése
+    edit_title: ! 'Projekt: %{title}'
+    estimate: Becslés
+    estimate_placeholder: ! 'projekt feladat tervezett időtartama (mértékegység: óra) '
+    index_title: ! 'Projekt: %{title}'
+    milestones: Mérföldkövek
+    n_completed_milestones: ! '%{n} lezárt mérföldkő'
+    n_completed_projects: ! '%{n} lezárt projektek'
+    name: Név
+    new_milestone: Új mérföldkő
+    new_project: Új projekt
+    new_title: Új projekt - %{title}
+    projects: Projektek
+    reopen: Újranyitás
+    revert: Visszatérő
+    score_rules: Súlyozási szabályok
+    suppressBilling: Nem közzétett riportok
+    tasks: Feladatok
+    user: Felhasználó
+    view_project_html: <b>°%{project}</b> projekt áttekintése
+    view_tasks: Feladatok áttekintése
+  properties:
+    create: Feladat paramétereinek létrehozása
+    default_color: alapértelmezett színbeállítása
+    default_sort: Alapértelemzett listázás
+    edit: Feladat paramétereinek szerkesztése
+    index: Feladat paraméterek
+    mandatory: A feladat ezen paraméterhez érték meghatározása szükséges.
+    name: Név
+    new: Új feladat paraméter
+    possible_values: Lehetséges értékek
+    remove_value: ! '%{value} paraméter érték eltávolítása'
+    select_replacement: Válasszon ki a kicserélendő értéket
+    color: Szín
+    default: Alapértelmezett
+    icon_url: ! 'Ikon URL '
+    priorities:
+      critical: Kritikus
+      high: Magas
+      low: Alacsony
+      lowest: Alacsonyabb
+      normal: Normális
+      urgent: Sürgős
+    priority: Prioritás
+    severities:
+      blocker: Blokkoló
+      critical: Kritikus
+      major: Jelentős
+      minor: Jelentéktelen
+      normal: Normál
+      trivial: Jelentéktelen
+    severity: severity
+    type: Típus
+    types:
+      defect: Hiányosság
+      improvement: Fejlesztés
+      new_feature: Új funkció
+      task: Feladat
+    values: Érték
+  resource_types:
+    allow_multiple: Többszörös választás engedélyezése
+    attributes: Mezők
+    create: Erőforrás típusának létrehozása
+    default_length: Alapértelmezett mező hosszúság
+    edit: Erőforrás típus szerkesztése
+    is_password: Jelszó mező
+    mandatory: Kötelező
+    name: Név
+    new: Új erőforrás típus
+    validation_regex: Jóváhagyási regex
+  resources:
+    active: Aktív
+    attributes: Mezők
+    company: Cég
+    edit: Erőforrás szerkesztése
+    edit_title: ! 'Erőforrás: %{title}'
+    history: Történet
+    name: Név
+    new: Új erőforrás
+    new_title: Új erőforrás - %{title}
+    notes: Észrevételek
+    parent_resource: Eredeti erőforrás
+    type: Típus
+  scm_projects:
+    location: helyszín
+    new: Új SCM projekt
+    scm_type: SCM típus
+    secret_key: Titkos kulcs
+  score_rules:
+    add_new: Új értékelési szabály hozzáadása
+    edit: Értékelési szabály szerkesztése
+    explanation: ! '%{container}-hez tartozó minden feladat eszerint az értékelési szabály szerint lesz létrehozva. A magasabban súlyozott feladatok fontosabbak. A feladat fontosságának csökkentését negatív számok alkalmazásával lehet elérni. A kitevő meghatározza a súlyok mértékének növelését; a normális értékek 1,2 és 2,5 között vannak.'
+    exponent: Kitevő
+    name: Név
+    new_html: Új hozzáadásához kattintson a %{link}-re.
+    no_rules: A %{container}-hez nem tartozik prioritási szabály.
+    score: pontszám
+    score_rules: Pontszám szabályok
+    score_type: Pontszám típus
+  service_level_aggreements:
+    billable: fizethető
+    company: Cég
+    company_id: Cég ID
+    customer: Ügyfél
+    customer_id: Ügyfél ID
+    edit_sla: sevice_level_agreement szerkesztése
+    list_sla: sevive_level_agreement listázása
+    new_sla: Új SLA
+    saved: mentve
+    service: Szolgáltatás
+    service_id: Szolgáltatás ID
+  services:
+    create_service: Szolgáltatás létrehozása
+    customer_placeholder: type ügyfélhez hozzáadása
+    customers: Ügyfelek
+    description: Leírás
+    edit_service: Szolgáltatás szerkesztése
+    name: Név
+    new_service: Új szolgáltatás
+    services: Szolgáltatások
+  shared:
+    actions: Tevékenységek
+    all: Minden
+    are_you_sure: Megerősíti?
+    back: Vissza
+    by: ! '%{user}'
+    by_html: <strong>%{user}</strong>
+    customer_placeholder: Kérjük az ügyfél nevének rögzítését.
+    days: nap
+    default: Alapértelmezett
+    error: hiba
+    errors: hiba
+    form_errors: ! 'Létrehozás közben a következő hibák léptek fel:'
+    friday: péntek
+    friday_short: Pé
+    here: itt
+    hour: óra
+    last_month: Elmúlt hónap
+    last_week: Múlthét
+    last_year: Elmúlt év
+    load_more: Több letöltése..
+    loading: betöltés...
+    minute: perc
+    monday: Hétfő
+    monday_short: Hé
+    months: hónap
+    never: Soha
+    no: 'nem'
+    no_item_found: Nem található ilyen elem.
+    none: Nincs
+    saturday: Szombat
+    saturday_short: Szo
+    sunday: Vasárnap
+    sunday_short: Vas
+    this_month: Ebben a hónapban
+    this_week: Ezen a héten
+    this_year: Ebben az évben
+    thursday: Csütörtök
+    thursday_short: Csü
+    time_ago: ! '%{time} óta'
+    today: Ma
+    total: Total
+    tuesday: Kedd
+    tuesday_short: Ke
+    wednesday: Szerda
+    wednesday_short: Sze
+    weeks: hetek
+    worked_today: ma %{time} rögzített idő
+    yess: igaz
+    yesterday: tegnap
+    action_labels:
+      add_another: Másik hozzáadása
+      remove: Eltávolítás
+      show_password: Jelszó megjelenítése
+    another_attribute: másik attributum
+    any_thing: Minden %{thing}
+    items_more: ! '%{count}-nál több'
+    last_x_days: Elmúlt %{x} nap
+    not_set: not set
+    not_specified: Nincs meghatározva
+    thing_with_count: ! '%{thing} (%{count})'
+    tomorrow: holnap
+    'true': true
+    unknown: ismeretlen
+    week: Hét
+    yes: 'igen'
+  signup:
+    account_created: ! '%{user} létrehozta a felhasználói adatait a projekt managment rendszerben.'
+    log_in_link: ! 'A továbbiakban ezen a linken keresztül éri el a rendszert: %{product}.'
+    login_at: Kérjük lépjen be a %{url}-en keresztül.
+    login_info: Belépési információk
+    password: Jelszó
+    site_location: ! 'A keresett oldal elérési helye: %{url}'
+    subdomain_change: ! '%{company} át lett helyezve a %{url} helyre.'
+    username: Felhasználónév
+    username_long: ! 'Az Ön felhasználóneve: %{username}'
+    welcome: Üdvözöljük a %{product}-ban!
+    welcome_back: Üdvözöljük ismét a %{product}-ban!
+  snippets:
+    body: Törzs
+    create_snippet: Snippet létrehozása
+    edit_snippet: Snippet szerkesztése
+    error_msg: ! 'A snippet elmentése az a következők miatt nem lehetséges:'
+    name: Név
+    new_snippet: Új snippet
+    snippets: Snippetek
+  statuses:
+    closed: 'Lezárt'
+    duplicate: 'Duplikátum'
+    invalid: 'Érvénytelen'
+    open: 'Nyitott'
+    won_t_fix: 'Nem javítandó'
+  tabmenu:
+    add_new_widget: Új widget hozzáadása
+    billing: Számlázás
+    company_settings: Céges beállítások
+    contacts: Kapcsolattartó személyek
+    dashboard: Kezdőlap
+    list: Lista
+    log_out: Kijelentkezés
+    milestones: Mérföldkövek
+    my_account: Adataim
+    new_company: Új cég
+    new_from_template: Új sablon
+    new_person: Új személy
+    new_project: Új projekt
+    new_resource: Új erőforrás
+    new_task: Új feladat
+    overview: Áttekintés
+    planning: Tervezés
+    projects: Projektek
+    reports: Riportok
+    resources: Erőforrások
+    search: Keresés...
+    tasks: Feladatok
+    timeline: Idővonal
+    wiki: Wiki
+  tags:
+    edit_tag: ! '%{tag} cimke szerkesztése '
+    tag_count: ! '%{open} megnyitása / %{all} feladatok'
+    tags: Cimkék
+    task_info: Feladat leírás
+  task_filters:
+    add_new: Új szűrő hozzáadása
+    filters: Szűrő
+    have_not_keyword: ! 'A kulcsszó nem található:'
+    keyword: ! 'Kulcsszó:'
+    manage: Szűrők beállítása
+    my_unread_only: Nem feldolgozott feladataim
+    name: Név
+    replace: Kicserél
+    replace_placeholder: Szűrő feltétel választása
+    save_current: Jelenlegi szűrő feltételek mentése
+    shared: Megosztott
+    task_search_placeholder: Feladat keresése...
+    update_existing: Meglévő szűrő feltételek frissítése
+    my_open: Nyitott feladataim
+    my_unread: Nem feldolgozott feladataim
+    open: Nyitott feladatok
+  task_templates:
+    delete: ! '%{template} törlése'
+    new_task_template: Új feladat sablon
+    title: Feladat sablonok - %{title}
+  timeline:
+    timeline: Idővonal
+    title: Idővonal - %{title}
+  todos:
+    add_todo_placeholder: Feladatlistához egy elem hozzáadása
+    delete_todo_html: <b>%{todo}</b> törlése
+  triggers:
+    action: Tevékenység
+    add_action: Tevékenység hozzáadása
+    create_trigger: Trigger létrehozása
+    edit_trigger: Trigger szerkesztése
+    event: Esemény
+    fire_on: Fire on
+    new_trigger: Új trigger
+    new_trigger_title: ! 'Új trigger: %{title}'
+    task_filter: Feladat szűrő
+    trigger_title: Tiggerek
+    triggers: Triggerek
+    updated_by_trigger: A feladat egy trigger által frissítve lett.
+  users:
+    access_control: Hozzáférés ellenőrzése
+    access_title: ! 'Felhazsnáló jogosultsága: %{title}'
+    active: Aktív
+    add_project_to_user: Projekt hozzárendelése felhasználóhoz
+    auto_add_to_customer_tasks: A felhasználó automatikus hozzárendelése a %{customer} feladataihoz.
+    company: Cég
+    current_avatar: Jelenlegi avatar
+    date_format: Dátum típusú mező
+    email: E-mail
+    email_addresses: E-mail címek
+    general: Általános
+    goto_company: go to this company
+    grant_access: Grant %{access} for %{user}
+    language: Nyelv
+    last_login: Legutolsó belépés
+    location: Hely
+    n_projects: ! '%{n} projektek'
+    name: Név
+    new_avatar: Új avatar
+    new_user: Új felhasználó
+    new_user_title: ! 'Felhasználó: %{title}'
+    next_tasks: Új feladatok
+    no_filers: Nem alkalmazott szűrő feltételeket.
+    no_filters: Nem alkalmazott szűrő feltételeket.
+    no_shared_filters: Szűrő feltételek nem lettek Önnel megosztva.
+    password: Jelszó
+    project: Projekt
+    project_permissions: Projekt beállítások
+    projects: Projektek
+    receive_notifications: Értesítések fogadása
+    receive_own_notifications: Saját értesítések fogadása
+    recent_work: Jelenlegi munka
+    remove_all_access: ! '%{user} összes hozzáfésérének eltávolítása'
+    send_welcome_email: Üdvözlő e-mail küldése
+    show_avatars: Avatar-ok listázása
+    task_filters: Feladatok szűrő feltételei
+    tasks: Feladatok
+    time_format: Idő formátum
+    track_time: Rögzítési idő
+    username: Felhasználónév
+    view_tasks: Feladatok áttekintése
+    welcome_message: Üdvözlő üzenet
+    welcome_message_input: Üdvözlő üzenet bevitele
+    welcome_message_optional: A regisztrációs e-mail része az üzenetet.
+    widget_key: Widget kulcs
+    work_plan: Munkaterv
+    welcome_message_header: Regisztációs üzenet
+  widgets:
+    active_tasks: Aktív feladatok
+    all_tasks: ! '[Minden feladat]'
+    burndown: Burndown kimutatás
+    burnup: Burnup kimutatás
+    comments: Hozzászólások
+    due_tasks: Esedékes feladatok
+    eta: ETA
+    everyone: Mindenki
+    find_google_gadget: Google Gadget keresése
+    gadget_html_code: Gadget HTML kód
+    google_gadget: Google Gadget
+    mine: Saját
+    please_configure: Kérjük alakítsa ki a widget-et.
+    priority: Prioritás
+    recent: Jelenlegi
+    resolution: Work resolution
+    started_at: ! '%{time} kezdődik'
+    subscribe_rss: Subscribe RSS feed widget-re
+    tasks: Feladatok
+    time_chart: Feladatok / Napi kivonat
+    type: Típus
+    unassigned: ! '[nincs hozzárendelt felhasználó]'
+    widget_title: Cím
+    invalid_filter: Nem érvényes szűrő feltétel
+    newest_tasks: Legújabb feladatok
+    number_9:
+      completed: Befejezett
+      last_completed_tasks: Utolsó %{count} befejezett feladat
+      new: Új
+      work_logged: Naplózott munka
+    open_tasks: Nyitott feladatok
+    top_tasks: Top feladatok
+  wiki:
+    by: ! '%{user}'
+    edit_summary: Összesítés szerkesztése
+    link_helper: ! '[[Wikipage]]
+
+      [[Wikipage|link name]]'
+    linked_from: ! 'Hivatkozás:'
+    linking_to_pages: Hivatkozás a következő helyekre
+    no_page_yet: ! 'Ez a wiki oldal még nem létezik. Létrehozható: szöveg beírásával valamint a lent található gombra kattintással.'
+    revision: Módosítás
+    revision_n: Módosítás %{n}
+    revisions: Módosítások
+    revisions_title: ! 'Wiki módosítások: %{title}'
+    title: Wiki - %{title}
+    under_revision_by: ! '%{user} jelenleg módosítást hajt végre.'
+    frontpage: Főoldal
+  work_logs:
+    client: Ügyfél
+    delete_confirmation: Valóban törölni akarja ezt a bejegyzést?
+    delete_title: Bejegyzés törlése
+    edit_title: Bejegyzés szerkesztése
+    new_title: Új bejegyzés
+    time_worked: Ráfordított idő
+    time_worked_tooltip: pl. 3h 4m
+    title: Tevékenységi napló - %{title}
+    email_sent_to: ! 'Küldés a következő személyeknek: %{recipients}'
+    status:
+      approved: jóváhagyva
+      rejected: visszautasítva
+    status_options:
+      close: lezárt
+      duplicate: Mentés másolatként
+      invalid: Mentés érvénytelenként
+      leave_closed: Lezárt marad
+      leave_duplicate: Másolat marad
+      leave_invalid: Érvénytelen marad
+      leave_open: Nyitott marad
+      leave_wont_fix: Nem kerül megoldásra
+      reopen: Áthelyezés a Nyitott-ak közé
+      wont_fix: set as won't fix
+    unassigned: Nincs hozzárendelve
+  boolean:
+    'false': false
+    'no':
+    'true': true
   devise:
     change_my_password: Jelszó megváltoztatása
     change_your_password: Jelszó megváltoztatása
@@ -502,13 +1259,6 @@ hu:
       mass_email: ! '[Jobsworth] Új verzió'
       signup: ! '[Jobsworth] Felhasználó regisztráció'
       subdomain_changed: ! '[Jobsworth] %{company_name} - megváltozozz login URL '
-  email_addresses:
-    attach: e-mail cím csatolása a felhasználóhoz
-    input_title: Kérjük adja meg a felhasználónevét.
-    orphaned: e-mail cím
-    orphaned_emails_link: e-mail-ek
-    select: Kérjük az alábbi listából válassza ki a megfelelő e-mail címet, melyhez hozzárendelheti a rendszerben már regisztrált felhasználót. Ennek következtében a kiválasztott e-mail címhez automatikusan hozzárendelésre kerülnek az üzenetek.
-    set_as_default: Beállítás alapértelmezettként
   error:
     company:
       delete_own_company: Saját cégét nem törölheti.
@@ -520,67 +1270,6 @@ hu:
     user:
       delete_self: Nem törölheti saját magát.
       send_creation_email: Hiba, a felhasználói adatok már léteznek.
-  errors:
-    format: ! '%{attribute} %{message}'
-    messages:
-      accepted: jóváhagyásra vár
-      already_confirmed: már meg van erősítve
-      between: ! '%{num1} és %{num2} közti szám értéknek kell lennie.'
-      blank: kitöltetelen mezőt tartalmaz
-      can_not_delete_project: Projekt nem törölhető, kérjük távolítsa el a projekthez tartozó feladatokat.
-      confirmation: a mező tartalma nem felel meg
-      confirmation_period_expired: needs to be confirmed within %{period}, please request a new one
-      doesnt_match_regex: ! '%{ attr_name } nem egyezik a regex-szel.'
-      empty: kitöltetelen mezőt tartalmaz
-      equal_to: egyeznie kell %{count}-el
-      even: az értékeknek egyezniük kell
-      exclusion: fentartott
-      expired: lejárt, igényelj egy újat
-      greater_than: nagyobbnak kell lennie %{count}-nál
-      greater_than_or_equal_to: az értéknek nagyobbnak vagy egyenlőnek kell lennie mint %{count}
-      inclusion: a lista nem tartalmazza
-      invalid: érvénytelen érték
-      less_than: az értéknek kisebbnek kell lennie mint %{count}
-      less_than_or_equal_to: az értéknek kisebbnek vagy egyenlőnek kell lennie mint %{count}
-      mandatory: ! '%{attr_name} kitöltetlen kötelező mező'
-      not_a_number: nem szám
-      not_an_integer: az érték szám típusú legyen
-      not_found: nem található
-      not_locked: nincs zárolva
-      not_saved:
-        one: ! '1 hiba miatt %{resource} mentése nem lehetséges:'
-        other: ! '%{count} hiba miatt %{resource} mentése nem lehetésges:'
-      odd: az érték páratlan szám legyen
-      record_invalid: ! 'jóváhagyási hiba: %{errors}'
-      reject_destroy_if_exist: A felhasználó %{association}, kérjük távolítsa el vagy deaktiválja a felhasználót.
-      taken: beállítva
-      taken_by: ! '%{email} elküldve a %{user} nevében'
-      too_long: a beírt szöveg nem megfelelő (maximum %{count} karakter)
-      too_short: a beírt szöveg nem megfelelő (minimum %{count} karakter)
-      wrong_length: a beírt szöveg nem megfelelő (%{count} karakter szükséges)
-    models:
-      task_record:
-        task_number:
-          invalid: Érvénytelen feladat szám
-    template:
-      body: ! 'A következő mezőkkel probléma van:'
-      header: A %{model} mentése nem lehetséges %{count} hiba miatt
-  filter_date:
-    custom: Egyéni
-    now: most
-    start_point: ! '[kezdő időpont]'
-  filter_status:
-    any_type: ! '[Összes típus]'
-    closed: Lezárt
-    comment: Megjegyzés
-    created: Létrehozott
-    modified: Módosított
-    password_request: Erőforrás jelszó lekérés
-    resolution_change: Jóváhagyás módosítás
-    wiki_addictions: wiki addiction
-    wiki_additions: Wiki összesítés
-    wiki_changes: Wiki változások
-    work_log: Tevékenységi lista
   flash:
     alert:
       access_denied: Jogosultság megtiltva
@@ -589,27 +1278,23 @@ hu:
       empty_report: Üres riport, kérjük határozzon meg több információt.
       file_not_found: Nincs eredménye a keresésnek.
       unauthorized_operation: Nincs jogosultsága ehhez a tevékenységhez.
+      unexpected_error: 'Nem várt hiba következett be: %{message}'
     error:
       cant_delete_default_model: Az alapértelmezett %{model} nem törölhető.
-      destroy_dependents_of_model: Kérjük mielőtt törli, távolítsa el a feltételként megjelölt feladatot - %{model} %{dependents}.
+      destroy_dependents_of_model: Kérjük távolítson a kapcsolódó objektumokat - %{model} %{dependents} - mielőtt törli.
       model_closed: A %{model} lezárásra került. Kérjük nyissa újra majd ezt követően módosítsa.
       model_delete: ! '%{model} áthúzása sikertelen.'
       not_exists_or_no_permission: A %{model} nem létezik vagy nem férhet hozzá.
       pair_already_added: (%{first}, %{second}) párok már hozzá lettek rendelve.
     notice:
-      completed: 
       model_attached_to_other: ! '%{model} sikeresen mellékelve lett %{other}-hez.'
-      model_completed: ! '%{model} projekt lezárásra került.'
+      model_completed: ! '%{model} sikeresen be lett fejezve.'
       model_created: ! '%{model} sikeresen létre lett hozva.'
       model_deleted: ! '%{model} sikeresen törölve lett.'
       model_reverted: ! '%{model} vissza lett helyezve.'
       model_saved: ! '%{model} mentésre került.'
       model_updated: ! '%{model} sikeresen aktualizálva lett.'
       settings_updated: Frissítve a %{model} beállításai
-  form:
-    select:
-      none: 
-      please_select: Please select
   forms:
     action:
       add: ! '%{model} hozzáadása'
@@ -617,13 +1302,6 @@ hu:
     select:
       none: none
       please_select: Kérjük válasszon
-  helpers:
-    select:
-      prompt: Kérem válassza ki
-    submit:
-      create: Új %{model}
-      submit: ! '%{model} Mentése'
-      update: ! '%{model} Módosítása'
   hint:
     company:
       receiving_emails: Jobsworth fogadta az email-eket. Amelyek nem tartoznak feladatokhoz, projektekhez lesznek rendelve.
@@ -644,16 +1322,6 @@ hu:
     user:
       add_permissions: A felhasználónak jogosutlságot kell adni az érintett projektekhez.
       avatar: (25x25 és 50x50 újraméretezve megtartva az arányokat)
-  locales:
-    as_in_days: napokban
-    as_in_hours: órákban
-    as_in_minutes: percekben
-    as_in_weeks: hetekben
-    no_live_changes: A módosítások nem azonnal kerülnek átvezetésre.
-    plural: többesszám
-    same_as_in_english: Megegyezik az angollal
-    singular: Egyesszám
-    translate: Fordítás
   mailmans:
     inactive_user: Mivel inaktív felhasználó, nincs jogosultsága e-mailt küldeni a Jobsworth-nek.
     no_company: Az e-mail címzettjei nem megfelelőek.
@@ -663,144 +1331,6 @@ hu:
       blank: Az e-mail tartalma hiányzik vagy nem került megválaszolásra.
       too_large: a csatolt állomány meghaladja a %{max} méretet.
       too_old: az e-mail több mint egy héttel ezelőtt lett létrehozva (vagy a rendszer-, zónaidő helytelenül van beállítva).
-  milestones:
-    client: Ügyfél
-    complete: Lezárás
-    completed: Lezárt
-    create: Mérföldkő létrehozása
-    description: Leírás
-    due_date: Lejárat napja
-    edit: Mérföldkő szerkesztése
-    edit_title: ! 'Mérföldő: %{title}'
-    milestones: Mérföldkövek
-    name: Név
-    new: Új mérföldkő
-    new_title: ! 'Új mérföldkő: %{title}'
-    owner: Létrehozó
-    progress: Folyamat
-    project: Projekt
-    reopen: Újranyitás
-    revert: Újranyitás
-    score_rules: Prioritási szabályok
-    status: Státusz
-    statuses:
-      closed: lezárt
-      locked: zárolt
-      open: nyitott
-      planning: tervezett
-    tasks: Feladatok
-    unscheduled: Nem ütemezett
-    view_tasks: Feladatok listázása
-  news_items:
-    body: Törzs
-    create: Új tétel létrehozása
-    edit: Új tétel szerkesztése
-    new: new news items
-    public: Nyilvános
-  notifications:
-    assigned_to: ! 'Hozzárendelve a következő személyhez:'
-    client: Ügyfél
-    created: Létrehozott
-    description: Leírás
-    due: Esedékes
-    due_today: Ma esedékes feladatok
-    due_tomorrow: Holnap esedékes feladatok
-    email_thank_you: Köszönjük levelét, mely a %{product} tracking rendszeréhez lett továbbítva.
-    event_types:
-      comment: Megjegyzés
-      reassigned: Újra hozzárendelve
-      resolved: Megoldva
-      reverted: visszaállítva
-      updated: Frissítve
-    further_comments: Amennyiben további észrevételei vannak, kérjük válaszoljon jelen e-mail-re (vonal alatti mezőben).
-    history_visit: ! 'A feladat történetének megtekintéséhez kérjük látogasson el:'
-    invalid_email: ! '%{prefix} érvénytelen e-mail'
-    milestone: Mérföldkő
-    overdue: Lejárt feladatok
-    process_error: Kérjük határozzon meg több információt mivel a művelet a %{cause} miatt nem hajtható végre.
-    project: Projekt
-    task_updated: ! '%{num} számú feladat firssítve lett, az alábbi információk szerint.'
-    tasks_due: Feladataok esedékessége
-    thank_you_signature: ! 'Köszönjük.
-
-      Üdvözlettel,
-
-      %{name}'
-    try_sending_again: Kérjük a probléma megoldása után ismételje meg az e-mail küldést.
-  number:
-    currency:
-      format:
-        delimiter: .
-        format: ! '%n %u'
-        precision: 2
-        separator: ! ','
-        significant: true
-        strip_insignificant_zeros: true
-        unit: Ft
-    format:
-      delimiter: ! ' .'
-      precision: 3
-      separator: ! ','
-      significant: false
-      strip_insignificant_zeros: false
-    human:
-      decimal_units:
-        format: ! '%n %u'
-        units:
-          billion: Milliárd
-          million: Millió
-          quadrillion: Kvadrillió
-          thousand: Ezer
-          trillion: Trillió
-          unit: unit
-      format:
-        delimiter: delimiter
-        precision: 3
-        significant: true
-        strip_insignificant_zeros: true
-      storage_units:
-        format: ! '%n %u'
-        units:
-          byte:
-            one: bájt
-            other: bájt
-          gb: GB
-          kb: KB
-          mb: MB
-          tb: TB
-    percentage:
-      format:
-        delimiter: delimiter
-    precision:
-      format:
-        delimiter: delimiter
-  org_units:
-    active: Aktív
-    edit_title: ! '%{unit} szervezeti egység szerkesztése'
-    name: Név
-    new_title: ! '%{customer} új szervezeti egysége'
-  permissions:
-    administrator: Adminisztrátor
-    all: Mindenki
-    approve_work_logs: Tevékenységnapló jóváhagyása
-    assign: Delegálva
-    close: Lezárás
-    comment: Megjegyzés
-    comment_access_level: Megjegyzés megtekintésének szintje
-    copy_permissions: ! 'Másolat létrehozása innen:'
-    create: Létrehozás
-    create_clients: Ügyfelek létrehozása
-    create_projects: Projektek létrehozásának joga
-    edit: Szerkesztés
-    edit_clients: Ügyfelek adatainak szerkesztése
-    grant: Grant
-    milestones: Mérföldkő
-    read: Olvasás
-    read_clients: Ügyfelek adatainak megtekintése
-    reports: Riportok
-    see_unwatched: see unwatched
-    use_resources: Erőforrások elérése
-    work: Munka
   project_permissions:
     close: Az adott projekthez tartozó feladat jóváhagyást nincs joga megváltoztatni.
     comment: Az adott projekthez tartozó feladatot nem tudja megjegyzéssel ellátni.
@@ -818,386 +1348,13 @@ hu:
     delete: ! '%{model} törlése'
     edit: Projekt sablon mentése
     new_template: Új projekt sablon
-  projects:
-    access_control: Hozzáférés ellenőrzés
-    billing_tip: Ne rögzítsen időt ehhez a projekthez.
-    company: Cég
-    complete: Lezárás
-    completed: Lezárt
-    completed_milestones: Lezárt mérföldkövek
-    completed_projects: Lezárt projektek
-    completed_title: Lezárt projektek - %{title}
-    customer: Ügyfél
-    default_estimate: Alapértelmezett becslés
-    description: Leírás
-    edit: Projekt szerkesztése
-    edit_project_html: <b>%{project}</b> projekt szerkesztése
-    edit_title: ! 'Projekt: %{title}'
-    estimate: Becslés
-    estimate_placeholder: ! 'projekt feladat tervezett időtartama (mértékegység: óra) '
-    index_title: ! 'Projekt: %{title}'
-    milestones: Mérföldkövek
-    n_completed_milestones: ! '%{n} lezárt mérföldkő'
-    n_completed_projects: ! '%{n} lezárt projekt'
-    name: Név
-    new_milestone: Új mérföldkő
-    new_project: Új projekt
-    new_title: Új projekt - %{title}
-    projects: Projektek
-    reopen: Újranyitás
-    revert: Újranyitás
-    score_rules: Súlyozási szabályok
-    suppressBilling: Nem közzétett riportok
-    tasks: Feladatok
-    user: Felhasználó
-    view_project_html: <b>%{project}</b> projekt áttekintése
-    view_tasks: Feladatok áttekintése
-  properties:
-    color: Szín
-    create: Feladat paramétereinek létrehozása
-    default: Alapértelmezett
-    default_color: alapértelmezett színbeállítása
-    default_sort: Alapértelemzett listázás
-    edit: Feladat paramétereinek szerkesztése
-    icon_url: ! 'Ikon URL '
-    index: Feladat paraméterek
-    mandatory: A feladat ezen paraméterhez érték meghatározása szükséges.
-    name: Név
-    new: Új feladat paraméter
-    possible_values: Lehetséges értékek
-    priorities:
-      critical: Kritikus
-      high: Magas
-      low: Alacsony
-      lowest: Alacsonyabb
-      normal: Normális
-      urgent: Sürgős
-    priority: Prioritás
-    remove_value: ! '%{value} paraméter érték eltávolítása'
-    select_replacement: Válasszon ki a kicserélendő értéket
-    severities:
-      blocker: Blokkoló
-      critical: Kritikus
-      major: Jelentős
-      minor: Jelentéktelen
-      normal: Normál
-      trivial: Jelentéktelen
-    severity: severity
-    type: Típus
-    types:
-      defect: Hiányosság
-      improvement: Fejlesztés
-      new_feature: Új funkció
-      task: Feladat
-    value: 
-    values: Érték
   resource_attributes:
     password_changed: Új jelszó rögzítésre került.
-  resource_types:
-    allow_multiple: Többszörös választás engedélyezése
-    attributes: Mezők
-    create: Erőforrás típusának létrehozása
-    default_length: Alapértelmezett mező hosszúság
-    edit: Erőforrás típus szerkesztése
-    is_password: Jelszó mező
-    mandatory: Kötelező
-    name: Név
-    new: Új erőforrás típus
-    validation_regex: Jóváhagyási regex
-  resources:
-    active: Aktív
-    attributes: Mezők
-    company: Cég
-    edit: Erőforrás szerkesztése
-    edit_title: ! 'Erőforrás: %{title}'
-    history: Történet
-    name: Név
-    new: Új erőforrás
-    new_title: Új erőforrás - %{title}
-    notes: Észrevételek
-    parent_resource: Eredeti erőforrás
-    type: Típus
-  scm_projects:
-    location: helyszín
-    new: Új SCM projekt
-    scm_type: SCM típus
-    secret_key: Titkos kulcs
   score_rule_types:
     fixed: Rögzített érték
     last_comment_age: Utolsó nyilvános megjegyzés óta - érték (/nap)
     overdue: Lejárt érték (/nap)
     task_age: Létrehozás óta kalkulált súly (/nap)
-  score_rules:
-    add_new: Új értékelési szabály hozzáadása
-    edit: Értékelési szabály szerkesztése
-    explanation: ! '%{container}-hez tartozó minden feladat eszerint az értékelési szabály szerint lesz létrehozva. A magasabban súlyozott feladatok fontosabbak. A feladat fontosságának csökkentését negatív számok alkalmazásával lehet elérni. A kitevő meghatározza a súlyok mértékének növelését; a normális értékek 1,2 és 2,5 között vannak.'
-    exponent: Kitevő
-    name: Név
-    new_html: Új hozzáadásához kattintson a %{link}-re.
-    no_rules: A %{container}-hez nem tartozik prioritási szabály.
-    score: pontszám
-    score_rules: Pontszám szabályok
-    score_type: Pontszám típus
-  service_level_aggreements:
-    billable: fizethető
-    company: Cég
-    company_id: Cég ID
-    customer: Ügyfél
-    customer_id: Ügyfél ID
-    edit_sla: sevice_level_agreement szerkesztése
-    list_sla: sevive_level_agreement listázása
-    new_sla: Új SLA
-    saved: mentve
-    service: Szolgáltatás
-    service_id: Szolgáltatás ID
-  services:
-    create_service: Szolgáltatás létrehozása
-    customer_placeholder: type ügyfélhez hozzáadása
-    customers: Ügyfelek
-    description: Leírás
-    edit_service: Szolgáltatás szerkesztése
-    name: Név
-    new_service: Új szolgáltatás
-    services: Szolgáltatások
-  shared:
-    action_labels:
-      add_another: Másik hozzáadása
-      remove: Eltávolítás
-      show_password: Jelszó megjelenítése
-    actions: Tevékenységek
-    all: Minden
-    another_attribute: másik attributum
-    any_thing: Minden %{thing}
-    are_you_sure: Megerősíti?
-    back: Vissza
-    by: ! '%{user}'
-    by_html: <strong>%{user}</strong>
-    customer_placeholder: Kérjük az ügyfél nevének rögzítését.
-    days: nap
-    default: Alapértelmezett
-    error: hiba
-    errors: hiba
-    form_errors: ! 'Létrehozás közben a következő hibák léptek fel:'
-    friday: péntek
-    friday_short: Pé
-    here: itt
-    hour: óra
-    items_more: ! '%{count}-nál több'
-    last_month: Elmúlt hónapban
-    last_week: Múlthét
-    last_x_days: Elmúlt %{x} nap
-    last_year: Elmúlt évben
-    load_more: Több letöltése..
-    loading: betöltés...
-    minute: perc
-    monday: Hétfő
-    monday_short: Hé
-    months: hónap
-    never: Soha
-    no_item_found: Nem található ilyen elem.
-    none: Nincs
-    not_set: not set
-    not_specified: Nincs meghatározva
-    saturday: Szombat
-    saturday_short: Szo
-    sunday: Vasárnap
-    sunday_short: Vas
-    thing_with_count: ! '%{thing} (%{count})'
-    this_month: Ebben a hónapban
-    this_week: Ezen a héten
-    this_year: Ebben az évben
-    thursday: Csütörtök
-    thursday_short: Csü
-    time_ago: ! '%{time} óta'
-    today: Ma
-    tomorrow: holnap
-    total: Total
-    'true': true
-    tuesday: Kedd
-    tuesday_short: Ke
-    unknown: ismeretlen
-    wednesday: Szerda
-    wednesday_short: Sze
-    week: Hét
-    weeks: hetek
-    worked_today: ma %{time} rögzített idő
-    'yes': 
-    yess: igaz
-    yesterday: tegnap
-  signup:
-    account_created: ! '%{user}  létrehozta felhasználói adatainak a projekt management rendszerben.'
-    log_in_link: ! 'A továbbiakban ezen a linken keresztül éri el a rendszert: %{product}.'
-    login_at: Kérjük lépjen be a %{url}-en keresztül.
-    login_info: Belépési információk
-    password: Jelszó
-    site_location: ! 'A keresett oldal elérési helye: %{url}'
-    subdomain_change: ! '%{company} át lett helyezve a %{url} helyre.'
-    username: Felhasználónév
-    username_long: ! 'Az Ön felhasználóneve: %{username}'
-    welcome: Üdvözöljük a %{product}-ban!
-    welcome_back: Üdvözöljük ismét a %{product}-ban!
-  snippets:
-    body: Törzs
-    create_snippet: Snippet létrehozása
-    edit_snippet: Snippet szerkesztése
-    error_msg: ! 'A snippet elmentése az a következők miatt nem lehetséges:'
-    name: Név
-    new_snippet: Új snippet
-    snippets: Snippetek
-  support:
-    array:
-      last_word_connector: ! ' és '
-      two_words_connector: ! ' és '
-      words_connector: ! ', '
-  tabmenu:
-    add_new_widget: Új widget hozzáadása
-    billing: Számlázás
-    company_settings: Céges beállítások
-    contacts: Kapcsolattartó személyek
-    dashboard: Kezdőlap
-    list: Lista
-    log_out: Kijelentkezés
-    milestones: Mérföldkövek
-    my_account: Adataim
-    new_company: Új cég
-    new_from_template: Új sablon
-    new_person: Új felhasználó
-    new_project: Új projekt
-    new_resource: Új erőforrás
-    new_task: Új feladat
-    overview: Kezdőlap
-    planning: Idővonal
-    projects: Projektek
-    reports: Riportok
-    resources: Erőforrások
-    search: Keresés...
-    tasks: Feladatok
-    timeline: Idővonal
-    wiki: Wiki
-  tags:
-    edit_tag: ! '%{tag} cimke szerkesztése '
-    name: 
-    tag_count: ! '%{open} megnyitása / %{all} feladatok'
-    tags: Cimkék
-    task_info: Feladat leírás
-  task_filters:
-    add_new: Új szűrő hozzáadása
-    filters: Szűrő
-    have_not_keyword: ! 'A kulcsszó nem található:'
-    keyword: ! 'Kulcsszó:'
-    manage: Szűrők beállítása
-    my_open: Nyitott feladataim
-    my_unread: Nem feldolgozott feladataim
-    my_unread_only: Nem feldolgozott feladataim
-    name: Név
-    open: Nyitott feladatok
-    replace: Kicserél
-    replace_placeholder: Szűrő feltétel választása
-    save_current: Jelenlegi szűrő feltételek mentése
-    shared: Megosztott
-    task_search_placeholder: Feladat keresése...
-    update_existing: Meglévő szűrő feltételek frissítése
-  task_templates:
-    delete: ! '%{template} törlése'
-    new_task_template: Új feladat sablon
-    title: Feladat sablonok - %{title}
-  tasks:
-    actions:
-      add_me: saját felhasználó hozzáadása
-      close: <b>%{task}</b> lezárása
-      open: <b>%{task}</b> megnyitása
-    activity: Tevékenység
-    add_comment: Megjegyzés hozzáadása...
-    archive_task_html: <b>%{task}</b> archív mappába helyezése.
-    assigned: Hozzárendelve
-    attachment_files: File-ok
-    attributes: Attributumok
-    billable: fizethető
-    calendar_title: Feladat naptár - %{title}
-    client: Ügyfél
-    commits: commits
-    companies: Cégek
-    create_snippet: Snippet létrehozása
-    custom_time: saját rögzítendő idő
-    customer_response: Ügyfél visszajelzés
-    depends_form: 
-    duration_title: ! 'Az érték rögzítésének módja: 3h 30m formátum.'
-    enter_task_desc: Írja be a feladat leírását...
-    enter_task_name: Írja ide a feladat nevét...
-    forecast_date: Előrejelzés dátum
-    forecast_to_miss: Célok előrejelzése
-    forecats_to_miss: 
-    gantt_title: Feladat Gantt mátrix - %{title}
-    groupings:
-      by_assigned: Hozzárendelt szerint csoportosítva
-      by_client: Ügyfelek szerint csoportosítva
-      by_resolution: resolution szerint csoportosítva
-      group_by: ! '%{thing} szerint csoportosítva'
-      not_grouped: Nincs csoportosítás
-    icon_calendar: Naptár
-    icon_gantt: Gantt
-    icon_list: Lista
-    index_title: Feladatok - %{title}
-    linked_resources: Hozzákötött erőforrás
-    manage_snippets: Snippet kezelése
-    milestone: Mérföldkő
-    more_tasks: több...
-    new_log_entry: Új napló bejegyzés
-    new_title: Új feladat - %{title}
-    next_tasks: Új feladatok
-    no_one: Nincs
-    no_time: nincs idő
-    no_todos: ! '[tennivaló]'
-    notifications: Értesítések
-    project: Projekt
-    reorder_task: újrarendezett feladat
-    resolution: státusz
-    resources: Erőforrások
-    restore_task_html: Áthelyezés a <b>%{task}</b> az Archiv mappából.
-    save_and_log: Ráfordítás rögzítés
-    score: Súly
-    score_adjustment: Súlyozási szabály
-    score_exponent: Kitevő
-    score_final_value: Végső érték
-    score_name: Név
-    score_type: Típus
-    search_by: Keresés feladat szám vagy cím alapján
-    service: Szolgáltatás
-    service_tip: Szolgáltatás Tip
-    services:
-      quoted: quoted
-      quoted_title: Ez a feladat quoted
-    show_open_tasks: ! '%{user} nyitott feladatainak megjelenítése'
-    simple_title: Feladat
-    snooze_until: Feladat indítás feltétele
-    start: Kezdet
-    tags: Cimkék
-    target_date: Célként kitűzött dátum
-    target_dates:
-      from_milestone: ! '%{milestone} mérföldkőtől'
-      manually_overridden: manually overriden
-      not_set: not set
-    template_title: Feladat (sablon)
-    time_default: alapértelmezett
-    time_estimate: Becsült idő
-    time_worked: Ráfordított idő
-    title: ! 'Feladat #%{num} : %{title}'
-    unbillable: nem számlázható
-    until_customer_responds: Ügyfél visszajelzésig
-    user_task_planning: Saját feladatok tervezése
-    users_to_notify: Értesítendő felhasználók
-    work_log_tooltip: 3h 4m
-    work_times: Ráfordított idő
-  time:
-    am: de.
-    formats:
-      default: ! '%Y. %b %e., %H:%M'
-      long: ! '%Y. %B %e., %A, %H:%M'
-      short: ! '%b %e., %H:%M'
-    pm: du.
-  timeline:
-    timeline: Idővonal
-    title: Idővonal - %{title}
   timetracking:
     add_earlier: Kérjük a <b>%{task}</b> -hoz korábbi munka hozzáadását.
     cancel: <b>%{task}</b>-re vonatkozó tevékenység törlése.
@@ -1207,121 +1364,6 @@ hu:
     start: <b>%{task}</b> indítása
     stop: <b>%{task}</b> leállítása
     time_worked: ! 'Rögíztett idő: %{time}'
-  todos:
-    add_todo_placeholder: Feladatlistához új elem hozzáadása
-    delete_todo_html: <b>%{todo}</b> törlése
-  triggers:
-    action: Tevékenység
-    add_action: Tevékenység hozzáadása
-    create_trigger: Trigger létrehozása
-    edit_trigger: Trigger szerkesztése
-    event: Esemény
-    fire_on: Fire on
-    new_trigger: Új trigger
-    new_trigger_title: ! 'Új trigger: %{title}'
-    task_filter: Feladat szűrő
-    trigger_title: Tiggerek
-    triggers: Triggerek
-    updated_by_trigger: A feladat egy trigger által frissítve lett.
-  users:
-    access_control: Hozzáférés ellenőrzése
-    access_title: ! 'Felhasználói jogosultság: %{title}'
-    active: Aktív
-    add_project_to_user: Projekt hozzárendelése felhasználóhoz
-    auto_add_to_customer_tasks: A felhasználó automatikus hozzárendelése a %{customer} feladataihoz.
-    company: Cég
-    current_avatar: Jelenlegi avatar
-    date_format: Dátum típusú mező
-    email: E-mail
-    email_addresses: E-mail címek
-    general: Általános
-    goto_company: go to this company
-    grant_access: Grant %{access} for %{user}
-    language: Nyelv
-    last_login: Legutolsó belépés
-    location: Hely
-    n_projects: ! '%{n} projektek'
-    name: Név
-    new_avatar: Új avatar
-    new_user: Új felhasználó
-    new_user_title: ! 'Felhasználó: %{title}'
-    next_tasks: Új feladatok
-    no_filers: Nem alkalmazott szűrő feltételeket.
-    no_filters: Nem alkalmazott szűrő feltételeket.
-    no_shared_filters: Szűrő feltételek nem lettek Önnel megosztva.
-    password: Jelszó
-    project: Projekt
-    project_permissions: Projekt beállítások
-    projects: Projektek
-    receive_notifications: Értesítések fogadása
-    receive_own_notifications: Saját értesítések fogadása
-    recent_work: Jelenlegi munka
-    remove_all_access: ! '%{user} összes hozzáfésérének eltávolítása'
-    send_welcome_email: Üdvözlő e-mail küldése
-    show_avatars: Avatar-ok listázása
-    task_filters: Feladatokhoz tartozó jogosultságok
-    tasks: Feladatok
-    time_format: Idő formátum
-    track_time: Rögzítési idő
-    username: Felhasználónév
-    view_tasks: Feladatok áttekintése
-    welcome_message: Üdvözlő üzenet
-    welcome_message_header: Regisztációs üzenet
-    welcome_message_input: Üdvözlő üzenet bevitele
-    welcome_message_optional: A regisztrációs e-mail része az üzenetet.
-    widget_key: Widget kulcs
-    work_plan: Ráfordítás időegysége
-  widget:
-    tasks: 
-  widgets:
-    active_tasks: Aktív feladatok
-    all_tasks: ! '[Minden feladat]'
-    burndown: Burndown kimutatás
-    burnup: Burnup kimutatás
-    comments: Hozzászólások
-    due_tasks: Esedékes feladatok
-    eta: ETA
-    everyone: Mindenki
-    find_google_gadget: Google Gadget keresése
-    gadget_html_code: Gadget HTML kód
-    google_gadget: Google Gadget
-    invalid_filter: Nem érvényes szűrő feltétel
-    mine: Saját
-    newest_tasks: Legújabb feladatok
-    number_9:
-      completed: Befejezett
-      last_completed_tasks: Utolsó %{count} befejezett feladat
-      new: Új
-      work_logged: Naplózott munka
-    open_tasks: Nyitott feladatok
-    please_configure: Kérjük alakítsa ki a widget-et.
-    priority: Prioritás
-    recent: Jelenlegi
-    resolution: Work resolution
-    started_at: ! '%{time} kezdődik'
-    subscribe_rss: Subscribe RSS feed widget-re
-    tasks: Feladatok
-    time_chart: Feladatok / Napi kivonat
-    top_tasks: Top feladatok
-    type: Típus
-    unassigned: ! '[nincs hozzárendelt felhasználó]'
-    widget_title: Cím
-  wiki:
-    by: ! '%{user}'
-    edit_summary: Összesítés szerkesztése
-    frontpage: Főoldal
-    link_helper: ! '[[Wikipage]]
-
-      [[Wikipage|link name]]'
-    linked_from: ! 'Hivatkozás:'
-    linking_to_pages: Hivatkozás a következő helyekre
-    no_page_yet: ! 'Ez a wiki oldal még nem létezik. Létrehozható: szöveg beírásával valamint a lent található gombra kattintással.'
-    revision: Módosítás
-    revision_n: Módosítás %{n}
-    revisions: Módosítások
-    revisions_title: ! 'Wiki módosítások: %{title}'
-    title: Wiki - %{title}
-    under_revision_by: ! '%{user} jelenleg módosítást hajt végre.'
   will_paginate:
     next_label: Következő &#8594;
     page_entries_info:
@@ -1331,31 +1373,6 @@ hu:
       single_page_html: <b>all&nbsp%{count}</b> %{model} mutatása
     page_gap: ! '&hellip;'
     previous_label: ! '&#8594; Előző'
-  work_logs:
-    client: Ügyfél
-    delete_confirmation: Valóban törölni akarja ezt a bejegyzést?
-    delete_title: Bejegyzés törlése
-    edit_title: Bejegyzés szerkesztése
-    email_sent_to: ! 'Küldés a következő személyeknek: %{recipients}'
-    new_title: Új bejegyzés
-    status:
-      approved: jóváhagyva
-      rejected: visszautasítva
-    status_options:
-      close: lezárt
-      duplicate: Mentés másolatként
-      invalid: Mentés érvénytelenként
-      leave_closed: Lezárt marad
-      leave_duplicate: Másolat marad
-      leave_invalid: Érvénytelen marad
-      leave_open: Nyitott marad
-      leave_wont_fix: Nem kerül megoldásra
-      reopen: Áthelyezés a Nyitott-ak közé
-      wont_fix: set as won't fix
-    time_worked: Ráfordított idő
-    time_worked_tooltip: pl. 3h 4m
-    title: Tevékenységi napló - %{title}
-    unassigned: Nincs hozzárendelve
   worklog_reports:
     errors:
       invalid_end_date: Érvénytelen lezárási dátum
