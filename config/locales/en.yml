@@ -9,7 +9,7 @@ en:
     - Fri
     - Sat
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Mar
@@ -35,7 +35,7 @@ en:
       long: ! '%B %d, %Y'
       short: ! '%b %d'
     month_names:
-    - 
+    -
     - January
     - February
     - March
@@ -159,7 +159,7 @@ en:
     true: true
     false: false
     'false': false
-    'no': 
+    'no':
     'true': true
   number:
     currency:
@@ -186,9 +186,9 @@ en:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit: 
+          unit:
       format:
-        delimiter: 
+        delimiter:
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -204,10 +204,10 @@ en:
           tb: TB
     percentage:
       format:
-        delimiter: 
+        delimiter:
     precision:
       format:
-        delimiter: 
+        delimiter:
   support:
     array:
       last_word_connector: ! ', and '
@@ -314,8 +314,6 @@ en:
             dependencies:
               from_other_projects: are from other projects.
     attributes:
-      resource_type_id: Resource Type
-      customer_id: Customer
       company:
         name: Company Name
         logo: Current Logo
@@ -335,6 +333,21 @@ en:
         name: Name
         contact_name: Contact Name
         active: Active
+      customer_id: Customer
+      resource_type_id: Resource Type
+      task_record:
+        summary: summary
+        id: id
+        client: client
+        milestone: milestone
+        due: due date
+        time: duration
+        assigned: assigned
+        resolution: resolution
+        updated_at: last modification
+        severity: severity
+        priority: priority
+        type: type
     attribute_values:
       task_record:
         status:
@@ -603,7 +616,7 @@ en:
     score_exponent: Exponent
     score_type: Type
     score_final_value: Final value
-    forecats_to_miss: 
+    forecats_to_miss:
   triggers:
     trigger_title: Triggers
     new_trigger_title: ! 'New Trigger : %{title}'
@@ -939,7 +952,7 @@ en:
     new_user: New user
     recent_work: Recent work
     next_tasks: Next Tasks
-    no_filters: 
+    no_filters:
     show_avatars: Show Avatars
   todos:
     delete_todo_html: Delete <b>%{todo}</b>
@@ -1125,7 +1138,7 @@ en:
     wiki_additions: Wiki Additions
     wiki_changes: Wiki Changes
     password_request: Resource Password Request
-    wiki_addictions: 
+    wiki_addictions:
   permissions:
     copy_permissions: Copy permissions from
     read: Read
@@ -1155,7 +1168,7 @@ en:
       resolved: Resolved
       updated: Updated
       comment: Comment
-      reverted: 
+      reverted:
       reassigned: Reassigned
     invalid_email: ! '%{prefix} invalid email'
     project: Project
@@ -1256,7 +1269,7 @@ en:
     worked_today: ! '%{time} worked today'
     yess: true
     'true': true
-    'yes': 
+    'yes':
   will_paginate:
     previous_label: ! '&#8592; Previous'
     next_label: Next &#8594;
@@ -1365,11 +1378,11 @@ en:
     sidebars:
       filters: Filters
     update_model: Edit %{model}
-  delete_todo_html: 
+  delete_todo_html:
   form:
     select:
-      please_select: 
-      none: 
+      please_select:
+      none:
   locales:
     as_in_days: as in days
     as_in_hours: as in hours
@@ -1385,7 +1398,7 @@ en:
     change_your_password: Change my password
     confirmations:
       confirmed: Your account was successfully confirmed. You are now signed in.
-      link: 
+      link:
       resend: Resend confirmation instructions
       send_instructions: You will receive an email with instructions about how to confirm your account in a few minutes.
       send_paranoid_instructions: If your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes.
@@ -1402,9 +1415,9 @@ en:
       unauthenticated: You need to sign in or sign up before continuing.
       unconfirmed: You have to confirm your account before continuing.
     mailer:
-      confirmation_instructions: 
-      reset_password_instructions: 
-      unlock_instructions: 
+      confirmation_instructions:
+      reset_password_instructions:
+      unlock_instructions:
     omniauth:
       sign_in_with: Sign in with %{kind}
     omniauth_callbacks:
@@ -1413,7 +1426,7 @@ en:
     passwords:
       forgot: Forgot Password
       input_your_email: ! 'Input your registered email address below to get reset password instructions:'
-      link: 
+      link:
       no_token: You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.
       reset: Reset Password
       send_instructions: You will receive an email with instructions about how to reset your password in a few minutes.
@@ -1427,7 +1440,7 @@ en:
       edit: Edit %{name}
       inactive_signed_up: Sikeres regisztráció, azonban még a bejelentkezés nem lehetséges, mert a felhasználói fiók %{reason}.
       leave_it_blank: (leave blank if you don't want to change it)
-      link: 
+      link:
       signed_up: Welcome! You have signed up successfully.
       signed_up_but_inactive: You have signed up successfully. However, we could not sign you in because your account is not yet activated.
       signed_up_but_locked: You have signed up successfully. However, we could not sign you in because your account is locked.
@@ -1438,24 +1451,24 @@ en:
       we_need_your_current: (we need your current password to confirm your changes)
     sessions:
       forget: Forget your password?
-      inactive: 
+      inactive:
       invalid: Invalid user or password
-      invalid_token: 
-      link: 
-      locked: 
+      invalid_token:
+      link:
+      locked:
       login: Login
       remember_me: remember me
       signed_in: Signed in successfully.
       signed_out: Signed out successfully.
-      timeout: 
-      unauthenticated: 
-      unconfirmed: 
+      timeout:
+      unauthenticated:
+      unconfirmed:
     sign_in: Sign in
     sign_up: Sign up
     unlocks:
       click_to_unlock: ! 'Click the link below to unlock your account:'
       hello: Hello %{email}
-      link: 
+      link:
       locked: Your account has been locked due to an excessive amount of unsuccessful sign in attempts.
       resend: Resend unlock instructions
       send_instructions: You will receive an email with instructions about how to unlock your account in a few minutes.
