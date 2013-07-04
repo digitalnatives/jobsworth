@@ -151,52 +151,47 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = AbstractTask.accessed_by(current_user).find_by_id(params[:id])
-    if @task.nil?
-      flash[:error] = t('not_exists_or_no_permission', model: TaskRecord.model_name.human)
-      redirect_from_last and return
-    end
+    @task = AbstractTask.accessed_by(current_user).find_by_task_num(params[:id])
 
     # TODO this should be a before_filter
-    unless current_user.can?(@task.project,'edit') or current_user.can?(@task.project, 'comment')
+    unless can_edit? || can_comment?
       flash[:error] = ProjectPermission.message_for('edit')
       redirect_from_last and return
     end
 
-    # if user only have comment rights
-    if current_user.can?(@task.project, 'comment') and !current_user.can?(@task.project,'edit')
-      params[:task] = {}
-    end
+    params[:task] = {} if can_comment? && !can_edit?
 
     # TODO this should go into Task model
-    begin
-      ActiveRecord::Base.transaction do
-        TaskRecord.update(@task, params, current_user)
-      end
+    ActiveRecord::Base.transaction do
+      TaskRecord.update(@task, params, current_user)
+    end
 
-      # TODO this should be an observer
-      Trigger.fire(@task, Trigger::Event::UPDATED)
-      flash[:success] ||= link_to_task(@task) + " - #{t('flash.notice.model_updated', model: TaskRecord.model_name.human)}"
+    # TODO this should be an observer
+    Trigger.fire(@task, Trigger::Event::UPDATED)
+    flash[:success] ||= link_to_task(@task) + " - #{t('flash.notice.model_updated', model: TaskRecord.model_name.human)}"
 
-      respond_to do |format|
-        format.html { redirect_to :action=> "edit", :id => @task.task_num  }
-        format.js {
-          render :json => {
-            :status => :success,
-            :tasknum => @task.task_num,
-            :tags => render_to_string(:partial => "tags/panel_list.html.erb"),
-            :message => render_to_string(:partial => "layouts/flash.html.erb", :locals => {:flash => flash}).html_safe }
-        }
+    respond_to do |format|
+      format.html { redirect_to edit_task_path(@task.task_num)  }
+      format.js {
+        render :json => {
+          :status => :success,
+          :tasknum => @task.task_num,
+          :tags => render_to_string(:partial => "tags/panel_list.html.erb"),
+          :message => render_to_string(:partial => "layouts/flash.html.erb", :locals => {:flash => flash}).html_safe }
+      }
+    end
 
-      end
-    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
-      respond_to do |format|
-        format.html {
-          flash[:error] = @task.errors.full_messages.join(". ")
-          render :template=> 'tasks/edit'
-        }
-        format.js { render :json => {:status => :error, :messages => @task.errors.full_messages}.to_json }
-      end
+  # rescue ActiveRecord::RecordNotFound
+    # flash[:error] = t('flash.error.not_exists_or_no_permission', model: TaskRecord.model_name.human)
+    # redirect_from_last and return
+
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
+    respond_to do |format|
+      format.html {
+        flash[:error] = @task.errors.full_messages.join(". ")
+        render action: :edit
+      }
+      format.js { render :json => {:status => :error, :messages => @task.errors.full_messages}.to_json }
     end
   end
 
@@ -446,7 +441,6 @@ class TasksController < ApplicationController
     end
   end
 
-############### This methods extracted to make Template Method design pattern #############################################3
   def create_entity
     return TaskRecord.new(:company => current_user.company)
   end
@@ -462,5 +456,14 @@ class TasksController < ApplicationController
 
   def set_last_task(task)
     session[:last_task_id] = task.id if task.is_a?(TaskRecord)
+  end
+
+private
+  def can_edit?
+    current_user.can?(@task.project,'edit')
+  end
+
+  def can_comment?
+    current_user.can?(@task.project, 'comment')
   end
 end
