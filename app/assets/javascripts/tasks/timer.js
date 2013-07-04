@@ -1,23 +1,22 @@
 var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
-jobsworth.tasks.TaskTimer = (function(){
+jobsworth.tasks.TaskTimer = (function($){
 
   function bind() {
-      var $ = jQuery;
       var self = this;
 
       // buttons
-      var $inline = $('#timer-bar-elapsed'),
+      var $inline       = $('#timer-bar-elapsed'),
           $pause_button = $('#pause-btn'),
           $play_button  = $('#play-btn'),
           $pin_button   = $('#pin-btn'),
           $save_button  = $('#save-btn'),
-          $li_elapsed = $('#worklog-elapsed'),
-          $li_custom = $('#worklog-custom'),
-          $li_none = $('#worklog-none'),
-          $dialog = $('#worktime-dialog'),
-          $form = $('#taskform');
+          $li_elapsed   = $('#worklog-elapsed'),
+          $li_custom    = $('#worklog-custom'),
+          $li_none      = $('#worklog-none'),
+          $dialog       = $('#worktime-dialog'),
+          $form         = $('#taskform');
 
       // initialize modal
       $dialog.draggable({handle: '.modal-header'});
@@ -91,11 +90,15 @@ jobsworth.tasks.TaskTimer = (function(){
 
       $("button.save", $dialog).click(function(e) {
         $('input[name^="work_log"]', $form).remove();
-        $dialog.modal('hide');
+
+        // There is a bug in Bootstrap.js
+        try { $dialog.modal('hide'); }
+        catch(err) {}
+
         $dialog.addClass("none").appendTo($form);
         $form.submit();
         return false;
-      })
+      });
   }
 
   function pulse() {
@@ -153,4 +156,4 @@ jobsworth.tasks.TaskTimer = (function(){
   }
 
   return TaskTimer;
-})();
+})(jQuery);
