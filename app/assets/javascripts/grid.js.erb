@@ -206,21 +206,6 @@ jobsworth.Grid = (function($){
       $("#groupBy select").val(store.get('grid.groupBy'));
     }
     $("#groupBy select").trigger("change");
-
-    // select columns
-    if (store.get('grid.Columns')) {
-      var visibleColumns = [];
-      var cols = store.get('grid.Columns');
-      for(var i in cols) {
-        for(var j in columns) {
-          if (cols[i].name == columns[j].name) {
-            columns[j].width = cols[i].width;
-            visibleColumns.push(columns[j]);
-          }
-        }
-      }
-      this.grid.setColumns(visibleColumns);
-    }
   }
 
   Grid.prototype.groupBy = function(column) {
