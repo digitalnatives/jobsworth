@@ -66,15 +66,20 @@ Jobsworth::Application.routes.draw do
   get "tasks/nextTasks/:count" => "tasks#nextTasks", :defaults => { :count => 5 }
   resources :tasks, :except => [:show] do
     collection do
-      post 'change_task_weight'
       get  'billable'
-      get  'planning'
       get  'calendar'
       get  'gantt'
+      get  'get_default_customers'
+      get  'get_default_watchers'
+      get  'get_default_watchers_for_customer'
+      get  'planning'
+      post 'change_task_weight'
     end
     member do
-      get 'score'
       get 'clone'
+      get 'get_watcher'
+      get 'score'
+      get 'users_to_notify_popup'
     end
   end
 
