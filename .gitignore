@@ -36,3 +36,4 @@ scheduler.rb.pid
 .autotest*
 public/assets
 public/cucumber_test_assets/
+.env
