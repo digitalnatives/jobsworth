@@ -66,7 +66,7 @@ jobsworth.Filter = (function($){
     });
 
     $("#search_filter_form").submit(function(event){
-      self.loadFilter($.param($(this).serializeArray()), "/task_filters/update_current_filter");
+      self.loadFilter($.param($(this).serializeArray()), update_current_filter_task_filters_path);
       return false;
     });
 
