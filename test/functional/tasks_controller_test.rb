@@ -24,12 +24,12 @@ class TasksControllerTest < ActionController::TestCase
     end
   end
 
-  context "on GET nextTasks" do
+  context "on GET next_tasks" do
     setup do
       TaskRecord.all.each do |task|
         TaskUser.new(:user_id => @user.id, :task_id => task.id).save
       end
-      get :nextTasks, :count => 5
+      get :next_tasks, :count => 5
     end
 
     should respond_with(:success)
