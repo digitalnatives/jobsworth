@@ -63,7 +63,7 @@ Jobsworth::Application.routes.draw do
   # task routes
   get 'tasks/:id' => "tasks#edit", :constraints => {:id => /\d+/}
   get "tasks/view/:id" => "tasks#edit", :as => :task_view
-  get "tasks/nextTasks/:count" => "tasks#nextTasks", :defaults => { :count => 5 }
+  get "tasks/next_tasks/:count" => "tasks#next_tasks", :defaults => { :count => 5 }, as: :next_tasks
   resources :tasks, :except => [:show] do
     collection do
       get  'billable'
@@ -122,6 +122,8 @@ Jobsworth::Application.routes.draw do
 
   resources :todos do
     match :toggle_done, :on => :member
+    post :reorder, on: :collection
+    get  :toggle_done_for_uncreated_task, on: :collection
   end
 
   resources :work_logs do
