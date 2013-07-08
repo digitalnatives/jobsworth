@@ -144,6 +144,14 @@ Jobsworth::Application.routes.draw do
     end
   end
 
+  resources :project_files, only: [ :show ] do
+    member do
+      get :thumbnail
+      get :download
+      get :destroy_file
+    end
+  end
+
   resources :properties do
     collection do
       get :remove_property_value_dialog

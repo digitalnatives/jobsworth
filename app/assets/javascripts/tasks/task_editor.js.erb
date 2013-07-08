@@ -15,6 +15,7 @@ jobsworth.tasks.TaskEditor = (function($) {
   var refresh_service_options_tasks_path = '<%= CGI.unescape url.refresh_service_options_tasks_path %>';
   var snippets_path = '<%= CGI.unescape url.snippets_path %>';
   var billable_tasks_path = '<%= CGI.unescape url.billable_tasks_path %>';
+  var destroy_file_project_file_path = function(id) { return resolve_url('<%= CGI.unescape url.destroy_file_project_file_path(id: '{id}') %>', {id: id}); };
 
   function TaskEditor(options) {
     this.options = options;
@@ -256,7 +257,7 @@ jobsworth.tasks.TaskEditor = (function($) {
     if (!answer) return;
 
     $.ajax({
-      url: '/project_files/destroy_file/'+ file_id,
+      url: destroy_file_project_file_path(file_id),
       dataType: 'json',
       success: function(response) {
         if (response.status == 'success') {
