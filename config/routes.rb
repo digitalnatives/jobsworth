@@ -82,6 +82,7 @@ Jobsworth::Application.routes.draw do
     member do
       get 'clone'
       get 'get_watcher'
+      get 'get_customer'
       get 'score'
       get 'users_to_notify_popup'
     end

@@ -14,6 +14,7 @@ jobsworth.tasks.TaskNotificationEditor = (function($) {
   var task_path       = function(id) { return resolve_url("<%= CGI.unescape url.task_path('{id}') %>",      {id: id}); };
   var edit_task_path  = function(id) { return resolve_url("<%= CGI.unescape url.edit_task_path('{id}') %>", {id: id}); };
   var get_watcher_task_path = function(id) { return resolve_url("<%= CGI.unescape url.get_watcher_task_path('{id}') %>", {id: id}); };
+  var get_customer_task_path = function(id) { return resolve_url("<%= CGI.unescape url.get_customer_task_path('{id}') %>", {id: id}); };
   var users_to_notify_popup_task_path = function(id, watcher_ids) { return resolve_url("<%= CGI.unescape url.users_to_notify_popup_task_path(id: '{id}', watcher_ids: '{watcher_ids}') %>", {id: id, watcher_ids: watcher_ids}); };
   var get_default_watchers_for_customer_tasks_path = "<%= CGI.unescape url.get_default_watchers_for_customer_tasks_path %>";
   var get_default_customers_tasks_path = "<%= CGI.unescape url.get_default_customers_tasks_path %>";
@@ -137,7 +138,7 @@ jobsworth.tasks.TaskNotificationEditor = (function($) {
     var self = this;
     var customerId = ui.item.id;
     var params = { customer_id : customerId };
-    $.get(get_watcher_task_path(this.options.taskId), params, function(data) {
+    $.get(get_customer_task_path(this.options.taskId), params, function(data) {
       $("#task_customers > div:first").append(data);
       self.customersChanged();
     }, 'html');
