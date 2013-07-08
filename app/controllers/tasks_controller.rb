@@ -418,7 +418,7 @@ class TasksController < ApplicationController
   end
 
   # build 'next tasks' panel from an ajax call (click on the more... button)
-  def nextTasks
+  def next_tasks
     @user = current_user
     if current_user.admin? and params[:user_id]
       @user = current_user.company.users.find(params[:user_id])

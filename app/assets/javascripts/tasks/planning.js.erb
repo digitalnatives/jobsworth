@@ -4,7 +4,7 @@ jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.Planning = (function($){
 
-  var nextTasks_path = '<%= CGI.unescape url.nextTasks_path %>';
+  var next_tasks_path = '<%= CGI.unescape url.next_tasks_path %>';
   var change_task_weight_tasks_path = '<%= CGI.unescape url.change_task_weight_tasks_path %>';
 
   function Planning() {
@@ -20,7 +20,7 @@ jobsworth.tasks.Planning = (function($){
       var user_id = parent.data("user");
       var count = $('ul li', parent).length + 5;
 
-      $.get(nextTasks_path + "?count=" + count + "&user_id=" + user_id, function(data) {
+      $.get(next_tasks_path + "?count=" + count + "&user_id=" + user_id, function(data) {
         $("ul", parent).html($(data.html).find("ul li"));
 
         $('li a[data-content]', parent).popover({

@@ -1,8 +1,11 @@
-
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.NextTaskPanel = (function($) {
+  var next_tasks_path = '<%= CGI.unescape url.next_tasks_path %>';
+  var change_task_weight_tasks_path = '<%= CGI.unescape url.change_task_weight_tasks_path %>';
+
   function NextTaskPanel(options) {
     this.options = options;
     this.options["popover_placement"] = options["popover_placement"] || "left"
@@ -24,7 +27,7 @@ jobsworth.tasks.NextTaskPanel = (function($) {
       stop: function(event, ui) {
         var moved = ui.item.children("a").data("taskid");
         var prev = ui.item.prev("li").children("a").data("taskid");
-        $.post("/tasks/change_task_weight", {"prev": prev, "moved": moved});
+        $.post(change_task_weight_tasks_path, {"prev": prev, "moved": moved});
       }
     });
 
@@ -36,7 +39,7 @@ jobsworth.tasks.NextTaskPanel = (function($) {
 
     $("a.more_tasks", container).live('click', function(){
       var count = $('ul li', container).length + 5;
-      $.get("/tasks/nextTasks?count=" + count, function(data) {
+      $.get(next_tasks_path + "?count=" + count, function(data) {
         $("ul", container).html($(data.html).find("ul li"));
 
         $('li a[data-content]', container).popover({
