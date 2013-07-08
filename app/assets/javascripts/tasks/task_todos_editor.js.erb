@@ -1,3 +1,4 @@
+<% url = Rails.application.routes.url_helpers %>
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
@@ -5,6 +6,13 @@ var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.TaskTodosEditor = (function($) {
+
+  var reorder_todos_path = '<%= CGI.unescape url.reorder_todos_path %>';
+  var todos_path = '<%= CGI.unescape url.todos_path %>';
+  var todo_path = function(id) { return resolve_url('<%= CGI.unescape url.todo_path(id: '{id}') %>', {id: id}); };
+  var toggle_done_todo_path = function(id) { return resolve_url('<%= CGI.unescape url.toggle_done_todo_path(id: '{id}') %>', {id: id}); };
+  var toggle_done_for_uncreated_task_todos_path = '<%= CGI.unescape url.toggle_done_for_uncreated_task_todos_path %>';
+
   function TaskTodosEditor(options) {
     this.options = options;
     this.el = this.options.el;
@@ -22,7 +30,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
           position.val(index+1);
           todos[index]= {id: $('input#todo_id', element).val(), position: index+1} ;
         });
-        $.ajax({ url: '/todos/reorder', data: {task_id: self.options.taskId, todos: todos }, type: 'POST' });
+        $.ajax({ url: reorder_todos_path, data: {task_id: self.options.taskId, todos: todos }, type: 'POST' });
       }
     });
   }
@@ -41,7 +49,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
       var todoId = todo.data("id");
 
       if (key.keyCode == 13) {
-        $(".todo-container").load("/todos/update/" + todoId,  {
+        $(".todo-container").load(todo_path(todoId),  {
           "_method": "PUT",
           task_id: self.options.taskId,
           "todo[name]": $(this).val()
@@ -72,7 +80,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
       if (key.keyCode != 13) return;
 
       $.ajax({
-        url: '/todos/create?task_id='+ self.options.taskId + '&todo[name]=' + $(this).val(),
+        url: todos_path + '?task_id='+ self.options.taskId + '&todo[name]=' + $(this).val(),
         type: 'POST',
         dataType: 'json',
         success:function(response) {
@@ -113,7 +121,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
       }
 
       $.ajax({
-        url: '/todos/toggle_done_for_uncreated_task/' + this.checked + '?name=' + todoName,
+        url: toggle_done_for_uncreated_task_todos_path + '/' + this.checked + '?name=' + todoName,
         dataType: 'html',
         success:function(response) {
           $(checkbox).parent().replaceWith(response);
@@ -129,7 +137,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
       var todoId = todo.data("id");
 
       $.ajax({
-        url: '/todos/' + todoId + '/toggle_done/' + '?task_id=' + self.options.taskId + '&format=json',
+        url: toggle_done_todo_path(todoId) + '?task_id=' + self.options.taskId + '&format=json',
         dataType: 'json',
         success:function(response) {
           $('.todo-container').html(response.todos_html);
@@ -144,7 +152,7 @@ jobsworth.tasks.TaskTodosEditor = (function($) {
       var link = this;
 
       $.ajax({
-        url: '/todos/' + todoId + '?task_id=' + self.options.taskId,
+        url: todo_path(todoId) + '?task_id=' + self.options.taskId,
         dataType: 'json',
         type: 'delete',
         success:function(response) {
