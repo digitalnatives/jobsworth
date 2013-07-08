@@ -50,6 +50,11 @@ class Tag < ActiveRecord::Base
     return res.sort_by { |tag, count| tag.name.downcase }
   end
 
+  def self.search_by_name(term)
+    name = arel_table[:name]
+
+    where(name.matches("#{term}%")).order('name')
+  end
 end
 
 

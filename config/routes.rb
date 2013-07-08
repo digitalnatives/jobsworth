@@ -73,7 +73,11 @@ Jobsworth::Application.routes.draw do
       get  'get_default_watchers'
       get  'get_default_watchers_for_customer'
       get  'planning'
+      get  'dependency'
+      get  'auto_complete_for_resource_name'
+      get  'resource'
       post 'change_task_weight'
+      get  'refresh_service_options'
     end
     member do
       get 'clone'
