@@ -1,7 +1,11 @@
+<% url = Rails.application.routes.url_helpers %>
 var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.Planning = (function($){
+
+  var nextTasks_path = '<%= CGI.unescape url.nextTasks_path %>';
+  var change_task_weight_tasks_path = '<%= CGI.unescape url.change_task_weight_tasks_path %>';
 
   function Planning() {
     this.init();
@@ -16,7 +20,7 @@ jobsworth.tasks.Planning = (function($){
       var user_id = parent.data("user");
       var count = $('ul li', parent).length + 5;
 
-      $.get("/tasks/nextTasks?count=" + count + "&user_id=" + user_id, function(data) {
+      $.get(nextTasks_path + "?count=" + count + "&user_id=" + user_id, function(data) {
         $("ul", parent).html($(data.html).find("ul li"));
 
         $('li a[data-content]', parent).popover({
@@ -66,7 +70,7 @@ jobsworth.tasks.Planning = (function($){
         var user_id = parent.data("user");
         var moved = $("a[data-taskid]", ui.item).data("taskid")
         var prev = $("a[data-taskid]", ui.item.prev("li")).data("taskid")
-        $.post("/tasks/change_task_weight", {"prev": prev, "moved": moved, "user_id":user_id});
+        $.post(change_task_weight_tasks_path, {"prev": prev, "moved": moved, "user_id":user_id});
       }
     });
 
