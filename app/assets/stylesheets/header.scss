@@ -409,7 +409,7 @@ body {
   position: relative;
   a {
     float: left;
-    height: 25px;
+    min-height: 25px;
     padding: 0px 5px;
     color: #000;
     text-decoration: none;
