@@ -236,7 +236,7 @@ class TasksController < ApplicationController
 
   def get_watcher
     @task = create_entity
-    if !params[:id].blank?
+    if params[:id].present?
       @task = AbstractTask.accessed_by(current_user).find_by_id(params[:id])
     end
 

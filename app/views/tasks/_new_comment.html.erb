@@ -10,16 +10,16 @@
       <% if current_user.admin? %>
         <li class="divider"></li>
         <li>
-          <a href="/snippets/new">
+          <%= link_to new_snippet_path do %>
             <i class="icon-plus-sign"></i>
             <%= t("tasks.create_snippet") %>
-          </a>
+          <% end %>
         </li>
         <li>
-          <a href="/snippets">
+          <%= link_to snippets_path do %>
             <i class="icon-th"></i>
             <%= t("tasks.manage_snippets") %>
-          </a>
+          <% end %>
         </li>
       <% end %>
     </ul>

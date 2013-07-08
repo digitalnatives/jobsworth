@@ -1,3 +1,4 @@
+<% url = Rails.application.routes.url_helpers %>
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
@@ -5,6 +6,17 @@ var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.TaskEditor = (function($) {
+
+  var dependency_tasks_path = '<%= CGI.unescape url.dependency_tasks_path %>';
+  var auto_complete_for_resource_name_tasks_path = '<%= CGI.unescape url.auto_complete_for_resource_name_tasks_path %>';
+  var resource_tasks_path = '<%= CGI.unescape url.resource_tasks_path %>';
+  var auto_complete_tags_path = '<%= CGI.unescape url.auto_complete_for_tags_tags_path %>';
+  var task_templates_path = '<%= CGI.unescape url.task_templates_path %>';
+  var refresh_service_options_tasks_path = '<%= CGI.unescape url.refresh_service_options_tasks_path %>';
+  var snippets_path = '<%= CGI.unescape url.snippets_path %>';
+  var billable_tasks_path = '<%= CGI.unescape url.billable_tasks_path %>';
+  var destroy_file_project_file_path = function(id) { return resolve_url('<%= CGI.unescape url.destroy_file_project_file_path(id: '{id}') %>', {id: id}); };
+
   function TaskEditor(options) {
     this.options = options;
     this.taskId = this.options.taskId;
@@ -33,7 +45,7 @@ jobsworth.tasks.TaskEditor = (function($) {
       delay: 800,
       minlength: 3,
       select: function(event, ui) {
-        var url = ui.item.url || "/tasks/dependency/";
+        var url = ui.item.url || dependency_tasks_path
         this.value = '';
         $.get(url, { dependency_id : ui.item.id }, function(data) {
           $("#task_dependencies .dependencies").append(data);
@@ -46,11 +58,11 @@ jobsworth.tasks.TaskEditor = (function($) {
       $(this).parent(".resource_no").remove();
     })
     $('#resource_name_auto_complete').autocomplete({
-      source: '/tasks/auto_complete_for_resource_name?customer_ids=' + this.taskNotificationEditor.getCustomerIds().join(','),
+      source: auto_complete_for_resource_name_tasks_path + '?customer_ids=' + this.taskNotificationEditor.getCustomerIds().join(','),
       select: function(event, ui) {
         var id = ui.item.id;
         $(this).val("");
-        $.get("/tasks/resource/", { resource_id : id }, function(data) {
+        $.get(resource_tasks_path, { resource_id : id }, function(data) {
           $("#task_resources").append(data);
         }, 'html');
         return false;
@@ -59,7 +71,7 @@ jobsworth.tasks.TaskEditor = (function($) {
       minlength: 3
     })
 
-    autocomplete_multiple_remote('#task_set_tags', '/tags/auto_complete_for_tags' );
+    autocomplete_multiple_remote('#task_set_tags', auto_complete_tags_path );
 
     $('#task_service_tip').popover({
       trigger: "hover",
@@ -98,11 +110,11 @@ jobsworth.tasks.TaskEditor = (function($) {
       $('#resource_name_auto_complete').autocomplete(
         'option',
         'source',
-        '/tasks/auto_complete_for_resource_name?customer_ids=' + customerIds.join(',')
+        auto_complete_for_resource_name_tasks_path + '?customer_ids=' + customerIds.join(',')
       )
 
       // update service options
-      $.getJSON("/tasks/refresh_service_options", {taskId: this.taskId, customerIds: customerIds.join(',')}, function(data) {
+      $.getJSON(refresh_service_options_tasks_path, {taskId: this.taskId, customerIds: customerIds.join(',')}, function(data) {
         $("#task_service_id", $(self.el)).html(data.html);
       })
 
@@ -118,7 +130,7 @@ jobsworth.tasks.TaskEditor = (function($) {
       if (!id) return true;
 
       id = id.split('-')[1];
-      $.get('/snippets/'+id + '.json', function(data) {
+      $.get(snippets_path + '/' + id + '.json', function(data) {
         $('#comment').val($('#comment').val() + '\n' + data.snippet.body);
       });
 
@@ -193,7 +205,7 @@ jobsworth.tasks.TaskEditor = (function($) {
 
     if (!projectId || customerIds.length == 0) return;
 
-    $.get("/tasks/billable", {project_id: projectId, customer_ids: customerIds, service_id: serviceId}, function(data) {
+    $.get(billable_tasks_path, {project_id: projectId, customer_ids: customerIds, service_id: serviceId}, function(data) {
       if (data.billable) {
         $("#billable-label").text("billable");
       } else {
@@ -245,7 +257,7 @@ jobsworth.tasks.TaskEditor = (function($) {
     if (!answer) return;
 
     $.ajax({
-      url: '/project_files/destroy_file/'+ file_id,
+      url: destroy_file_project_file_path(file_id),
       dataType: 'json',
       success: function(response) {
         if (response.status == 'success') {

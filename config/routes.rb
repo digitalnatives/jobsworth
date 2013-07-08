@@ -66,15 +66,25 @@ Jobsworth::Application.routes.draw do
   get "tasks/nextTasks/:count" => "tasks#nextTasks", :defaults => { :count => 5 }
   resources :tasks, :except => [:show] do
     collection do
-      post 'change_task_weight'
       get  'billable'
-      get  'planning'
       get  'calendar'
       get  'gantt'
+      get  'get_default_customers'
+      get  'get_default_watchers'
+      get  'get_default_watchers_for_customer'
+      get  'planning'
+      get  'dependency'
+      get  'auto_complete_for_resource_name'
+      get  'resource'
+      post 'change_task_weight'
+      get  'refresh_service_options'
     end
     member do
-      get 'score'
       get 'clone'
+      get 'get_watcher'
+      get 'get_customer'
+      get 'score'
+      get 'users_to_notify_popup'
     end
   end
 
@@ -131,6 +141,14 @@ Jobsworth::Application.routes.draw do
       get :cancel
       get :pause
       get :refresh
+    end
+  end
+
+  resources :project_files, only: [ :show ] do
+    member do
+      get :thumbnail
+      get :download
+      get :destroy_file
     end
   end
 

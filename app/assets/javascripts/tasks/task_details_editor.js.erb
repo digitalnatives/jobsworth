@@ -1,3 +1,4 @@
+<% url = Rails.application.routes.url_helpers %>
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
@@ -5,6 +6,10 @@ var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 
 jobsworth.tasks.TaskDetailsEditor = (function($) {
+
+  var new_milestone_path = '<%= CGI.unescape url.new_milestone_path %>';
+  var get_milestones_milestones_path = '<%= CGI.unescape url.get_milestones_milestones_path %>';
+
   function TaskDetailsEditor(options) {
     this.options = options;
     this.taskId = this.options.taskId;
@@ -60,7 +65,7 @@ jobsworth.tasks.TaskDetailsEditor = (function($) {
     } 
 
     $("#ui_popup_dialog").remove();
-    $.get("/milestones/new?project_id=" + $("#task_project_id").val(), function(data) {
+    $.get(new_milestone_path + "?project_id=" + $("#task_project_id").val(), function(data) {
       $('body').prepend(data);
       $('#ui_popup_dialog').modal('show');
 
@@ -95,7 +100,7 @@ jobsworth.tasks.TaskDetailsEditor = (function($) {
       return;
     }
 
-    $.getJSON("/milestones/get_milestones", {project_id: pid},
+    $.getJSON(get_milestones_milestones_path, {project_id: pid},
       function(data) {
         select.empty();
         options = data.options;
