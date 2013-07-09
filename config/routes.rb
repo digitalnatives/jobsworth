@@ -78,11 +78,11 @@ Jobsworth::Application.routes.draw do
       get  'resource'
       post 'change_task_weight'
       get  'refresh_service_options'
+      get  'get_customer'
+      get  'get_watcher'
     end
     member do
       get 'clone'
-      get 'get_watcher'
-      get 'get_customer'
       get 'score'
       get 'users_to_notify_popup'
     end
