@@ -151,7 +151,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = AbstractTask.accessed_by(current_user).find_by_task_num(params[:id])
+    @task = AbstractTask.accessed_by(current_user).find_by_id(params[:id])
 
     # TODO this should be a before_filter
     unless can_edit? || can_comment?
