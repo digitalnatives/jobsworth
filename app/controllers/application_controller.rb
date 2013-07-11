@@ -169,7 +169,7 @@ class ApplicationController < ActionController::Base
     if !request.xhr?
       redirect_to url
     else
-      render :js => "parent.document.location = '#{ url }'"
+      render js: "parent.window.location = '#{ url }'"
     end
   end
 
