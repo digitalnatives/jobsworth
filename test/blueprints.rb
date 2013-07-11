@@ -14,6 +14,14 @@ module Faker
   end
 end
 
+module Faker
+  class Name
+    def name
+      'Ari Maniatis'
+    end
+  end
+end
+
 Sham.name  { Faker::Name.name }
 Sham.email { Faker::Internet.email }
 Sham.title { Faker::Lorem.sentence }
