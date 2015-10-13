@@ -1,12 +1,4 @@
 PATH
-  remote: vendor/engines/omniauth-fluenta
-  specs:
-    omniauth-fluenta (0.0.1)
-      omniauth
-      omniauth-oauth2
-      rails (~> 3.2.10)
-
-PATH
   remote: vendor/gems/i18n-js
   specs:
     i18n-js (2.1.2)
@@ -123,6 +115,8 @@ GEM
       cucumber (>= 1.2.0)
       nokogiri (>= 1.5.0)
       rails (~> 3.0)
+    custom_configuration (0.0.2)
+      railties (> 3.0)
     daemons (1.1.9)
     database_cleaner (0.9.1)
     debugger (1.5.0)
@@ -143,6 +137,9 @@ GEM
       warden (~> 1.2.1)
     devise-encryptable (0.1.1)
       devise (>= 2.1.0.rc)
+    devise_cas_authenticatable (1.5.0)
+      devise (>= 1.2.0)
+      rubycas-client (>= 2.2.1)
     diff-lcs (1.2.1)
     dynamic_form (1.1.4)
     erubis (2.7.0)
@@ -158,8 +155,6 @@ GEM
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
     faker (0.3.1)
-    faraday (0.8.7)
-      multipart-post (~> 1.1)
     fastercsv (1.5.5)
     faye-websocket (0.4.7)
       eventmachine (>= 0.12.0)
@@ -174,13 +169,11 @@ GEM
       json (>= 1.7.6)
     gherkin (2.11.6-java)
       json (>= 1.7.6)
-    gli (2.5.6)
     has_scope (0.5.1)
     hashie (2.0.3)
     hike (1.2.2)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
-    httpauth (0.2.0)
     human_attribute (0.2.0)
     i18n (0.6.1)
     icalendar (1.2.3)
@@ -200,8 +193,6 @@ GEM
       jruby-rack (>= 1.1.10)
     json (1.7.7)
     json (1.7.7-java)
-    jwt (0.1.8)
-      multi_json (>= 1.5)
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -212,12 +203,6 @@ GEM
       addressable (~> 2.3)
       spoon (~> 0.0.1)
     locale_setter (0.4.0)
-    localeapp (0.6.9)
-      gli
-      i18n
-      json
-      rest-client
-      ya2yaml
     machinist (1.0.6)
     mail (2.5.3)
       i18n (>= 0.4.0)
@@ -233,23 +218,9 @@ GEM
     mocha (0.13.3)
       metaclass (~> 0.0.1)
     multi_json (1.7.2)
-    multipart-post (1.2.0)
-    mysql2 (0.3.11)
     net-ldap (0.3.1)
     nokogiri (1.5.8)
     nokogiri (1.5.8-java)
-    oauth2 (0.8.1)
-      faraday (~> 0.8)
-      httpauth (~> 0.1)
-      jwt (~> 0.1.4)
-      multi_json (~> 1.0)
-      rack (~> 1.2)
-    omniauth (1.1.4)
-      hashie (>= 1.2, < 3)
-      rack
-    omniauth-oauth2 (1.1.1)
-      oauth2 (~> 0.8.0)
-      omniauth (~> 1.0)
     orm_adapter (0.4.0)
     paperclip (3.4.1)
       activemodel (>= 3.0.0)
@@ -296,8 +267,6 @@ GEM
     remotipart (1.0.5)
     responders (0.9.3)
       railties (~> 3.1)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -314,6 +283,8 @@ GEM
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
     ruby-prof (0.13.0)
+    rubycas-client (2.3.9)
+      activesupport
     rubyzip (0.9.9)
     rufus-scheduler (2.0.18)
       tzinfo (>= 0.3.23)
@@ -348,7 +319,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.7)
     thin (1.5.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -378,7 +348,6 @@ GEM
     xray-rails (0.1.5)
       coffee-rails
       rails (>= 3.1.0)
-    ya2yaml (0.31)
 
 PLATFORMS
   java
@@ -402,12 +371,14 @@ DEPENDENCIES
   coffee-rails
   crb
   cucumber-rails
+  custom_configuration
   daemons
   database_cleaner
   debugger
   delayed_job_active_record
   devise
   devise-encryptable
+  devise_cas_authenticatable
   dynamic_form
   exception_notification (= 2.6.1)
   factory_girl_rails
@@ -422,12 +393,8 @@ DEPENDENCIES
   json
   launchy
   locale_setter
-  localeapp
   machinist (= 1.0.6)
-  mysql2
   net-ldap
-  omniauth (~> 1.1.3)
-  omniauth-fluenta!
   paperclip (> 3.1)
   pg
   poltergeist
@@ -444,7 +411,6 @@ DEPENDENCIES
   shoulda
   simplecov
   spork
-  sqlite3
   thin
   timecop
   tzinfo

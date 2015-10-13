@@ -5,8 +5,9 @@ require 'digest/md5'
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, :encryptable,
-         :recoverable, :rememberable, :trackable, :omniauthable
+  #devise :database_authenticatable, :registerable, :encryptable,
+  #       :recoverable, :rememberable, :trackable, :omniauthable
+  devise :cas_authenticatable, :timeoutable #:invitable, :registerable, :recoverable
 
   # Setup accessible (or protected) attributes for your model
   ACCESS_CONTROL_ATTRIBUTES=[:create_projects, :use_resources, :read_clients, :create_clients, :edit_clients, :can_approve_work_logs, :admin]
@@ -67,7 +68,7 @@ class User < ActiveRecord::Base
             :length => {:minimum => 2, :maximum => 200},
             :uniqueness => { :case_sensitive => false, :scope => "company_id" }
 
-  validates :password, :confirmation => true, :if => :password_required?
+  #validates :password, :confirmation => true, :if => :password_required?
   validates_presence_of :email
 
 

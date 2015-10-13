@@ -30,13 +30,15 @@ gem 'activeadmin'
 gem 'locale_setter'
 
 gem 'unicorn'
+gem 'devise_cas_authenticatable'
+gem 'custom_configuration'
 
-gem 'omniauth', '~> 1.1.3'
-gem 'omniauth-fluenta', :path => "vendor/engines/omniauth-fluenta"
+#gem 'omniauth', '~> 1.1.3'
+#gem 'omniauth-fluenta', :path => "vendor/engines/omniauth-fluenta"
 
 gem 'choices'
 
-gem 'localeapp'
+#gem 'localeapp'
 gem 'human_attribute'
 # gem 'i18n-js' # https://github.com/fnando/i18n-js/issues/137
 # gem 'i18n-js', github: 'fnando/i18n-js', branch: 'master'
@@ -54,9 +56,9 @@ end
 platforms :mri do
   gem 'daemons'
 
-  gem 'mysql2',  group: :mysql
+  #gem 'mysql2',  group: :mysql
   gem 'pg',      group: :postgres
-  gem 'sqlite3', group: :sqlite
+  #gem 'sqlite3', group: :sqlite
 
   gem 'ruby-prof', group: :test
 end

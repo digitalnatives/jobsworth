@@ -54,4 +54,12 @@ Jobsworth::Application.configure do
 
   # ENV['RAILS_RELATIVE_URL_ROOT'] = '/project-management'
   # config.action_controller.relative_url_root = ENV['RAILS_RELATIVE_URL_ROOT']
+
+  # CAS settings
+  config.x.profile_manager.base_url = 'http://fluenta.profilemanager.dev'
+  config.x.cas.base_url = 'http://cas.electool.dev/'
+  config.x.cas.pepper   = 'fecc64637916941d08ad4795a767bc5441c74095deabb25605598c352a6c15138cb672a9b7d00b601428b64fc5b9ae65aa8fca7ab85bffc216efa9993c7948f6'
+  config.x.cas.stretches = 10
+  config.x.messaging.application_name = 'procurementtool-development'
+  config.x.messaging.raise_error_on_publish_failure = false
 end

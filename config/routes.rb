@@ -1,16 +1,22 @@
 Jobsworth::Application.routes.draw do
   scope ActionController::Base.config.relative_url_root || "/" do
 
-  devise_prefix = ActionController::Base.config.relative_url_root.to_s.sub('/', '')
-
+  devise_for :users
   devise_scope :user do
-    match "users/auth/:provider",          to: 'omniauth_fluenta/omniauth_callbacks#passthru', as: :user_omniauth_authorize, constraints: {provider: /fluenta/ }
-    match "users/auth/:provider/callback", to: 'omniauth_fluenta/omniauth_callbacks#fluenta',  as: :user_omniauth_callback, constraints: {provider: /fluenta/ }
+    match 'login', to: 'devise/cas_sessions#new'
+    root to: 'devise/cas_sessions#new'
   end
-  devise_for :users,
-             :path_prefix => [devise_prefix, 'auth'].reject(&:blank?).join('/'),
-             :controllers => { :sessions  => "auth/sessions",
-                               :passwords => "auth/passwords" }
+
+  #devise_prefix = ActionController::Base.config.relative_url_root.to_s.sub('/', '')
+
+  #devise_scope :user do
+  #  match "users/auth/:provider",          to: 'omniauth_fluenta/omniauth_callbacks#passthru', as: :user_omniauth_authorize, constraints: {provider: /fluenta/ }
+  #  match "users/auth/:provider/callback", to: 'omniauth_fluenta/omniauth_callbacks#fluenta',  as: :user_omniauth_callback, constraints: {provider: /fluenta/ }
+  #end
+  #devise_for :users,
+  #           :path_prefix => [devise_prefix, 'auth'].reject(&:blank?).join('/'),
+  #           :controllers => { :sessions  => "auth/sessions",
+  #                             :passwords => "auth/passwords" }
 
   resources :snippets
 
